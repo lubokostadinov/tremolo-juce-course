@@ -1,7 +1,7 @@
 #include "Tremolo/PluginEditor.h"
 #include "Tremolo/PluginProcessor.h"
 
-namespace audio_plugin {
+namespace ws {
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
     AudioPluginAudioProcessor& p)
     : AudioProcessorEditor(&p), processorRef(p) {
@@ -29,4 +29,4 @@ void AudioPluginAudioProcessorEditor::resized() {
   // This is generally where you'll want to lay out the positions of any
   // subcomponents in your editor..
 }
-}  // namespace audio_plugin
+}  // namespace ws

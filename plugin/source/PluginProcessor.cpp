@@ -1,7 +1,7 @@
 #include "Tremolo/PluginProcessor.h"
 #include "Tremolo/PluginEditor.h"
 
-namespace audio_plugin {
+namespace ws {
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
     : AudioProcessor(
           BusesProperties()
@@ -161,10 +161,10 @@ void AudioPluginAudioProcessor::setStateInformation(const void* data,
   // call.
   juce::ignoreUnused(data, sizeInBytes);
 }
-}  // namespace audio_plugin
+}  // namespace ws
 
 // This creates new instances of the plugin.
 // This function definition must be in the global namespace.
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
-  return new audio_plugin::AudioPluginAudioProcessor();
+  return new ws::AudioPluginAudioProcessor();
 }
