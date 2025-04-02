@@ -43,7 +43,7 @@ target_include_directories(TremoloCoursePlugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 
 # Links to all necessary dependencies. The present ones are recommended by JUCE.
 # If you use one of the additional modules, like the DSP module, you need to specify it here.
-target_link_libraries_system(TremoloCoursePlugin PUBLIC juce::juce_audio_utils)
+target_link_libraries_system(TremoloCoursePlugin PUBLIC juce::juce_audio_utils PRIVATE juce::juce_dsp)
 target_link_libraries(
   TremoloCoursePlugin PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags
                          juce::juce_recommended_warning_flags

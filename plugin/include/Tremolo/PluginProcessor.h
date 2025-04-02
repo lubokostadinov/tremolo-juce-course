@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "Tremolo.h"
 
 namespace ws {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {
@@ -36,6 +37,8 @@ public:
   void setStateInformation(const void* data, int sizeInBytes) override;
 
 private:
+  Tremolo<float> tremolo;
+
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };
 }  // namespace ws
