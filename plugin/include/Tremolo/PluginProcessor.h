@@ -40,9 +40,9 @@ public:
 
 private:
   struct Parameters {
-    Parameters();
+    explicit Parameters(juce::AudioProcessor& p);
 
-    juce::AudioParameterFloat rate;
+    juce::AudioParameterFloat& rate;
 
     JUCE_DECLARE_NON_COPYABLE(Parameters)
   };

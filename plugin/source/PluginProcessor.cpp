@@ -5,10 +5,21 @@
 #include "Tremolo/PluginEditor.h"
 
 namespace ws {
-AudioPluginAudioProcessor::Parameters::Parameters()
-    : rate{"modulation.rate", "Modulation rate",
-           juce::NormalisableRange<float>{0.1f, 20.f}, 5.f,
-           juce::AudioParameterFloatAttributes{}.withLabel("Hz")} {}
+namespace {
+juce::AudioParameterFloat& createModulationRateParameter(
+    juce::AudioProcessor& p) {
+  auto parameter = std::make_unique<juce::AudioParameterFloat>(
+      "modulation.rate", "Modulation rate",
+      juce::NormalisableRange<float>{0.1f, 20.f}, 5.f,
+      juce::AudioParameterFloatAttributes{}.withLabel("Hz"));
+  auto& parameterReference = *parameter;
+  p.addParameter(parameter.release());
+  return parameterReference;
+}
+}  // namespace
+
+AudioPluginAudioProcessor::Parameters::Parameters(juce::AudioProcessor& p)
+    : rate{createModulationRateParameter(p)} {}
 
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
     : AudioProcessor(
@@ -19,7 +30,8 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 #endif
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      ) {
+              ),
+      parameters{*this} {
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
