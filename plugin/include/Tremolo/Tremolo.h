@@ -6,7 +6,17 @@ namespace ws {
 template <typename SampleType>
 class Tremolo {
 public:
-  Tremolo() : lfo{[](SampleType phase) { return std::sin(phase); }} {}
+  Tremolo() : lfo{[](SampleType phase) { return std::sin(phase); }} {
+    lfo.setFrequency(SampleType(5), true);
+  }
+
+  void prepare(double sampleRate) {
+    lfo.prepare(juce::dsp::ProcessSpec{
+      .sampleRate = sampleRate,
+      .maximumBlockSize = 1u,
+      .numChannels = 1u,
+    });
+  }
 
   template <typename ProcessContext>
   void process(const ProcessContext& context) noexcept {
@@ -20,7 +30,8 @@ public:
     // for each sample
     for (const auto i :
          std::views::iota(0, static_cast<int>(inputBlock.getNumSamples()))) {
-      // generate the LFO value
+      // generate the LFO value;
+      // the argument is added to the generated sample, thus, we pass in 0
       const auto lfoValue = lfo.processSample(SampleType(0));
       // calculate the modulation value
       const auto modulationValue =
@@ -38,6 +49,10 @@ public:
         outputBlock.setSample(channel, i, outputSample);
       }
     }
+  }
+
+  void reset() {
+    lfo.reset();
   }
 
 private:

@@ -1,4 +1,5 @@
 #include "Tremolo/PluginProcessor.h"
+#include <juce_core/juce_core.h>
 #include "Tremolo/PluginEditor.h"
 
 namespace ws {
@@ -76,12 +77,15 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate,
                                               int samplesPerBlock) {
   // Use this method as the place to do any pre-playback
   // initialisation that you need..
-  juce::ignoreUnused(sampleRate, samplesPerBlock);
+  juce::ignoreUnused(samplesPerBlock);
+
+  tremolo.prepare(sampleRate);
 }
 
 void AudioPluginAudioProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
+  tremolo.reset();
 }
 
 bool AudioPluginAudioProcessor::isBusesLayoutSupported(
