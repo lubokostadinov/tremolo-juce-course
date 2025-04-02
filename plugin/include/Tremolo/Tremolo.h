@@ -10,12 +10,16 @@ public:
     lfo.setFrequency(SampleType(5), true);
   }
 
-  void prepare(double sampleRate) {
+  void prepare(double sampleRate) noexcept {
     lfo.prepare(juce::dsp::ProcessSpec{
-      .sampleRate = sampleRate,
-      .maximumBlockSize = 1u,
-      .numChannels = 1u,
+        .sampleRate = sampleRate,
+        .maximumBlockSize = 1u,
+        .numChannels = 1u,
     });
+  }
+
+  void setModulationRate(SampleType rateHz) noexcept {
+    lfo.setFrequency(rateHz);
   }
 
   template <typename ProcessContext>
@@ -51,9 +55,7 @@ public:
     }
   }
 
-  void reset() {
-    lfo.reset();
-  }
+  void reset() noexcept { lfo.reset(); }
 
 private:
   static constexpr auto MODULATION_DEPTH = SampleType(0.1);
