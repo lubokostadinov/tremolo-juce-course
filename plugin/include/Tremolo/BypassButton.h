@@ -11,7 +11,7 @@ public:
   void paintButton(juce::Graphics& g,
                    bool shouldDrawButtonAsHighlighted,
                    bool shouldDrawButtonAsDown) override {
-    if (shouldDrawButtonAsDown || !getToggleState()) {
+    if (shouldDrawButtonAsDown || getToggleState()) {
       setButtonText("Bypassed");
     } else {
       setButtonText("On");
