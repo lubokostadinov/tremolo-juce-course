@@ -6,7 +6,7 @@ project(TremoloCoursePluginTest)
 enable_testing()
 
 # Creates the test console application.
-set(SOURCE_FILES source/AudioProcessorTest.cpp)
+set(SOURCE_FILES source/AudioProcessorTest.cpp source/JSONSerializerTest.cpp)
 add_executable(TremoloCoursePluginTest ${SOURCE_FILES})
 
 # Sets the necessary include directories of googletest.
