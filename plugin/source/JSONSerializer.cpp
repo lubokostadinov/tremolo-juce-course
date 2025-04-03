@@ -37,11 +37,46 @@ void JSONSerializer::serialize(const Parameters& parameters,
 
   json.setProperty(ids.pluginName, PLUGIN_NAME);
   json.setProperty(ids.version, CURRENT_VERSION);
-  json.setProperty(ids.rate, double(parameters.rate));
-  json.setProperty(ids.bypass, bool{parameters.bypassed});
+  json.setProperty(ids.rate, static_cast<double>(parameters.rate.get()));
+  json.setProperty(ids.bypass, parameters.bypassed.get());
 
   json.writeAsJSON(output, juce::JSON::FormatOptions{}
                                .withSpacing(juce::JSON::Spacing::multiLine)
                                .withMaxDecimalPlaces(2));
+}
+
+void JSONSerializer::deserialize(juce::InputStream& input,
+                                 Parameters& parameters) {
+  juce::var parsedResult;
+  const auto parsingResult =
+      juce::JSON::parse(input.readEntireStreamAsString(), parsedResult);
+
+  if (parsingResult.failed()) {
+    DBG(parsingResult.getErrorMessage());
+    return;
+  }
+
+  if (!parsedResult.isObject()) {
+    DBG("not a dynamic object");
+    return;
+  }
+
+  const auto& ids = getIdentifiers();
+  if (!parsedResult.hasProperty(ids.pluginName) ||
+      parsedResult[ids.pluginName] != PLUGIN_NAME) {
+    DBG("invalid plugin name");
+    return;
+  }
+
+  if (!parsedResult.hasProperty(ids.version) ||
+      parsedResult[ids.version] != CURRENT_VERSION) {
+    DBG("this plugin version only supports version 1.0.0 of parameters");
+    return;
+  }
+
+  parameters.rate = parsedResult.getProperty(
+      ids.rate, static_cast<double>(parameters.rate.get()));
+  parameters.bypassed =
+      parsedResult.getProperty(ids.bypass, parameters.bypassed.get());
 }
 }  // namespace ws
