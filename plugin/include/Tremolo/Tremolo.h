@@ -6,20 +6,31 @@ namespace ws {
 template <typename SampleType>
 class Tremolo {
 public:
-  Tremolo() : lfo{[](SampleType phase) { return std::sin(phase); }} {
-    lfo.setFrequency(SampleType(5), true);
+  enum LfoWaveform : size_t {
+    SINE = 0u,
+    TRIANGLE = 1u,
+    COUNT = 2u,
+  };
+
+  Tremolo()
+      : lfos{juce::dsp::Oscillator<SampleType>{
+                 [](SampleType phase) { return std::sin(phase); }},
+             juce::dsp::Oscillator<SampleType>{[](SampleType) { return 0; }}} {
+    std::ranges::for_each(
+        lfos, [](auto& lfo) { lfo.setFrequency(SampleType(5), true); });
   }
 
   void prepare(double sampleRate) noexcept {
-    lfo.prepare(juce::dsp::ProcessSpec{
-        .sampleRate = sampleRate,
-        .maximumBlockSize = 1u,
-        .numChannels = 1u,
-    });
+    std::ranges::for_each(lfos, [spec = juce::dsp::ProcessSpec{
+                                     .sampleRate = sampleRate,
+                                     .maximumBlockSize = 1u,
+                                     .numChannels = 1u,
+                                 }](auto& lfo) { lfo.prepare(spec); });
   }
 
   void setModulationRate(SampleType rateHz) noexcept {
-    lfo.setFrequency(rateHz);
+    std::ranges::for_each(lfos,
+                          [rateHz](auto& lfo) { lfo.setFrequency(rateHz); });
   }
 
   template <typename ProcessContext>
@@ -36,7 +47,7 @@ public:
          std::views::iota(0, static_cast<int>(inputBlock.getNumSamples()))) {
       // generate the LFO value;
       // the argument is added to the generated sample, thus, we pass in 0
-      const auto lfoValue = lfo.processSample(SampleType(0));
+      const auto lfoValue = lfos[currentLfo].processSample(SampleType(0));
       // calculate the modulation value
       const auto modulationValue =
           (SampleType(1) + MODULATION_DEPTH * lfoValue);
@@ -55,10 +66,13 @@ public:
     }
   }
 
-  void reset() noexcept { lfo.reset(); }
+  void reset() noexcept {
+    std::ranges::for_each(lfos, [](auto& lfo) { lfo.reset(); });
+  }
 
 private:
   static constexpr auto MODULATION_DEPTH = SampleType(0.1);
-  juce::dsp::Oscillator<SampleType> lfo;
+  std::array<juce::dsp::Oscillator<SampleType>, LfoWaveform::COUNT> lfos;
+  size_t currentLfo = LfoWaveform::SINE;
 };
 }  // namespace ws
