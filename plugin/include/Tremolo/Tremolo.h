@@ -1,6 +1,7 @@
 #pragma once
 #include <juce_dsp/juce_dsp.h>
 #include <ranges>
+#include <array>
 
 namespace ws {
 template <typename SampleType>
@@ -31,6 +32,14 @@ public:
   void setModulationRate(SampleType rateHz) noexcept {
     std::ranges::for_each(lfos,
                           [rateHz](auto& lfo) { lfo.setFrequency(rateHz); });
+  }
+
+  void setLfoWaveform(LfoWaveform waveform) {
+    jassert(waveform < LfoWaveform::COUNT);
+
+    if (waveform < LfoWaveform::COUNT) {
+      currentLfo = waveform;
+    }
   }
 
   template <typename ProcessContext>
