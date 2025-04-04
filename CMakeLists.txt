@@ -33,21 +33,6 @@ cpmaddpackage(
   ${LIB_DIR}/juce
 )
 
-# Adds googletest.
-cpmaddpackage(
-  NAME
-  GOOGLETEST
-  GITHUB_REPOSITORY
-  google/googletest
-  VERSION
-  1.16.0
-  SOURCE_DIR
-  ${LIB_DIR}/googletest
-  OPTIONS
-  "INSTALL_GTEST OFF"
-  "gtest_force_shared_crt ON"
-)
-
 # Add compiler warning utilities
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Util.cmake)
@@ -55,8 +40,26 @@ include(cmake/Util.cmake)
 # Adds all the targets configured in the "plugin" folder.
 add_subdirectory(plugin)
 
-# This command allows running tests from the "build" folder (the one where CMake generates the project to).
-enable_testing()
+option(BUILD_TESTS "When on, will download the GoogleTest framework and add the automated tests project" OFF)
+if(BUILD_TESTS)
+  # Adds googletest.
+  cpmaddpackage(
+    NAME
+    GOOGLETEST
+    GITHUB_REPOSITORY
+    google/googletest
+    VERSION
+    1.16.0
+    SOURCE_DIR
+    ${LIB_DIR}/googletest
+    OPTIONS
+    "INSTALL_GTEST OFF"
+    "gtest_force_shared_crt ON"
+  )
 
-# Adds all the targets configured in the "test" folder.
-add_subdirectory(test)
+  # This command allows running tests from the "build" folder (the one where CMake generates the project to).
+  enable_testing()
+
+  # Adds all the targets configured in the "test" folder.
+  add_subdirectory(test)
+endif()
