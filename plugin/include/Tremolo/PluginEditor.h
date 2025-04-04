@@ -16,9 +16,6 @@ public:
   void resized() override;
 
 private:
-  // This reference is provided as a quick way for your editor to
-  // access the processor object that created it.
-  AudioPluginAudioProcessor& processorRef;
   Gradient background;
   juce::Label headerLabel{"header label", "TREMOLO"};
 
@@ -33,6 +30,8 @@ private:
   juce::Label bypassLabel{"bypass label", "BYPASS"};
   BypassButton bypassButton;
   juce::ButtonParameterAttachment bypassAttachment;
+
+  juce::LookAndFeel_V4 lookAndFeel;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
 };

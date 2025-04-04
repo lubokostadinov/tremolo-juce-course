@@ -1,15 +1,34 @@
 #include "Tremolo/PluginEditor.h"
+#include <juce_graphics/juce_graphics.h>
 #include "Tremolo/PluginProcessor.h"
 
 namespace ws {
+namespace Colours {
+enum : size_t { ORANGE, LIGHT_GREY };
+}
+
+namespace {
+const auto& getColourPalette() {
+  static const std::array COLOURS{
+      juce::Colour{0xFFEF7600},
+      juce::Colour{0xFFD9D9D9},
+  };
+  return COLOURS;
+}
+}  // namespace
+
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
     AudioPluginAudioProcessor& p)
     : AudioProcessorEditor(&p),
-      processorRef(p),
       waveformAttachment{p.getParameters().waveform, waveformComboBox},
       rateAttachment{p.getParameters().rate, rateSlider},
       bypassAttachment{p.getParameters().bypassed, bypassButton} {
-  juce::ignoreUnused(processorRef);
+  lookAndFeel.setColour(juce::TextButton::buttonOnColourId,
+                        std::get<Colours::ORANGE>(getColourPalette()));
+  lookAndFeel.setColour(juce::TextButton::buttonColourId,
+                        std::get<Colours::LIGHT_GREY>(getColourPalette()));
+
+  setLookAndFeel(&lookAndFeel);
 
   background.topColour = juce::Colours::whitesmoke;
   background.bottomColour = juce::Colours::grey;
@@ -39,7 +58,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
   setSize(600, 300);
 }
 
-AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor() {}
+AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor() {
+  setLookAndFeel(nullptr);
+}
 
 void AudioPluginAudioProcessorEditor::resized() {
   auto bounds = getLocalBounds();
