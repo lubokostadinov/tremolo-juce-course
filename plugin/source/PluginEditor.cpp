@@ -6,8 +6,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
     AudioPluginAudioProcessor& p)
     : AudioProcessorEditor(&p),
       processorRef(p),
-      rateAttachment{p.getRateParameter(), rateSlider},
-      bypassAttachment{*p.getBypassParameter(), bypassButton} {
+      waveformAttachment{p.getParameters().waveform, waveformComboBox},
+      rateAttachment{p.getParameters().rate, rateSlider},
+      bypassAttachment{p.getParameters().bypassed, bypassButton} {
   juce::ignoreUnused(processorRef);
 
   background.topColour = juce::Colours::whitesmoke;
@@ -19,6 +20,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
 
   waveformLabel.setJustificationType(juce::Justification::centred);
   addAndMakeVisible(waveformLabel);
+
+  waveformComboBox.addItemList(p.getParameters().waveform.choices, 1);
+  waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
 
   rateLabel.setJustificationType(juce::Justification::centred);

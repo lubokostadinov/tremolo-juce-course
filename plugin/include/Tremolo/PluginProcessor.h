@@ -38,8 +38,8 @@ public:
   void getStateInformation(juce::MemoryBlock& destData) override;
   void setStateInformation(const void* data, int sizeInBytes) override;
 
-  [[nodiscard]] juce::AudioParameterFloat& getRateParameter() noexcept;
-  juce::RangedAudioParameter* getBypassParameter() const noexcept override;
+  [[nodiscard]] Parameters& getParameters() noexcept;
+  juce::AudioProcessorParameter* getBypassParameter() const noexcept override;
 
 private:
   Parameters parameters;

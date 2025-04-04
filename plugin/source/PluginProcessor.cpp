@@ -173,12 +173,11 @@ void AudioPluginAudioProcessor::setStateInformation(const void* data,
   JSONSerializer{}.deserialize(inputStream, parameters);
 }
 
-juce::AudioParameterFloat&
-AudioPluginAudioProcessor::getRateParameter() noexcept {
-  return parameters.rate;
+Parameters& AudioPluginAudioProcessor::getParameters() noexcept {
+  return parameters;
 }
 
-juce::RangedAudioParameter* AudioPluginAudioProcessor::getBypassParameter()
+juce::AudioProcessorParameter* AudioPluginAudioProcessor::getBypassParameter()
     const noexcept {
   return &parameters.bypassed;
 }

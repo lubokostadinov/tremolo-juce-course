@@ -24,6 +24,7 @@ private:
 
   juce::Label waveformLabel{"waveform label", "WAVEFORM"};
   juce::ComboBox waveformComboBox;
+  juce::ComboBoxParameterAttachment waveformAttachment;
 
   juce::Label rateLabel{"rate label", "RATE"};
   juce::Slider rateSlider;
