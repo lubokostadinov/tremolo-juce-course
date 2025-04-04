@@ -140,6 +140,8 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
   // update the parameters
   tremolo.setModulationRate(parameters.rate);
+  tremolo.setLfoWaveform(
+      static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
 
   if (parameters.bypassed) {
     // don't do any processing if the plugin is bypassed
