@@ -17,7 +17,8 @@ TEST(JSONSerializer, SerializeToFile) {
   "pluginName": "Tremolo",
   "version": "1.0.0",
   "modulationRateHz": 10.0,
-  "bypassed": true
+  "bypassed": true,
+  "modulationWaveform": "Triangle"
 })";
   juce::MemoryBlock block;
   juce::MemoryOutputStream outputStream{block, false};
@@ -25,7 +26,7 @@ TEST(JSONSerializer, SerializeToFile) {
   JSONSerializer{}.serialize(parameters, outputStream);
   outputStream.flush();
 
-  const auto result = outputStream.toUTF8();
+  const auto result = outputStream.toUTF8().removeCharacters("\r");
 
   EXPECT_EQ(EXPECTED_OUTPUT, result);
 }
@@ -36,7 +37,8 @@ TEST(JSONSerializer, DeserializeFromString) {
   "pluginName": "Tremolo",
   "version": "1.0.0",
   "modulationRateHz": 10.0,
-  "bypassed": true
+  "bypassed": true,
+  "modulationWaveform": "Triangle"
 })";
 
   Parameters::Container container;
@@ -51,5 +53,7 @@ TEST(JSONSerializer, DeserializeFromString) {
 
   EXPECT_FLOAT_EQ(parameters.rate, 10.f);
   EXPECT_TRUE(parameters.bypassed);
+  EXPECT_EQ(juce::String{"Triangle"},
+            parameters.waveform.getCurrentChoiceName());
 }
 }  // namespace ws
