@@ -181,6 +181,11 @@ juce::AudioProcessorParameter* AudioPluginAudioProcessor::getBypassParameter()
     const noexcept {
   return &parameters.bypassed;
 }
+
+void AudioPluginAudioProcessor::readAllLfoSamples(
+    juce::AudioBuffer<float>& bufferToFill) {
+  tremolo.readAllLfoSamples(bufferToFill);
+}
 }  // namespace ws
 
 // This creates new instances of the plugin.

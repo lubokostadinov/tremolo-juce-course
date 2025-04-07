@@ -41,6 +41,8 @@ public:
   [[nodiscard]] Parameters& getParameters() noexcept;
   juce::AudioProcessorParameter* getBypassParameter() const noexcept override;
 
+  void readAllLfoSamples(juce::AudioBuffer<float>& bufferToFill);
+
 private:
   Parameters parameters;
   Tremolo tremolo;
