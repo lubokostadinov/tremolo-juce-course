@@ -5,26 +5,26 @@ project(TremoloCoursePlugin VERSION 0.1.0)
 # Adds a plugin target (that's basically what the Projucer does).
 juce_add_plugin(
   TremoloCoursePlugin
+  PRODUCT_NAME
+  "Tremolo"
+  VERSION
+  0.0.0 # 0 forces AU hosts to always refresh
   COMPANY_NAME
-  WolfSound # change this
+  "WolfSound"
+  PLUGIN_MANUFACTURER_CODE
+  Wfsd
+  PLUGIN_CODE
+  Trcp
+  FORMATS
+  Standalone
+  AU
+  VST3
   IS_SYNTH
   FALSE
   NEEDS_MIDI_INPUT
   FALSE
   NEEDS_MIDI_OUTPUT
   FALSE
-  PLUGIN_MANUFACTURER_CODE
-  WFSD # change this
-  PLUGIN_CODE
-  TRCP # change this
-  FORMATS
-  Standalone
-  AU
-  VST3
-  PRODUCT_NAME
-  "Tremolo"
-  VERSION
-  0.0.0 # 0 forces AU hosts to always refresh
   VST3_AUTO_MANIFEST
   FALSE
   COPY_PLUGIN_AFTER_BUILD
