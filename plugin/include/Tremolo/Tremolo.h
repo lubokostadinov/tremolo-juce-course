@@ -1,4 +1,5 @@
 #pragma once
+#include "SampleFifo.h"
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
 #include <ranges>
@@ -27,6 +28,7 @@ public:
                                      .maximumBlockSize = 1u,
                                      .numChannels = 1u,
                                  }](auto& lfo) { lfo.prepare(spec); });
+    lfoSampleFifo.prepare(sampleRate);
   }
 
   void setModulationRate(float rateHz) noexcept {
@@ -48,6 +50,8 @@ public:
       // generate the LFO value;
       // the argument is added to the generated sample, thus, we pass in 0
       const auto lfoValue = lfos[currentLfo].processSample(0.f);
+      lfoSampleFifo.push(lfoValue);
+
       // calculate the modulation value
       const auto modulationValue = (1.f + MODULATION_DEPTH * lfoValue);
 
@@ -66,6 +70,11 @@ public:
 
   void reset() noexcept {
     std::ranges::for_each(lfos, [](auto& lfo) { lfo.reset(); });
+    lfoSampleFifo.reset();
+  }
+
+  void readAllLfoSamples(juce::AudioBuffer<float>& bufferToFill) {
+    lfoSampleFifo.popAll(bufferToFill);
   }
 
 private:
@@ -79,5 +88,7 @@ private:
   static constexpr auto MODULATION_DEPTH = 0.1f;
   std::array<juce::dsp::Oscillator<float>, LfoWaveform::COUNT> lfos;
   size_t currentLfo = LfoWaveform::SINE;
+
+  SampleFifo<float> lfoSampleFifo;
 };
 }  // namespace ws
