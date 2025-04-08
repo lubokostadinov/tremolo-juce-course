@@ -61,9 +61,9 @@ private:
       }
       buffer.clear();
     } else {
-      const auto zerosToFill =
+      const auto samplesPassed =
           static_cast<int>(getCurrentSampleRate() * updateIntervalMs / 1000.0);
-      for (; sampleIndex < zerosToFill; sampleIndex += stride) {
+      for (; sampleIndex < samplesPassed; sampleIndex += stride) {
         lfoSamples.pop_front();
         lfoSamples.push_back(0.f);
       }
