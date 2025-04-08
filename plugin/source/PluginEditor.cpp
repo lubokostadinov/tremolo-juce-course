@@ -72,7 +72,8 @@ void AudioPluginAudioProcessorEditor::resized() {
 
   auto widgetBounds = bounds.removeFromTop(67);
 
-  waveformComboBox.setBounds(widgetBounds.removeFromLeft(oneThirdOfWidth));
+  waveformComboBox.setBounds(
+      widgetBounds.removeFromLeft(oneThirdOfWidth).reduced(0.f, 15.f));
 
   auto bypassButtonBounds = widgetBounds.removeFromRight(oneThirdOfWidth);
   bypassButtonBounds.reduce(8, 14);

@@ -4,6 +4,12 @@ namespace ws {
 CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::TextButton::buttonOnColourId, getColour<Colours::ORANGE>());
   setColour(juce::TextButton::buttonColourId, getColour<Colours::LIGHT_GREY>());
+  setColour(juce::ComboBox::backgroundColourId,
+            getColour<Colours::LIGHT_GREY>());
+  setColour(juce::ComboBox::outlineColourId,
+            getColour<Colours::LIGHT_GREY>().darker());
+  setColour(juce::ComboBox::arrowColourId,
+            getColour<Colours::LIGHT_GREY>().darker());
 }
 
 void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
@@ -15,10 +21,7 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
                                      int /* buttonW */,
                                      int /* buttonH */,
                                      juce::ComboBox& box) {
-  auto cornerSize =
-      box.findParentComponentOfClass<juce::ChoicePropertyComponent>() != nullptr
-          ? 0.0f
-          : 3.0f;
+  constexpr auto cornerSize = 6.f;
   juce::Rectangle<int> boxBounds(0, 0, width, height);
 
   g.setColour(box.findColour(juce::ComboBox::backgroundColourId));
@@ -28,7 +31,11 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   g.drawRoundedRectangle(boxBounds.toFloat().reduced(0.5f, 0.5f), cornerSize,
                          1.0f);
 
-  auto arrowZone = juce::Rectangle<int>(width - 30, 0, 20, height).toFloat();
+  auto arrowZone =
+      juce::Rectangle<int>(width - height, 0, height, height).toFloat();
+  g.drawRoundedRectangle(arrowZone, cornerSize, 1.f);
+
+  arrowZone.reduce((arrowZone.getWidth() - 20.f) / 2.f, 0.f);
   juce::Path path;
   path.startNewSubPath(arrowZone.getX() + 3.0f, arrowZone.getCentreY() - 2.0f);
   path.lineTo(arrowZone.getCentreX(), arrowZone.getCentreY() + 3.0f);
