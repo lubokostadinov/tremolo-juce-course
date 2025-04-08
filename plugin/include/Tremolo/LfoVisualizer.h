@@ -33,7 +33,7 @@ public:
   }
 
 private:
-  static constexpr auto pointsOnPath = 800u;
+  static constexpr auto pointsOnPath = 22050u;
   static constexpr auto updateIntervalMs = 25;
   static constexpr auto periodsToPlotOf1HzWaveform = 4u;
 
