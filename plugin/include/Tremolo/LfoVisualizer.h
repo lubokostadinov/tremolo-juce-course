@@ -99,10 +99,11 @@ private:
    *                                     (right-bottom corner)
    */
   juce::AffineTransform getLfoCurveTransform() const {
+    constexpr auto ylim = 1.1f;
     const auto bounds = getLocalBounds().toFloat();
     const auto transform = juce::AffineTransform::fromTargetPoints(
-        0.f, 1.f, 0.f, 0.f, 0.f, -1.f, 0.f, bounds.getHeight(),
-        lfoCurve.getCurrentPosition().getX(), -1.f, bounds.getWidth(),
+        0.f, ylim, 0.f, 0.f, 0.f, -ylim, 0.f, bounds.getHeight(),
+        lfoCurve.getCurrentPosition().getX(), -ylim, bounds.getWidth(),
         bounds.getHeight());
     return transform;
   }
