@@ -24,7 +24,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
       rateAttachment{p.getParameters().rate, rateSlider},
       bypassAttachment{p.getParameters().bypassed, bypassButton},
       lfoVisualizer{
-          [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); }} {
+          [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
+          [&p] { return p.getSampleRateThreadSafe(); }} {
   lookAndFeel.setColour(juce::TextButton::buttonOnColourId,
                         std::get<Colours::ORANGE>(getColourPalette()));
   lookAndFeel.setColour(juce::TextButton::buttonColourId,

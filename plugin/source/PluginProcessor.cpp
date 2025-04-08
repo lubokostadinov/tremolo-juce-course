@@ -87,6 +87,8 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate,
   // initialisation that you need..
   juce::ignoreUnused(samplesPerBlock);
 
+  currentSampleRate = sampleRate;
+
   tremolo.prepare(sampleRate);
 }
 
@@ -185,6 +187,10 @@ juce::AudioProcessorParameter* AudioPluginAudioProcessor::getBypassParameter()
 void AudioPluginAudioProcessor::readAllLfoSamples(
     juce::AudioBuffer<float>& bufferToFill) {
   tremolo.readAllLfoSamples(bufferToFill);
+}
+
+double AudioPluginAudioProcessor::getSampleRateThreadSafe() const noexcept {
+  return currentSampleRate;
 }
 }  // namespace ws
 

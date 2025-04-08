@@ -10,13 +10,15 @@ namespace ws {
 class LfoVisualizer : public juce::Component, private juce::Timer {
 public:
   using ReadAllLfoSamples = std::function<void(juce::AudioBuffer<float>&)>;
+  using GetCurrentSampleRate = std::function<double()>;
 
-  explicit LfoVisualizer(ReadAllLfoSamples callback)
-      : readAllLfoSamples{callback} {
-    constexpr auto initialSize = 48000;
+  LfoVisualizer(ReadAllLfoSamples readSamples, GetCurrentSampleRate getRate)
+      : readAllLfoSamples{readSamples}, getCurrentSampleRate{getRate} {
+    const auto initialSize = static_cast<size_t>(getCurrentSampleRate());
     lfoSamples.resize(initialSize);
     std::fill_n(lfoSamples.begin(), initialSize, 0.f);
-    startTimer(50);
+    updateLfoCurve();
+    startTimer(updateIntervalMs);
   }
 
   void paint(juce::Graphics& g) override {
@@ -30,6 +32,8 @@ public:
   }
 
 private:
+  static constexpr auto updateIntervalMs = 50;
+
   void timerCallback() override {
     updateLfoCurve();
     repaint();
@@ -66,6 +70,7 @@ private:
 
   juce::Colour backgroundColour{0xFFD9D9D9};
   ReadAllLfoSamples readAllLfoSamples;
+  GetCurrentSampleRate getCurrentSampleRate;
   juce::AudioBuffer<float> buffer;
   juce::Path lfoCurve;
   std::deque<float> lfoSamples;
