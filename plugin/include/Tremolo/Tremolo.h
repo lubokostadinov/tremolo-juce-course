@@ -1,5 +1,6 @@
 #pragma once
 #include "SampleFifo.h"
+#include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
 #include <ranges>
@@ -18,7 +19,8 @@ public:
       : lfos{juce::dsp::Oscillator<float>{
                  [](float phase) { return std::sin(phase); }},
              juce::dsp::Oscillator<float>{
-                 [](float phase) { return triangle(phase); }}} {
+                 [](float phase) { return triangle(phase); }}},
+        lfoTransitionSmoother{0.f} {
     std::ranges::for_each(lfos, [](auto& lfo) { lfo.setFrequency(5, true); });
   }
 
@@ -29,6 +31,7 @@ public:
                                      .numChannels = 1u,
                                  }](auto& lfo) { lfo.prepare(spec); });
     lfoSampleFifo.prepare(sampleRate);
+    lfoTransitionSmoother.reset(sampleRate, 0.025 /* 25 milliseconds */);
   }
 
   void setModulationRate(float rateHz) noexcept {
@@ -39,17 +42,22 @@ public:
   void setLfoWaveform(LfoWaveform waveform) {
     jassert(waveform < LfoWaveform::COUNT);
 
-    if (waveform < LfoWaveform::COUNT) {
+    if (waveform != currentLfo && waveform < LfoWaveform::COUNT) {
+      // update the smoother
+      lfoTransitionSmoother.setCurrentAndTargetValue(getNextLfoValue());
+
       currentLfo = waveform;
+
+      // initiate smoothing
+      lfoTransitionSmoother.setTargetValue(getNextLfoValue());
     }
   }
 
   void process(juce::AudioBuffer<float>& buffer) noexcept {
     // for each sample
     for (const auto i : std::views::iota(0, buffer.getNumSamples())) {
-      // generate the LFO value;
-      // the argument is added to the generated sample, thus, we pass in 0
-      const auto lfoValue = lfos[currentLfo].processSample(0.f);
+      // generate the LFO value
+      const auto lfoValue = getNextLfoValue();
       lfoSampleFifo.push(lfoValue);
 
       // calculate the modulation value
@@ -87,8 +95,18 @@ private:
     return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
   }
 
+  float getNextLfoValue() {
+    if (lfoTransitionSmoother.isSmoothing()) {
+      return lfoTransitionSmoother.getNextValue();
+    }
+    // the argument is added to the generated sample, thus, we pass in 0
+    return lfos[currentLfo].processSample(0.f);
+  }
+
   std::array<juce::dsp::Oscillator<float>, LfoWaveform::COUNT> lfos;
   size_t currentLfo = LfoWaveform::SINE;
+  juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
+      lfoTransitionSmoother;
 
   SampleFifo<float> lfoSampleFifo;
 };
