@@ -18,6 +18,17 @@ public:
 
   CustomLookAndFeel();
 
+  void drawComboBox(juce::Graphics&,
+                    int width,
+                    int height,
+                    bool isButtonDown,
+                    int buttonX,
+                    int buttonY,
+                    int buttonW,
+                    int buttonH,
+                    juce::ComboBox&) override;
+
+private:
   template <Colours ColourName>
   const juce::Colour& getColour() {
     return std::get<ColourName>(getColourPalette());
