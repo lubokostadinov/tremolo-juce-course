@@ -42,18 +42,16 @@ public:
   void setLfoWaveform(LfoWaveform waveform) {
     jassert(waveform < LfoWaveform::COUNT);
 
-    if (waveform != currentLfo && waveform < LfoWaveform::COUNT) {
-      // update the smoother
-      lfoTransitionSmoother.setCurrentAndTargetValue(getNextLfoValue());
-
-      currentLfo = waveform;
-
-      // initiate smoothing
-      lfoTransitionSmoother.setTargetValue(getNextLfoValue());
+    if (waveform < LfoWaveform::COUNT) {
+      lfoToSet = waveform;
     }
   }
 
   void process(juce::AudioBuffer<float>& buffer) noexcept {
+    // actual updating of the LFO waveform happens in process()
+    // to keep setLfoWaveform() idempotent
+    updateLfoWaveform();
+
     // for each sample
     for (const auto i : std::views::iota(0, buffer.getNumSamples())) {
       // generate the LFO value
@@ -95,6 +93,18 @@ private:
     return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
   }
 
+  void updateLfoWaveform() {
+    if (lfoToSet != currentLfo) {
+      // update the smoother
+      lfoTransitionSmoother.setCurrentAndTargetValue(getNextLfoValue());
+
+      currentLfo = lfoToSet;
+
+      // initiate smoothing
+      lfoTransitionSmoother.setTargetValue(getNextLfoValue());
+    }
+  }
+
   float getNextLfoValue() {
     if (lfoTransitionSmoother.isSmoothing()) {
       return lfoTransitionSmoother.getNextValue();
@@ -104,7 +114,8 @@ private:
   }
 
   std::array<juce::dsp::Oscillator<float>, LfoWaveform::COUNT> lfos;
-  size_t currentLfo = LfoWaveform::SINE;
+  LfoWaveform currentLfo = LfoWaveform::SINE;
+  LfoWaveform lfoToSet{currentLfo};
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
       lfoTransitionSmoother;
 
