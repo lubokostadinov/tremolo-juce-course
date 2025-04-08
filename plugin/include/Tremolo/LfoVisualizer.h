@@ -15,7 +15,7 @@ public:
 
   LfoVisualizer(ReadAllLfoSamples readSamples, GetCurrentSampleRate getRate)
       : readAllLfoSamples{readSamples}, getCurrentSampleRate{getRate} {
-    const auto initialSize = static_cast<size_t>(getCurrentSampleRate());
+    const auto initialSize = getNumSamplesToStore();
     lfoSamples.resize(initialSize);
     std::fill_n(lfoSamples.begin(), initialSize, 0.f);
     decimateSamplesToPath();
@@ -32,6 +32,12 @@ public:
 private:
   static constexpr auto updateIntervalMs = 50;
 
+  size_t getNumSamplesToStore() const {
+    constexpr auto periodsToPlotOf1HzWaveform = 1u;
+    return static_cast<size_t>(getCurrentSampleRate() *
+                               periodsToPlotOf1HzWaveform);
+  }
+
   void timerCallback() override {
     updateLfoCurve();
     repaint();
@@ -43,6 +49,11 @@ private:
   }
 
   void updateSamplesQueue() {
+    if (lfoSamples.size() != getNumSamplesToStore()) {
+      // sample rate has changed
+      lfoSamples.resize(getNumSamplesToStore());
+    }
+
     readAllLfoSamples(buffer);
 
     const auto newAvailableSamples = buffer.getNumSamples();
