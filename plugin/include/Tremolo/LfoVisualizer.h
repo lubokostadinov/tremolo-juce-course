@@ -25,14 +25,7 @@ public:
     g.fillAll(backgroundColour);
 
     g.setColour(juce::Colour{0xFFEF7600});
-
-    const auto bounds = getLocalBounds().toFloat();
-    const auto transform = juce::AffineTransform::fromTargetPoints(
-        0.f, 1.f, 0.f, 0.f, 0.f, -1.f, 0.f, bounds.getHeight(),
-        lfoCurve.getCurrentPosition().getX(), -1.f, bounds.getWidth(),
-        bounds.getHeight());
-
-    g.strokePath(lfoCurve, juce::PathStrokeType{4.f}, transform);
+    g.strokePath(lfoCurve, juce::PathStrokeType{4.f}, getLfoCurveTransform());
   }
 
 private:
@@ -70,6 +63,24 @@ private:
       path.lineTo(static_cast<float>(i), lfoSamples.at(i));
     }
     lfoCurve = path;
+  }
+
+  /** @brief Creates a transform that maps current LFO curve to component bounds
+   *
+   * @detail The transform is based on following point mappings:
+   *
+   *     (0,1)                        -> (0,0) (left-top corner)
+   *     (0,-1)                       -> (0, height) (left-bottom corner)
+   *     (curve end X coordinate, -1) -> (component width, component height)
+   *                                     (right-bottom corner)
+   */
+  juce::AffineTransform getLfoCurveTransform() const {
+    const auto bounds = getLocalBounds().toFloat();
+    const auto transform = juce::AffineTransform::fromTargetPoints(
+        0.f, 1.f, 0.f, 0.f, 0.f, -1.f, 0.f, bounds.getHeight(),
+        lfoCurve.getCurrentPosition().getX(), -1.f, bounds.getWidth(),
+        bounds.getHeight());
+    return transform;
   }
 
   juce::Colour backgroundColour{0xFFD9D9D9};
