@@ -26,8 +26,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
       lfoVisualizer{
           [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
           [&p] { return p.getSampleRateThreadSafe(); }} {
-  lookAndFeel.setColour(juce::TextButton::buttonOnColourId,
-                        std::get<Colours::ORANGE>(getColourPalette()));
+  lookAndFeel.setColour(
+      juce::TextButton::buttonOnColourId,
+      lookAndFeel.getColour<CustomLookAndFeel::Colours::ORANGE>());
   lookAndFeel.setColour(juce::TextButton::buttonColourId,
                         std::get<Colours::LIGHT_GREY>(getColourPalette()));
 
