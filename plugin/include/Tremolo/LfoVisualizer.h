@@ -50,8 +50,7 @@ private:
   void updateSamplesQueue() {
     readAllLfoSamples(buffer);
 
-    const auto stride = static_cast<int>(
-        getCurrentSampleRate() * periodsToPlotOf1HzWaveform / pointsOnPath);
+    const auto stride = getStride();
 
     const auto newAvailableSamples = buffer.getNumSamples();
     if (newAvailableSamples > 0) {
@@ -72,6 +71,11 @@ private:
     while (stride <= sampleIndex) {
       sampleIndex -= stride;
     }
+  }
+
+  int getStride() const {
+    return static_cast<int>(getCurrentSampleRate() *
+                            periodsToPlotOf1HzWaveform / pointsOnPath);
   }
 
   void samplesToPath() {
