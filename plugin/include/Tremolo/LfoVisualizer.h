@@ -5,6 +5,7 @@
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_graphics/juce_graphics.h>
+#include <ranges>
 
 namespace ws {
 class LfoVisualizer : public juce::Component, private juce::Timer {
@@ -52,6 +53,13 @@ private:
                         lfoSamples.push_back(sample);
                       });
       buffer.clear();
+    } else {
+      const auto zerosToFill =
+          static_cast<int>(getCurrentSampleRate() * updateIntervalMs / 1000.0);
+      for ([[maybe_unused]] const auto i : std::views::iota(0, zerosToFill)) {
+        lfoSamples.pop_front();
+        lfoSamples.push_back(0.f);
+      }
     }
   }
 
