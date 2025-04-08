@@ -14,6 +14,7 @@ public:
     const auto sampleCapacity = static_cast<int>(0.1 * sampleRate);
 
     buffer.setSize(1, sampleCapacity);
+    buffer.clear();
     fifo.setTotalSize(sampleCapacity);
   }
 
