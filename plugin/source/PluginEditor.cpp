@@ -44,6 +44,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
 
   addAndMakeVisible(bypassButton);
 
+  lfoVisualizer.setCurveColor(
+      lookAndFeel.getColor<CustomLookAndFeel::Colors::ORANGE>());
+  lfoVisualizer.setBackgroundColor(
+      lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>());
   addAndMakeVisible(lfoVisualizer);
 
   // Make sure that before the constructor has finished, you've set the

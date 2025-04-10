@@ -22,12 +22,16 @@ public:
   void paint(juce::Graphics& g) override {
     g.fillAll(backgroundColour);
 
-    g.setColour(juce::Colour{0xFFEF7600});
+    g.setColour(curveColor);
     g.strokePath(
         lfoCurve,
         juce::PathStrokeType{4.f, juce::PathStrokeType::JointStyle::curved},
         getLfoCurveTransform());
   }
+
+  void setCurveColor(const juce::Colour& c) { curveColor = c; }
+
+  void setBackgroundColor(const juce::Colour& c) { backgroundColour = c; }
 
 private:
   static constexpr auto pointsOnPath = 22050u;
@@ -102,7 +106,8 @@ private:
     return transform;
   }
 
-  juce::Colour backgroundColour{0xFFD9D9D9};
+  juce::Colour curveColor{juce::Colours::black};
+  juce::Colour backgroundColour{juce::Colours::white};
   ReadAllLfoSamples readAllLfoSamples;
   GetCurrentSampleRate getCurrentSampleRate;
   juce::AudioBuffer<float> buffer;
