@@ -1,10 +1,10 @@
 #include "Tremolo/PluginProcessor.h"
+#include "Tremolo/PluginEditor.h"
+#include "Tremolo/JsonSerializer.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
 #include <ranges>
-#include "Tremolo/JsonSerializer.h"
-#include "Tremolo/PluginEditor.h"
 
 namespace ws {
 AudioPluginAudioProcessor::AudioPluginAudioProcessor(

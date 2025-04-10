@@ -1,8 +1,8 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
 #include "Parameters.h"
 #include "Tremolo.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
 namespace ws {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {
@@ -43,8 +43,8 @@ public:
 
   void readAllLfoSamples(juce::AudioBuffer<float>& bufferToFill);
 
-  /** @brief Retrieves the sample rate the processor was initialized with in a
-   * thread-safe manner */
+  /** @brief Retrieves the most recent sample rate the processor was given
+   * in a thread-safe manner */
   double getSampleRateThreadSafe() const noexcept;
 
 private:
