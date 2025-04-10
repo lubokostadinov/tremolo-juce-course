@@ -74,7 +74,8 @@ void JsonSerializer::deserialize(juce::InputStream& input,
 
   if (!parsedResult.hasProperty(ids.version) ||
       parsedResult[ids.version] != CURRENT_VERSION) {
-    DBG("this plugin version only supports version 1.0.0 of parameters");
+    DBG("this plugin version only supports version " << CURRENT_VERSION
+                                                     << " of parameters");
     return;
   }
 
@@ -88,7 +89,9 @@ void JsonSerializer::deserialize(juce::InputStream& input,
     if (waveformName.isString()) {
       const auto index =
           parameters.waveform.choices.indexOf(waveformName.toString());
-      parameters.waveform = std::max(index, parameters.waveform.getIndex());
+      if (0 <= index) {
+        parameters.waveform = index;
+      }
     }
   }
 }
