@@ -72,8 +72,9 @@ void AudioPluginAudioProcessorEditor::resized() {
 
   bounds.removeFromTop(12);
 
-  bounds.removeFromLeft(26);
-  bounds.removeFromRight(26);
+  constexpr auto widgetMargin = 26;
+  bounds.removeFromLeft(widgetMargin);
+  bounds.removeFromRight(widgetMargin);
 
   auto labelsBounds = bounds.removeFromTop(18);
   const auto oneThirdOfWidth = labelsBounds.getWidth() / 3;
