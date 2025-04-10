@@ -59,7 +59,7 @@ public:
       lfoSampleFifo.push(lfoValue);
 
       // calculate the modulation value
-      const auto modulationValue = (1.f + MODULATION_DEPTH * lfoValue);
+      const auto modulationValue = (1.f + modulationDepth * lfoValue);
 
       for (const auto channelIndex :
            std::views::iota(0, buffer.getNumChannels())) {
@@ -85,7 +85,7 @@ public:
   }
 
 private:
-  static constexpr auto MODULATION_DEPTH = 0.1f;
+  static constexpr auto modulationDepth = 0.1f;
 
   static float triangle(float phase) {
     // Source:

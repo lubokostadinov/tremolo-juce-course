@@ -29,8 +29,8 @@ const ParameterIdentifiers& getIdentifiers() {
   return ids;
 }
 
-constexpr auto PLUGIN_NAME = JucePlugin_Name;
-constexpr auto CURRENT_VERSION = "1.0.0";
+constexpr auto pluginName = JucePlugin_Name;
+constexpr auto currentVersion = "1.0.0";
 }  // namespace
 
 void JsonSerializer::serialize(const Parameters& parameters,
@@ -38,8 +38,8 @@ void JsonSerializer::serialize(const Parameters& parameters,
   juce::DynamicObject json{};
   const auto& ids = getIdentifiers();
 
-  json.setProperty(ids.pluginName, PLUGIN_NAME);
-  json.setProperty(ids.version, CURRENT_VERSION);
+  json.setProperty(ids.pluginName, pluginName);
+  json.setProperty(ids.version, currentVersion);
   json.setProperty(ids.rate, static_cast<double>(parameters.rate.get()));
   json.setProperty(ids.bypass, parameters.bypassed.get());
   json.setProperty(ids.waveform, parameters.waveform.getCurrentChoiceName());
@@ -67,14 +67,14 @@ void JsonSerializer::deserialize(juce::InputStream& input,
 
   const auto& ids = getIdentifiers();
   if (!parsedResult.hasProperty(ids.pluginName) ||
-      parsedResult[ids.pluginName] != PLUGIN_NAME) {
+      parsedResult[ids.pluginName] != pluginName) {
     DBG("invalid plugin name");
     return;
   }
 
   if (!parsedResult.hasProperty(ids.version) ||
-      parsedResult[ids.version] != CURRENT_VERSION) {
-    DBG("this plugin version only supports version " << CURRENT_VERSION
+      parsedResult[ids.version] != currentVersion) {
+    DBG("this plugin version only supports version " << currentVersion
                                                      << " of parameters");
     return;
   }
