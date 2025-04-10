@@ -11,9 +11,12 @@ CustomLookAndFeel::CustomLookAndFeel() {
             getColour<Colours::LIGHT_GREY>().darker());
   setColour(juce::ComboBox::arrowColourId,
             getColour<Colours::LIGHT_GREY>().darker());
-  setColour(juce::Label::textColourId, juce::Colours::black);
   setColour(juce::ComboBox::textColourId, juce::Colours::black);
+  setColour(juce::Label::textColourId, juce::Colours::black);
   setColour(juce::ToggleButton::textColourId, juce::Colours::black);
+  setColour(juce::ToggleButton::tickColourId, juce::Colours::black);
+  setColour(juce::ToggleButton::tickDisabledColourId,
+            juce::Colours::black.brighter());
 }
 
 void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
