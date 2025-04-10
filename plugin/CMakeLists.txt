@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(TremoloCoursePlugin VERSION 0.1.0)
 
-# Adds a plugin target (that's basically what the Projucer does).
+# Adds a plugin target.
 juce_add_plugin(
   TremoloCoursePlugin
   PRODUCT_NAME
@@ -47,8 +47,7 @@ target_sources(TremoloCoursePlugin PRIVATE ${SOURCE_FILES})
 # Sets the include directories of the plugin project.
 target_include_directories(TremoloCoursePlugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Links to all necessary dependencies. The present ones are recommended by JUCE.
-# If you use one of the additional modules, like the DSP module, you need to specify it here.
+# Links to all necessary dependencies.
 target_link_libraries_system(
   TremoloCoursePlugin
   PUBLIC
@@ -65,7 +64,7 @@ target_link_libraries(
 target_compile_definitions(TremoloCoursePlugin PUBLIC JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_VST3_CAN_REPLACE_VST2=0)
 
 # Enables strict C++ warnings and treats warnings as errors.
-# This needs to be set up only for your projects, not 3rd party
+# We set it only for our source files to avoid compilation errors for JUCE sources.
 set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_OPTIONS "${PROJECT_WARNINGS_CXX}")
 
 # In Visual Studio this command provides a nice grouping of source files in "filters".
