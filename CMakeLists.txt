@@ -13,6 +13,9 @@ if(PROJECT_IS_TOP_LEVEL)
   # Always use the newest C++ standard on green-field projects if possible.
   # C++ 20 is a good baseline.
   set(CMAKE_CXX_STANDARD 20)
+
+  # Link to C++ runtime statically
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
 # I like to download the dependencies to the same folder as the project.
