@@ -1,9 +1,9 @@
 #pragma once
-#include <functional>
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_graphics/juce_graphics.h>
+#include <functional>
 #include <ranges>
 
 namespace ws {
@@ -81,7 +81,7 @@ private:
   void samplesToPath() {
     juce::Path path;
     path.startNewSubPath(0.f, lfoSamplesToPlot.front());
-    for (const auto i : std::views::iota(0u, lfoSamplesToPlot.size())) {
+    for (const auto i : std::views::iota(1u, lfoSamplesToPlot.size())) {
       path.lineTo(static_cast<float>(i), lfoSamplesToPlot.at(i));
     }
     lfoCurve = path;
@@ -91,10 +91,10 @@ private:
    *
    * @detail The transform is based on following point mappings:
    *
-   *     (0,1)                        -> (0,0) (left-top corner)
-   *     (0,-1)                       -> (0, height) (left-bottom corner)
-   *     (curve end X coordinate, -1) -> (component width, component height)
-   *                                     (right-bottom corner)
+   *   (0,ylim)                        -> (0,0) (left-top corner)
+   *   (0,-ylim)                       -> (0, height) (left-bottom corner)
+   *   (curve end X coordinate, -ylim) -> (component width, component height)
+   *                                      (right-bottom corner)
    */
   juce::AffineTransform getLfoCurveTransform() const {
     constexpr auto ylim = 1.1f;
