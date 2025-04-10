@@ -111,6 +111,7 @@ private:
       return lfoTransitionSmoother.getNextValue();
     }
     // the argument is added to the generated sample, thus, we pass in 0
+    // to get just the generated sample
     return lfos[currentLfo].processSample(0.f);
   }
 
