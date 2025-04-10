@@ -24,6 +24,9 @@ CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::black);
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
             getColor<Colors::ORANGE>());
+
+  setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+  setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
 }
 
 void CustomLookAndFeel::drawComboBox(juce::Graphics& g,

@@ -13,8 +13,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
       lfoVisualizer{
           [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
           [&p] { return p.getSampleRateThreadSafe(); }} {
-  setLookAndFeel(&lookAndFeel);
-
   background.topColour =
       lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>().brighter();
   background.bottomColour =
@@ -53,6 +51,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
   lfoVisualizer.setBackgroundColor(
       lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>());
   addAndMakeVisible(lfoVisualizer);
+
+  // set the look and feel AFTER configuring all child components
+  setLookAndFeel(&lookAndFeel);
 
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
