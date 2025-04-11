@@ -5,11 +5,10 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 namespace ws {
-class AudioPluginAudioProcessor : public juce::AudioProcessor {
+class PluginProcessor : public juce::AudioProcessor {
 public:
-  explicit AudioPluginAudioProcessor(
-      Parameters::Container parameterContainer = {});
-  ~AudioPluginAudioProcessor() override;
+  explicit PluginProcessor(Parameters::Container parameterContainer = {});
+  ~PluginProcessor() override;
 
   void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 
@@ -52,6 +51,6 @@ private:
   Tremolo tremolo;
   std::atomic<double> currentSampleRate{0.};
 
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
 }  // namespace ws

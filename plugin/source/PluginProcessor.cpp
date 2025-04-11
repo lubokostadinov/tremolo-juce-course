@@ -7,8 +7,7 @@
 #include <ranges>
 
 namespace ws {
-AudioPluginAudioProcessor::AudioPluginAudioProcessor(
-    Parameters::Container parameterContainer)
+PluginProcessor::PluginProcessor(Parameters::Container parameterContainer)
     : AudioProcessor(
           BusesProperties()
 #if !JucePlugin_IsMidiEffect
@@ -24,13 +23,13 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor(
   });
 }
 
-AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
+PluginProcessor::~PluginProcessor() {}
 
-const juce::String AudioPluginAudioProcessor::getName() const {
+const juce::String PluginProcessor::getName() const {
   return JucePlugin_Name;
 }
 
-bool AudioPluginAudioProcessor::acceptsMidi() const {
+bool PluginProcessor::acceptsMidi() const {
 #if JucePlugin_WantsMidiInput
   return true;
 #else
@@ -38,7 +37,7 @@ bool AudioPluginAudioProcessor::acceptsMidi() const {
 #endif
 }
 
-bool AudioPluginAudioProcessor::producesMidi() const {
+bool PluginProcessor::producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
   return true;
 #else
@@ -46,7 +45,7 @@ bool AudioPluginAudioProcessor::producesMidi() const {
 #endif
 }
 
-bool AudioPluginAudioProcessor::isMidiEffect() const {
+bool PluginProcessor::isMidiEffect() const {
 #if JucePlugin_IsMidiEffect
   return true;
 #else
@@ -54,36 +53,35 @@ bool AudioPluginAudioProcessor::isMidiEffect() const {
 #endif
 }
 
-double AudioPluginAudioProcessor::getTailLengthSeconds() const {
+double PluginProcessor::getTailLengthSeconds() const {
   return 0.0;
 }
 
-int AudioPluginAudioProcessor::getNumPrograms() {
+int PluginProcessor::getNumPrograms() {
   return 1;  // NB: some hosts don't cope very well if you tell them there are 0
              // programs, so this should be at least 1, even if you're not
              // really implementing programs.
 }
 
-int AudioPluginAudioProcessor::getCurrentProgram() {
+int PluginProcessor::getCurrentProgram() {
   return 0;
 }
 
-void AudioPluginAudioProcessor::setCurrentProgram(int index) {
+void PluginProcessor::setCurrentProgram(int index) {
   juce::ignoreUnused(index);
 }
 
-const juce::String AudioPluginAudioProcessor::getProgramName(int index) {
+const juce::String PluginProcessor::getProgramName(int index) {
   juce::ignoreUnused(index);
   return {};
 }
 
-void AudioPluginAudioProcessor::changeProgramName(int index,
-                                                  const juce::String& newName) {
+void PluginProcessor::changeProgramName(int index,
+                                        const juce::String& newName) {
   juce::ignoreUnused(index, newName);
 }
 
-void AudioPluginAudioProcessor::prepareToPlay(double sampleRate,
-                                              int samplesPerBlock) {
+void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
   // Use this method as the place to do any pre-playback
   // initialisation that you need..
   juce::ignoreUnused(samplesPerBlock);
@@ -93,14 +91,13 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate,
   tremolo.prepare(sampleRate);
 }
 
-void AudioPluginAudioProcessor::releaseResources() {
+void PluginProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
   tremolo.reset();
 }
 
-bool AudioPluginAudioProcessor::isBusesLayoutSupported(
-    const BusesLayout& layouts) const {
+bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
 #if JucePlugin_IsMidiEffect
   juce::ignoreUnused(layouts);
   return true;
@@ -123,8 +120,8 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported(
 #endif
 }
 
-void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
-                                             juce::MidiBuffer& midiMessages) {
+void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
+                                   juce::MidiBuffer& midiMessages) {
   juce::ignoreUnused(midiMessages);
 
   juce::ScopedNoDenormals noDenormals;
@@ -156,42 +153,40 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   tremolo.process(buffer);
 }
 
-bool AudioPluginAudioProcessor::hasEditor() const {
+bool PluginProcessor::hasEditor() const {
   return true;  // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor() {
+juce::AudioProcessorEditor* PluginProcessor::createEditor() {
   return new AudioPluginAudioProcessorEditor(*this);
 }
 
-void AudioPluginAudioProcessor::getStateInformation(
-    juce::MemoryBlock& destData) {
+void PluginProcessor::getStateInformation(juce::MemoryBlock& destData) {
   juce::MemoryOutputStream outputStream{destData, true};
   JsonSerializer{}.serialize(parameters, outputStream);
 }
 
-void AudioPluginAudioProcessor::setStateInformation(const void* data,
-                                                    int sizeInBytes) {
+void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
   juce::MemoryInputStream inputStream{data, static_cast<size_t>(sizeInBytes),
                                       false};
   JsonSerializer{}.deserialize(inputStream, parameters);
 }
 
-Parameters& AudioPluginAudioProcessor::getParameters() noexcept {
+Parameters& PluginProcessor::getParameters() noexcept {
   return parameters;
 }
 
-juce::AudioProcessorParameter* AudioPluginAudioProcessor::getBypassParameter()
+juce::AudioProcessorParameter* PluginProcessor::getBypassParameter()
     const noexcept {
   return &parameters.bypassed;
 }
 
-void AudioPluginAudioProcessor::readAllLfoSamples(
+void PluginProcessor::readAllLfoSamples(
     juce::AudioBuffer<float>& bufferToFill) {
   tremolo.readAllLfoSamples(bufferToFill);
 }
 
-double AudioPluginAudioProcessor::getSampleRateThreadSafe() const noexcept {
+double PluginProcessor::getSampleRateThreadSafe() const noexcept {
   return currentSampleRate;
 }
 }  // namespace ws
@@ -199,5 +194,5 @@ double AudioPluginAudioProcessor::getSampleRateThreadSafe() const noexcept {
 // This creates new instances of the plugin.
 // This function definition must be in the global namespace.
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
-  return new ws::AudioPluginAudioProcessor();
+  return new ws::PluginProcessor();
 }

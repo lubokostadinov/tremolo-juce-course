@@ -11,7 +11,7 @@ namespace ws {
 
 class AudioPluginAudioProcessorEditor : public juce::AudioProcessorEditor {
 public:
-  explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor&);
+  explicit AudioPluginAudioProcessorEditor(PluginProcessor&);
   ~AudioPluginAudioProcessorEditor() override;
 
   void resized() override;

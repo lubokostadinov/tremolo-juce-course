@@ -5,7 +5,7 @@
 
 namespace ws {
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
-    AudioPluginAudioProcessor& p)
+    PluginProcessor& p)
     : AudioProcessorEditor(&p),
       waveformAttachment{p.getParameters().waveform, waveformComboBox},
       rateAttachment{p.getParameters().rate, rateSlider},
