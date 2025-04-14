@@ -5,6 +5,32 @@ project(TremoloCoursePluginTest)
 # Signals to CMake that we want to run tests from this directory.
 enable_testing()
 
+# Adds googletest.
+cpmaddpackage(
+  NAME
+  GOOGLETEST
+  GITHUB_REPOSITORY
+  google/googletest
+  VERSION
+  1.16.0
+  SOURCE_DIR
+  ${LIB_DIR}/googletest
+  OPTIONS
+  "INSTALL_GTEST OFF"
+  "gtest_force_shared_crt ON"
+)
+
+cpmaddpackage(
+  NAME
+  WOLFSOUND_DSP_UTILS
+  GITHUB_REPOSITORY
+  JanWilczek/wolfsound-dsp-utils
+  VERSION
+  0.1.0
+  SOURCE_DIR
+  ${LIB_DIR}/wolfsound-dsp-utils
+)
+
 # Creates the test console application.
 set(SOURCE_FILES source/PluginProcessorTest.cpp source/JsonSerializerTest.cpp source/TremoloTest.cpp)
 add_executable(TremoloCoursePluginTest ${SOURCE_FILES})

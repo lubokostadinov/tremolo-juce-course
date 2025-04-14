@@ -47,32 +47,6 @@ add_subdirectory(plugin)
 
 option(BUILD_TESTS "When on, will download the GoogleTest framework and add the automated tests project" OFF)
 if(BUILD_TESTS)
-  # Adds googletest.
-  cpmaddpackage(
-    NAME
-    GOOGLETEST
-    GITHUB_REPOSITORY
-    google/googletest
-    VERSION
-    1.16.0
-    SOURCE_DIR
-    ${LIB_DIR}/googletest
-    OPTIONS
-    "INSTALL_GTEST OFF"
-    "gtest_force_shared_crt ON"
-  )
-
-  cpmaddpackage(
-    NAME
-    WOLFSOUND_DSP_UTILS
-    GITHUB_REPOSITORY
-    JanWilczek/wolfsound-dsp-utils
-    VERSION
-    0.1.0
-    SOURCE_DIR
-    ${LIB_DIR}/wolfsound-dsp-utils
-  )
-
   # This command allows running tests from the "build" folder (the one where CMake generates the project to).
   enable_testing()
 
