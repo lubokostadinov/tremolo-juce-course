@@ -61,7 +61,7 @@ public:
 
       // calculate the modulation value
       constexpr auto modulationDepth = 0.1f;
-      const auto modulationValue = (1.f + modulationDepth * lfoValue);
+      const auto modulationValue = modulationDepth * lfoValue + 1.f;
 
       for (const auto channelIndex :
            std::views::iota(0, buffer.getNumChannels())) {
