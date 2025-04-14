@@ -14,10 +14,10 @@ namespace ws {
 TEST(Tremolo, ExtractLfo) {
   Tremolo testee;
   constexpr auto sampleRate = 48000.0;
-  testee.prepare(sampleRate, int(sampleRate));
+  testee.prepare(sampleRate, static_cast<int>(sampleRate));
 
   juce::AudioBuffer<float> buffer;
-  buffer.setSize(1, int(sampleRate));
+  buffer.setSize(1, static_cast<int>(sampleRate));
 
   juce::dsp::AudioBlock<float> block{buffer};
   block.fill(1.f);
