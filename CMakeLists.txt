@@ -62,6 +62,17 @@ if(BUILD_TESTS)
     "gtest_force_shared_crt ON"
   )
 
+  cpmaddpackage(
+    NAME
+    WOLFSOUND_DSP_UTILS
+    GITHUB_REPOSITORY
+    JanWilczek/wolfsound-dsp-utils
+    VERSION
+    0.1.0
+    SOURCE_DIR
+    ${LIB_DIR}/wolfsound-dsp-utils
+  )
+
   # This command allows running tests from the "build" folder (the one where CMake generates the project to).
   enable_testing()
 

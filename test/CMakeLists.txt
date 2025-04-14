@@ -6,11 +6,13 @@ project(TremoloCoursePluginTest)
 enable_testing()
 
 # Creates the test console application.
-set(SOURCE_FILES source/PluginProcessorTest.cpp source/JsonSerializerTest.cpp)
+set(SOURCE_FILES source/PluginProcessorTest.cpp source/JsonSerializerTest.cpp source/TremoloTest.cpp)
 add_executable(TremoloCoursePluginTest ${SOURCE_FILES})
 
 # Thanks to the fact that we link against the gtest_main library, we don't have to write the main function ourselves.
-target_link_libraries(TremoloCoursePluginTest PRIVATE ws::TremoloCoursePlugin GTest::gtest_main)
+target_link_libraries(
+  TremoloCoursePluginTest PRIVATE ws::TremoloCoursePlugin GTest::gtest_main wolfsound::wolfsound_dsp_utils
+)
 
 # Enables strict C++ warnings and treats warnings as errors.
 # This needs to be set up only for your projects, not 3rd party
