@@ -30,7 +30,7 @@ public:
                     juce::ComboBox&) override;
 
   template <Colors ColorName>
-  const juce::Colour& getColor() {
+  juce::Colour getColor() {
     return std::get<static_cast<std::underlying_type_t<Colors>>(ColorName)>(
         getColorPalette());
   }
