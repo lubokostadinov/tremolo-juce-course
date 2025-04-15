@@ -3,7 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "PluginProcessor.h"
-#include "Gradient.h"
+#include "GradientComponent.h"
 #include "LfoVisualizer.h"
 #include "CustomLookAndFeel.h"
 
