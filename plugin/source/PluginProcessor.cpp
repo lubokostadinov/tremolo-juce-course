@@ -23,8 +23,6 @@ PluginProcessor::PluginProcessor(Parameters::Container parameterContainer)
   });
 }
 
-PluginProcessor::~PluginProcessor() {}
-
 const juce::String PluginProcessor::getName() const {
   return JucePlugin_Name;
 }
