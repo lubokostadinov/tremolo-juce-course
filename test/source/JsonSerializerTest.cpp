@@ -14,8 +14,8 @@ TEST(JsonSerializer, SerializeToFile) {
 
   const juce::String EXPECTED_OUTPUT =
       u8R"({
+  "__version__": 1,
   "pluginName": "Tremolo",
-  "version": "1.0.0",
   "modulationRateHz": 10.0,
   "bypassed": true,
   "modulationWaveform": "Triangle"
@@ -34,8 +34,8 @@ TEST(JsonSerializer, SerializeToFile) {
 TEST(JsonSerializer, DeserializeFromString) {
   const juce::String SAVED_PARAMETERS =
       u8R"({
+  "__version__": 1,
   "pluginName": "Tremolo",
-  "version": "1.0.0",
   "modulationRateHz": 10.0,
   "bypassed": true,
   "modulationWaveform": "Triangle"

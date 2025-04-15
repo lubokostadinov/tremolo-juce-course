@@ -1,52 +1,40 @@
 #include "Tremolo/JsonSerializer.h"
 #include <juce_core/juce_core.h>
 
-namespace ws {
 namespace {
-struct ParameterIdentifiers {
-  juce::Identifier pluginName;
-
-  /** @brief Version of the parameters JSON */
-  juce::Identifier version;
-
-  /** @brief Modulation rate parameter */
-  juce::Identifier rate;
-
-  /** @brief Bypass parameter */
-  juce::Identifier bypass;
-
-  juce::Identifier waveform;
-};
-
-const ParameterIdentifiers& getIdentifiers() {
-  static const ParameterIdentifiers ids{
-      .pluginName = "pluginName",
-      .version = "version",
-      .rate = "modulationRateHz",
-      .bypass = "bypassed",
-      .waveform = "modulationWaveform",
-  };
-  return ids;
+constexpr auto pluginName = "pluginName";
 }
 
-constexpr auto pluginName = JucePlugin_Name;
-constexpr auto currentVersion = "1.0.0";
-}  // namespace
+template <>
+struct juce::SerialisationTraits<ws::Parameters> {
+  static constexpr auto marshallingVersion = 1;
 
+  template <typename Archive, typename T>
+  static void serialise(Archive& archive, T& t) {
+    using namespace juce;
+
+    archive(named(pluginName, JucePlugin_Name),
+            named("modulationRateHz", t.rate.get()),
+            named("bypassed", t.bypassed.get()),
+            named("modulationWaveform", t.waveform.getCurrentChoiceName()));
+  }
+};
+
+namespace ws {
 void JsonSerializer::serialize(const Parameters& parameters,
                                juce::OutputStream& output) {
-  juce::DynamicObject json{};
-  const auto& ids = getIdentifiers();
+  const auto json = juce::ToVar::convert(parameters);
 
-  json.setProperty(ids.pluginName, pluginName);
-  json.setProperty(ids.version, currentVersion);
-  json.setProperty(ids.rate, static_cast<double>(parameters.rate.get()));
-  json.setProperty(ids.bypass, parameters.bypassed.get());
-  json.setProperty(ids.waveform, parameters.waveform.getCurrentChoiceName());
+  if (!json.has_value()) {
+    return;
+  }
 
-  json.writeAsJSON(output, juce::JSON::FormatOptions{}
-                               .withSpacing(juce::JSON::Spacing::multiLine)
-                               .withMaxDecimalPlaces(2));
+  jassert(json->isObject());
+
+  json->getDynamicObject()->writeAsJSON(
+      output, juce::JSON::FormatOptions{}
+                  .withSpacing(juce::JSON::Spacing::multiLine)
+                  .withMaxDecimalPlaces(2));
 }
 
 void JsonSerializer::deserialize(juce::InputStream& input,
@@ -65,27 +53,27 @@ void JsonSerializer::deserialize(juce::InputStream& input,
     return;
   }
 
-  const auto& ids = getIdentifiers();
-  if (!parsedResult.hasProperty(ids.pluginName) ||
-      parsedResult[ids.pluginName] != pluginName) {
+  if (!parsedResult.hasProperty("pluginName") ||
+      parsedResult["pluginName"] != JucePlugin_Name) {
     DBG("invalid plugin name");
     return;
   }
 
-  if (!parsedResult.hasProperty(ids.version) ||
-      parsedResult[ids.version] != currentVersion) {
+  constexpr auto currentVersion = 1;
+  if (!parsedResult.hasProperty("__version__") ||
+      parsedResult["__version__"] != juce::var{currentVersion}) {
     DBG("this plugin version only supports version " << currentVersion
                                                      << " of parameters");
     return;
   }
 
   parameters.rate = parsedResult.getProperty(
-      ids.rate, static_cast<double>(parameters.rate.get()));
+      "modulationRateHz", static_cast<double>(parameters.rate.get()));
   parameters.bypassed =
-      parsedResult.getProperty(ids.bypass, parameters.bypassed.get());
+      parsedResult.getProperty("bypassed", parameters.bypassed.get());
 
-  if (parsedResult.hasProperty(ids.waveform)) {
-    const auto waveformName = parsedResult[ids.waveform];
+  if (parsedResult.hasProperty("modulationWaveform")) {
+    const auto waveformName = parsedResult["modulationWaveform"];
     if (waveformName.isString()) {
       const auto index =
           parameters.waveform.choices.indexOf(waveformName.toString());
