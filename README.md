@@ -4,7 +4,7 @@
 
 ## Usage
 
-This is a template repository which means you can right click "Use this template" on GitHub and create your own repo out of it.
+This is a template repository which means you can click "Use this template" on GitHub and create your own repo out of it.
 
 After cloning it locally, you can proceed with the usual CMake workflow.
 
@@ -31,4 +31,3 @@ pre-commit install
 ```
 
 (for this you may need to install `pre-commit` with `pip`: `pip install pre-commit`).
-
