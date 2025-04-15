@@ -6,15 +6,15 @@ namespace ws {
 class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 private:
   const auto& getColorPalette() {
-    static const std::array COLOURS{
+    static const std::array colours{
         juce::Colour{0xFFEF7600},
         juce::Colour{0xFFD9D9D9},
     };
-    return COLOURS;
+    return colours;
   }
 
 public:
-  enum Colors : size_t { ORANGE, LIGHT_GREY };
+  enum Colors : size_t { orange, lightGrey };
 
   CustomLookAndFeel();
 
