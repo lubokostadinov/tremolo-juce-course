@@ -6,14 +6,14 @@
 #include <ranges>
 #include <array>
 #include <cmath>
+#include <type_traits>
 
 namespace ws {
 class Tremolo {
 public:
-  enum LfoWaveform : size_t {
-    SINE = 0u,
-    TRIANGLE = 1u,
-    COUNT = 2u,
+  enum class LfoWaveform {
+    sine,
+    triangle,
   };
 
   Tremolo()
@@ -41,11 +41,10 @@ public:
   }
 
   void setLfoWaveform(LfoWaveform waveform) {
-    jassert(waveform < LfoWaveform::COUNT);
+    jassert(static_cast<std::underlying_type_t<LfoWaveform>>(waveform) <
+            static_cast<std::underlying_type_t<LfoWaveform>>(lfoWaveformCount));
 
-    if (waveform < LfoWaveform::COUNT) {
-      lfoToSet = waveform;
-    }
+    lfoToSet = waveform;
   }
 
   void process(juce::AudioBuffer<float>& buffer) noexcept {
@@ -112,11 +111,12 @@ private:
     }
     // the argument is added to the generated sample, thus, we pass in 0
     // to get just the generated sample
-    return lfos[currentLfo].processSample(0.f);
+    return lfos[static_cast<size_t>(currentLfo)].processSample(0.f);
   }
 
-  std::array<juce::dsp::Oscillator<float>, LfoWaveform::COUNT> lfos;
-  LfoWaveform currentLfo = LfoWaveform::SINE;
+  static constexpr auto lfoWaveformCount = 2u;
+  std::array<juce::dsp::Oscillator<float>, lfoWaveformCount> lfos;
+  LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet{currentLfo};
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
       lfoTransitionSmoother;

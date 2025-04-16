@@ -8,7 +8,6 @@ namespace ws {
 class PluginProcessor : public juce::AudioProcessor {
 public:
   explicit PluginProcessor(Parameters::Container parameterContainer = {});
-  ~PluginProcessor() override;
 
   void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 

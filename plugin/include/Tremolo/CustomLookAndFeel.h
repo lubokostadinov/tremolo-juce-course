@@ -1,20 +1,12 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <type_traits>
 
 namespace ws {
 class CustomLookAndFeel : public juce::LookAndFeel_V4 {
-private:
-  const auto& getColorPalette() {
-    static const std::array COLOURS{
-        juce::Colour{0xFFEF7600},
-        juce::Colour{0xFFD9D9D9},
-    };
-    return COLOURS;
-  }
-
 public:
-  enum Colors : size_t { ORANGE, LIGHT_GREY };
+  enum class Colors : size_t { orange, lightGrey };
 
   CustomLookAndFeel();
 
@@ -28,9 +20,6 @@ public:
                     int buttonH,
                     juce::ComboBox&) override;
 
-  template <Colors ColorName>
-  const juce::Colour& getColor() {
-    return std::get<ColorName>(getColorPalette());
-  }
+  static juce::Colour getColor(Colors colorName);
 };
 }  // namespace ws

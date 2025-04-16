@@ -4,13 +4,13 @@
 
 namespace ws {
 CustomLookAndFeel::CustomLookAndFeel() {
-  setColour(juce::TextButton::buttonOnColourId, getColor<Colors::ORANGE>());
-  setColour(juce::TextButton::buttonColourId, getColor<Colors::LIGHT_GREY>());
-  setColour(juce::ComboBox::backgroundColourId, getColor<Colors::LIGHT_GREY>());
+  setColour(juce::TextButton::buttonOnColourId, getColor(Colors::orange));
+  setColour(juce::TextButton::buttonColourId, getColor(Colors::lightGrey));
+  setColour(juce::ComboBox::backgroundColourId, getColor(Colors::lightGrey));
   setColour(juce::ComboBox::outlineColourId,
-            getColor<Colors::LIGHT_GREY>().darker());
+            getColor(Colors::lightGrey).darker());
   setColour(juce::ComboBox::arrowColourId,
-            getColor<Colors::LIGHT_GREY>().darker());
+            getColor(Colors::lightGrey).darker());
   setColour(juce::ComboBox::textColourId, juce::Colours::black);
   setColour(juce::Label::textColourId, juce::Colours::black);
   setColour(juce::ToggleButton::textColourId, juce::Colours::black);
@@ -18,12 +18,11 @@ CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::ToggleButton::tickDisabledColourId,
             juce::Colours::black.brighter());
 
-  setColour(juce::PopupMenu::backgroundColourId,
-            getColor<Colors::LIGHT_GREY>());
+  setColour(juce::PopupMenu::backgroundColourId, getColor(Colors::lightGrey));
   setColour(juce::PopupMenu::textColourId, juce::Colours::black);
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::black);
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
-            getColor<Colors::ORANGE>());
+            getColor(Colors::orange));
 
   setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
   setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
@@ -61,5 +60,13 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   g.setColour(box.findColour(juce::ComboBox::arrowColourId)
                   .withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
   g.strokePath(path, juce::PathStrokeType(2.0f));
+}
+
+juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
+  static const std::array colors{
+      juce::Colour{0xFFEF7600},
+      juce::Colour{0xFFD9D9D9},
+  };
+  return colors.at(static_cast<std::underlying_type_t<Colors>>(colorName));
 }
 }  // namespace ws

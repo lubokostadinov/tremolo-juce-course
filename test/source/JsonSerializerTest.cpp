@@ -12,7 +12,7 @@ TEST(JsonSerializer, SerializeToFile) {
   parameters.bypassed = true;
   parameters.waveform = 1;
 
-  const juce::String EXPECTED_OUTPUT =
+  const juce::String expectedOutput =
       u8R"({
   "__version__": 1,
   "pluginName": "Tremolo",
@@ -28,11 +28,11 @@ TEST(JsonSerializer, SerializeToFile) {
 
   const auto result = outputStream.toUTF8().removeCharacters("\r");
 
-  EXPECT_EQ(EXPECTED_OUTPUT, result);
+  EXPECT_EQ(expectedOutput, result);
 }
 
 TEST(JsonSerializer, DeserializeFromString) {
-  const juce::String SAVED_PARAMETERS =
+  const juce::String savedParameters =
       u8R"({
   "__version__": 1,
   "pluginName": "Tremolo",
@@ -42,8 +42,8 @@ TEST(JsonSerializer, DeserializeFromString) {
 })";
 
   juce::MemoryInputStream inputStream{
-      SAVED_PARAMETERS.getCharPointer(),
-      static_cast<size_t>(SAVED_PARAMETERS.length()), false};
+      savedParameters.getCharPointer(),
+      static_cast<size_t>(savedParameters.length()), false};
 
   Parameters::Container container;
   Parameters parameters{container};

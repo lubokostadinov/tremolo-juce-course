@@ -13,9 +13,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
           [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
           [&p] { return p.getSampleRateThreadSafe(); }} {
   background.topColour =
-      lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>().brighter();
+      lookAndFeel.getColor(CustomLookAndFeel::Colors::lightGrey).brighter();
   background.bottomColour =
-      lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>().darker();
+      lookAndFeel.getColor(CustomLookAndFeel::Colors::lightGrey).darker();
   addAndMakeVisible(background);
 
   headerLabel.setJustificationType(juce::Justification::centred);
@@ -46,9 +46,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(bypassButton);
 
   lfoVisualizer.setCurveColor(
-      lookAndFeel.getColor<CustomLookAndFeel::Colors::ORANGE>());
+      lookAndFeel.getColor(CustomLookAndFeel::Colors::orange));
   lfoVisualizer.setBackgroundColor(
-      lookAndFeel.getColor<CustomLookAndFeel::Colors::LIGHT_GREY>());
+      lookAndFeel.getColor(CustomLookAndFeel::Colors::lightGrey));
   addAndMakeVisible(lfoVisualizer);
 
   // set the look and feel AFTER configuring all child components

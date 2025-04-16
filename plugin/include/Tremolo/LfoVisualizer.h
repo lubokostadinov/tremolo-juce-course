@@ -7,16 +7,19 @@
 #include <ranges>
 
 namespace ws {
-class LfoVisualizer : public juce::Component, private juce::Timer {
+class LfoVisualizer : public juce::Component {
 public:
   using ReadAllLfoSamples = std::function<void(juce::AudioBuffer<float>&)>;
   using GetCurrentSampleRate = std::function<double()>;
 
   LfoVisualizer(ReadAllLfoSamples readSamples, GetCurrentSampleRate getRate)
-      : readAllLfoSamples{readSamples}, getCurrentSampleRate{getRate} {
+      : readAllLfoSamples{readSamples},
+        getCurrentSampleRate{getRate},
+        vblankAttachment{this, [this](double timestampSeconds) {
+                           update(timestampSeconds);
+                         }} {
     lfoSamplesToPlot.resize(pointsOnPath, 0.f);
     samplesToPath();
-    startTimer(updateIntervalMs);
   }
 
   void paint(juce::Graphics& g) override {
@@ -35,20 +38,24 @@ public:
 
 private:
   static constexpr auto pointsOnPath = 22050u;
-  static constexpr auto updateIntervalMs = 25;
   static constexpr auto periodsToPlotOf1HzWaveform = 4u;
 
-  void timerCallback() override {
-    updateLfoCurve();
+  void update(double timestampSeconds) {
+    updateLfoCurve(timestampSeconds);
     repaint();
   }
 
-  void updateLfoCurve() {
-    updateSamplesQueue();
+  void updateLfoCurve(double timestampSeconds) {
+    updateSamplesQueue(timestampSeconds);
     samplesToPath();
   }
 
-  void updateSamplesQueue() {
+  void updateSamplesQueue(double timestampSeconds) {
+    if (!lastTimestampSeconds.has_value()) {
+      lastTimestampSeconds = timestampSeconds;
+      return;
+    }
+
     readAllLfoSamples(buffer);
 
     const auto stride = getStride();
@@ -62,7 +69,8 @@ private:
       }
       buffer.clear();
     } else {
-      const auto secondsPassed = updateIntervalMs / 1000.0;
+      const auto secondsPassed =
+          timestampSeconds - lastTimestampSeconds.value();
       const auto samplesPassed =
           static_cast<int>(getCurrentSampleRate() * secondsPassed);
       for (; sampleIndex < samplesPassed; sampleIndex += stride) {
@@ -71,6 +79,8 @@ private:
       }
     }
     sampleIndex %= stride;
+
+    lastTimestampSeconds = timestampSeconds;
   }
 
   int getStride() const {
@@ -114,5 +124,8 @@ private:
   juce::Path lfoCurve;
   std::deque<float> lfoSamplesToPlot;
   int sampleIndex{0};
+
+  std::optional<double> lastTimestampSeconds;
+  juce::VBlankAttachment vblankAttachment;
 };
 }  // namespace ws
