@@ -32,7 +32,10 @@ public:
 
   void popAll(juce::AudioBuffer<SampleType>& bufferToFill) {
     const auto sampleCount = fifo.getNumReady();
-    bufferToFill.setSize(1, sampleCount);
+
+    // avoidReallocating = true, to avoid reallocations when the buffer size
+    // does not increase
+    bufferToFill.setSize(1, sampleCount, false, false, true);
 
     const auto scope = fifo.read(sampleCount);
     const auto* samplesToReadPtr = buffer.getReadPointer(0);
