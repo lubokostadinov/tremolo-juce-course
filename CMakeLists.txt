@@ -42,8 +42,78 @@ cpmaddpackage(
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Util.cmake)
 
-# Adds all the targets configured in the "plugin" folder.
-add_subdirectory(plugin)
+# Adds a plugin target.
+set(PLUGIN_NAME "Tremolo")
+juce_add_plugin(
+  TremoloCoursePlugin
+  PRODUCT_NAME
+    ${PLUGIN_NAME}
+  VERSION
+    0.0.0 # 0 forces AU hosts to always refresh
+  COMPANY_NAME
+    "WolfSound"
+  PLUGIN_MANUFACTURER_CODE
+    Wfsd
+  PLUGIN_CODE
+    Trcp
+  FORMATS
+    Standalone
+    AU
+    VST3
+  IS_SYNTH
+    FALSE
+  NEEDS_MIDI_INPUT
+    FALSE
+  NEEDS_MIDI_OUTPUT
+    FALSE
+  VST3_AUTO_MANIFEST
+    FALSE
+  COPY_PLUGIN_AFTER_BUILD
+    TRUE
+)
+# Adding an alias for a target is a good CMake practice: it forces
+# CMake to fail project generation when the aliased target doesn't exist.
+add_library(ws::TremoloCoursePlugin ALIAS TremoloCoursePlugin)
+
+# Sets the source files of the plugin project.
+set(SOURCE_FILES
+    plugin/plugin.cpp
+)
+juce_add_module(plugin ALIAS_NAMESPACE ws)
+target_sources(plugin PRIVATE ${SOURCE_FILES})
+target_compile_definitions(plugin INTERFACE PLUGIN_NAME="${PLUGIN_NAME}")
+
+# # Links to all necessary dependencies.
+# target_link_libraries(
+#   plugin
+#   PRIVATE
+#     juce::juce_audio_utils
+#     juce::juce_dsp
+# )
+target_link_libraries(
+  TremoloCoursePlugin
+  PUBLIC
+    juce::juce_recommended_config_flags
+    juce::juce_recommended_lto_flags
+    juce::juce_recommended_warning_flags
+)
+
+# These definitions are recommended by JUCE.
+target_compile_definitions(TremoloCoursePlugin
+  PUBLIC
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_VST3_CAN_REPLACE_VST2=0
+)
+
+# Enables strict C++ warnings and treats warnings as errors.
+# We set it only for our source files to avoid compilation errors for JUCE sources.
+set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_OPTIONS "${PROJECT_WARNINGS_CXX}")
+
+target_link_libraries(TremoloCoursePlugin PRIVATE ws::plugin)
+
+# In Visual Studio this command provides a nice grouping of source files in "filters".
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 option(BUILD_TESTS "When on, will download the GoogleTest framework and add the automated tests project" OFF)
 if(BUILD_TESTS)

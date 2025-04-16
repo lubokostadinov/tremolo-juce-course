@@ -1,6 +1,3 @@
-#include "Tremolo/JsonSerializer.h"
-#include <juce_core/juce_core.h>
-
 namespace ws {
 namespace {
 struct ParameterIdentifiers {
@@ -29,7 +26,7 @@ const ParameterIdentifiers& getIdentifiers() {
   return ids;
 }
 
-constexpr auto pluginName = JucePlugin_Name;
+constexpr auto pluginName = PLUGIN_NAME;
 constexpr auto currentVersion = "1.0.0";
 }  // namespace
 

@@ -1,4 +1,4 @@
-#include <Tremolo/PluginProcessor.h>
+#include <plugin/plugin.h>
 #include <gtest/gtest.h>
 
 namespace ws {

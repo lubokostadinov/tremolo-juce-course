@@ -42,6 +42,7 @@ set(SOURCE_FILES
     source/Parameters.cpp
     source/JsonSerializer.cpp
 )
+juce_add_module(tremolo_plugin_core ALIAS_NAMESPACE ws)
 target_sources(TremoloCoursePlugin PRIVATE ${SOURCE_FILES})
 
 # Sets the include directories of the plugin project.
@@ -50,9 +51,8 @@ target_include_directories(TremoloCoursePlugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 # Links to all necessary dependencies.
 target_link_libraries_system(
   TremoloCoursePlugin
-  PUBLIC
-    juce::juce_audio_utils
   PRIVATE
+    juce::juce_audio_utils
     juce::juce_dsp
 )
 target_link_libraries(
