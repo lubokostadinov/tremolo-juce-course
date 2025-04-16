@@ -1,4 +1,4 @@
-#include "plugin.h"
+#include "tremolo_plugin.h"
 #include "source/CustomLookAndFeel.cpp"
 #include "source/JsonSerializer.cpp"
 #include "source/Parameters.cpp"

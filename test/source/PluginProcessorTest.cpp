@@ -1,4 +1,4 @@
-#include <plugin/plugin.h>
+#include <tremolo_plugin/tremolo_plugin.h>
 #include <gtest/gtest.h>
 
 namespace ws {

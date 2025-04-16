@@ -77,19 +77,12 @@ add_library(ws::TremoloCoursePlugin ALIAS TremoloCoursePlugin)
 
 # Sets the source files of the plugin project.
 set(SOURCE_FILES
-    plugin/plugin.cpp
+    tremolo_plugin/tremolo_plugin.cpp
 )
-juce_add_module(plugin ALIAS_NAMESPACE ws)
-target_sources(plugin PRIVATE ${SOURCE_FILES})
-target_compile_definitions(plugin INTERFACE PLUGIN_NAME="${PLUGIN_NAME}")
+juce_add_module(tremolo_plugin ALIAS_NAMESPACE ws)
+target_sources(tremolo_plugin PRIVATE ${SOURCE_FILES})
+target_compile_definitions(tremolo_plugin INTERFACE PLUGIN_NAME="${PLUGIN_NAME}")
 
-# # Links to all necessary dependencies.
-# target_link_libraries(
-#   plugin
-#   PRIVATE
-#     juce::juce_audio_utils
-#     juce::juce_dsp
-# )
 target_link_libraries(
   TremoloCoursePlugin
   PUBLIC
@@ -110,7 +103,7 @@ target_compile_definitions(TremoloCoursePlugin
 # We set it only for our source files to avoid compilation errors for JUCE sources.
 set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_OPTIONS "${PROJECT_WARNINGS_CXX}")
 
-target_link_libraries(TremoloCoursePlugin PRIVATE ws::plugin)
+target_link_libraries(TremoloCoursePlugin PRIVATE ws::tremolo_plugin)
 
 # In Visual Studio this command provides a nice grouping of source files in "filters".
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/..)

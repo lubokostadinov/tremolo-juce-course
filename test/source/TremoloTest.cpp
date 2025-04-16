@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <plugin/plugin.h>
+#include <tremolo_plugin/tremolo_plugin.h>
 
 #include <wolfsound/file/wolfsound_WavFileWriter.hpp>
 
