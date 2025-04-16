@@ -31,6 +31,10 @@ struct juce::SerialisationTraits<SerializableParameters> {
   static void serialise(Archive& archive, T& p) {
     using namespace juce;
 
+    if (archive.getVersion() != 1) {
+      return;
+    }
+
     std::string pluginName = JucePlugin_Name;
 
     archive(named(pluginNameId, pluginName));
