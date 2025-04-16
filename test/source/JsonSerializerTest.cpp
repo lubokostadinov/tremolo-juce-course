@@ -24,7 +24,7 @@ TEST(JsonSerializer, SerializeToFile) {
   juce::MemoryBlock block;
   juce::MemoryOutputStream outputStream{block, false};
 
-  JsonSerializer{}.serialize(parameters, outputStream);
+  JsonSerializer::serialize(parameters, outputStream);
   outputStream.flush();
 
   const auto result = outputStream.toUTF8().removeCharacters("\r");
@@ -49,7 +49,7 @@ TEST(JsonSerializer, DeserializeFromString) {
   Parameters::Container container;
   Parameters parameters{container};
 
-  JsonSerializer{}.deserialize(inputStream, parameters);
+  JsonSerializer::deserialize(inputStream, parameters);
 
   EXPECT_FLOAT_EQ(parameters.rate, 10.f);
   EXPECT_TRUE(parameters.bypassed);
@@ -79,7 +79,7 @@ TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
   parameters.rate = 5.f;
 
   // when
-  JsonSerializer{}.deserialize(inputStream, parameters);
+  JsonSerializer::deserialize(inputStream, parameters);
 
   // then
   EXPECT_FLOAT_EQ(parameters.rate, 5.f);
