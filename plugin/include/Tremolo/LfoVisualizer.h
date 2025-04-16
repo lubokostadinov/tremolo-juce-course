@@ -13,11 +13,7 @@ public:
   using GetCurrentSampleRate = std::function<double()>;
 
   LfoVisualizer(ReadAllLfoSamples readSamples, GetCurrentSampleRate getRate)
-      : readAllLfoSamples{readSamples},
-        getCurrentSampleRate{getRate},
-        vblankAttachment{this, [this](double timestampSeconds) {
-                           update(timestampSeconds);
-                         }} {
+      : readAllLfoSamples{readSamples}, getCurrentSampleRate{getRate} {
     lfoSamplesToPlot.resize(pointsOnPath, 0.f);
     samplesToPath();
   }
@@ -126,6 +122,7 @@ private:
   int sampleIndex{0};
 
   std::optional<double> lastTimestampSeconds;
-  juce::VBlankAttachment vblankAttachment;
+  juce::VBlankAttachment vblankAttachment{
+      this, [this](double timestampSeconds) { update(timestampSeconds); }};
 };
 }  // namespace ws
