@@ -29,6 +29,8 @@ cpmaddpackage(
     0.3.0
   SOURCE_DIR
     ${LIB_DIR}/wolfsound-dsp-utils
+  OPTIONS
+    "BUILD_TESTS OFF"
 )
 
 # Creates the test console application.
