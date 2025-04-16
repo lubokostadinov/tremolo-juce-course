@@ -1,49 +1,64 @@
-namespace ws {
 namespace {
-struct ParameterIdentifiers {
-  juce::Identifier pluginName;
+constexpr auto pluginNameId = "pluginName";
+constexpr auto modulationRateHzId = "modulationRateHz";
+constexpr auto bypassedId = "bypassed";
+constexpr auto modulationWaveformId = "modulationWaveform";
 
-  /** @brief Version of the parameters JSON */
-  juce::Identifier version;
-
-  /** @brief Modulation rate parameter */
-  juce::Identifier rate;
-
-  /** @brief Bypass parameter */
-  juce::Identifier bypass;
-
-  juce::Identifier waveform;
+struct SerializableParameters {
+  float rate;
+  bool bypassed;
+  std::string waveform;
 };
 
-const ParameterIdentifiers& getIdentifiers() {
-  static const ParameterIdentifiers ids{
-      .pluginName = "pluginName",
-      .version = "version",
-      .rate = "modulationRateHz",
-      .bypass = "bypassed",
-      .waveform = "modulationWaveform",
+SerializableParameters from(const ws::Parameters& p) {
+  return {
+      .rate = p.rate.get(),
+      .bypassed = p.bypassed.get(),
+      .waveform = p.waveform.getCurrentChoiceName().toStdString(),
   };
-  return ids;
 }
-
-constexpr auto pluginName = TREMOLO_PLUGIN_NAME;
-constexpr auto currentVersion = "1.0.0";
 }  // namespace
 
+template <>
+struct juce::SerialisationTraits<SerializableParameters> {
+  static constexpr auto marshallingVersion = 1;
+
+  template <typename Archive, typename T>
+  static void serialise(Archive& archive, T& p) {
+    using namespace juce;
+
+    if (archive.getVersion() != 1) {
+      return;
+    }
+
+    std::string pluginName = TREMOLO_PLUGIN_NAME;
+
+    archive(named(pluginNameId, pluginName));
+
+    if (pluginName != TREMOLO_PLUGIN_NAME) {
+      return;
+    }
+
+    archive(named(modulationRateHzId, p.rate), named(bypassedId, p.bypassed),
+            named(modulationWaveformId, p.waveform));
+  }
+};
+
+namespace ws {
 void JsonSerializer::serialize(const Parameters& parameters,
                                juce::OutputStream& output) {
-  juce::DynamicObject json{};
-  const auto& ids = getIdentifiers();
+  const auto json = juce::ToVar::convert(from(parameters));
 
-  json.setProperty(ids.pluginName, pluginName);
-  json.setProperty(ids.version, currentVersion);
-  json.setProperty(ids.rate, static_cast<double>(parameters.rate.get()));
-  json.setProperty(ids.bypass, parameters.bypassed.get());
-  json.setProperty(ids.waveform, parameters.waveform.getCurrentChoiceName());
+  if (!json.has_value()) {
+    return;
+  }
 
-  json.writeAsJSON(output, juce::JSON::FormatOptions{}
-                               .withSpacing(juce::JSON::Spacing::multiLine)
-                               .withMaxDecimalPlaces(2));
+  jassert(json->isObject());
+
+  json->getDynamicObject()->writeAsJSON(
+      output, juce::JSON::FormatOptions{}
+                  .withSpacing(juce::JSON::Spacing::multiLine)
+                  .withMaxDecimalPlaces(2));
 }
 
 void JsonSerializer::deserialize(juce::InputStream& input,
@@ -57,39 +72,20 @@ void JsonSerializer::deserialize(juce::InputStream& input,
     return;
   }
 
-  if (!parsedResult.isObject()) {
-    DBG("not a dynamic object");
+  const auto parsedParameters =
+      juce::FromVar::convert<SerializableParameters>(parsedResult);
+
+  if (!parsedParameters.has_value()) {
     return;
   }
 
-  const auto& ids = getIdentifiers();
-  if (!parsedResult.hasProperty(ids.pluginName) ||
-      parsedResult[ids.pluginName] != pluginName) {
-    DBG("invalid plugin name");
-    return;
-  }
+  parameters.rate = parsedParameters->rate;
+  parameters.bypassed = parsedParameters->bypassed;
 
-  if (!parsedResult.hasProperty(ids.version) ||
-      parsedResult[ids.version] != currentVersion) {
-    DBG("this plugin version only supports version " << currentVersion
-                                                     << " of parameters");
-    return;
-  }
-
-  parameters.rate = parsedResult.getProperty(
-      ids.rate, static_cast<double>(parameters.rate.get()));
-  parameters.bypassed =
-      parsedResult.getProperty(ids.bypass, parameters.bypassed.get());
-
-  if (parsedResult.hasProperty(ids.waveform)) {
-    const auto waveformName = parsedResult[ids.waveform];
-    if (waveformName.isString()) {
-      const auto index =
-          parameters.waveform.choices.indexOf(waveformName.toString());
-      if (0 <= index) {
-        parameters.waveform = index;
-      }
-    }
+  const auto index =
+      parameters.waveform.choices.indexOf(parsedParameters->waveform);
+  if (0 <= index) {
+    parameters.waveform = index;
   }
 }
 }  // namespace ws
