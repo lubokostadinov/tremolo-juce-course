@@ -71,29 +71,15 @@ juce_add_plugin(
   COPY_PLUGIN_AFTER_BUILD
     TRUE
 )
-# Adding an alias for a target is a good CMake practice: it forces
-# CMake to fail project generation when the aliased target doesn't exist.
-add_library(ws::TremoloCoursePlugin ALIAS TremoloCoursePlugin)
+
+juce_add_module(tremolo_plugin ALIAS_NAMESPACE ws)
 
 # Sets the source files of the plugin project.
-set(SOURCE_FILES
-    tremolo_plugin/tremolo_plugin.cpp
-)
-juce_add_module(tremolo_plugin ALIAS_NAMESPACE ws)
-target_sources(tremolo_plugin PRIVATE ${SOURCE_FILES})
-target_compile_definitions(tremolo_plugin INTERFACE PLUGIN_NAME="${PLUGIN_NAME}")
-
-target_link_libraries(
-  TremoloCoursePlugin
-  PUBLIC
-    juce::juce_recommended_config_flags
-    juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags
-)
-
-# These definitions are recommended by JUCE.
-target_compile_definitions(TremoloCoursePlugin
-  PUBLIC
+target_sources(tremolo_plugin PRIVATE tremolo_plugin/tremolo_plugin.cpp)
+target_compile_definitions(tremolo_plugin
+  INTERFACE
+    PLUGIN_NAME="${PLUGIN_NAME}"
+    # The following definitions are recommended by JUCE.
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
@@ -101,9 +87,17 @@ target_compile_definitions(TremoloCoursePlugin
 
 # Enables strict C++ warnings and treats warnings as errors.
 # We set it only for our source files to avoid compilation errors for JUCE sources.
-set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_OPTIONS "${PROJECT_WARNINGS_CXX}")
+target_compile_options(tremolo_plugin INTERFACE "${PROJECT_WARNINGS_CXX}")
 
-target_link_libraries(TremoloCoursePlugin PRIVATE ws::tremolo_plugin)
+target_link_libraries(
+  TremoloCoursePlugin
+  PRIVATE
+    ws::tremolo_plugin
+  PUBLIC
+    juce::juce_recommended_config_flags
+    juce::juce_recommended_lto_flags
+    juce::juce_recommended_warning_flags
+)
 
 # In Visual Studio this command provides a nice grouping of source files in "filters".
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/..)
