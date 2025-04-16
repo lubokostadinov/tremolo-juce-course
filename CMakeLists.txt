@@ -4,6 +4,9 @@
 # $ cmake --version
 cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 
+set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
+set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded CACHE STRING "" FORCE)
+
 # Sets a few variables, like PROJECT_NAME.
 project(JucePluginDevelopmentCourseTremoloPlugin)
 
