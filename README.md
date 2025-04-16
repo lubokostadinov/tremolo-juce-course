@@ -11,9 +11,10 @@ After cloning it locally, you can proceed with the usual CMake workflow.
 In the main repo directory execute
 
 ```bash
- # uses Ninja; alternatives: release | vs | Xcode
- # BUILD_TESTS flag will donwload googletest and allow unit test execution
-cmake --preset default -DBUILD_TESTS=ON
+# 'default' preset uses Ninja; alternatives: 'release' | 'vs' | 'Xcode'
+# BUILD_TESTS flag will download googletest and allow unit test execution
+# WARNINGS_AS_ERRORS flag will disallow code compilation on possible mistakes
+cmake --preset default -DBUILD_TESTS=ON -DWARNINGS_AS_ERRORS=ON
 cmake --build --preset default
 
 # to run unit tests (BUILD_TESTS=ON)
