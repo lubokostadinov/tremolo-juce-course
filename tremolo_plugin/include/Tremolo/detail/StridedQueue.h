@@ -13,11 +13,6 @@ public:
   void pushBack(std::span<const T> buffer) {
     const auto toBeAdded = newElementsCount(buffer.size());
 
-    const auto endElementIndex =
-        (elementIndex + (buffer.size() / stride + 1u) * stride -
-         buffer.size()) %
-        stride;
-
     if (stridedElements.size() > toBeAdded) {
       std::rotate(stridedElements.begin(), stridedElements.begin() + toBeAdded,
                   stridedElements.end());
@@ -33,7 +28,9 @@ public:
       *(stridedElements.rbegin() + i) = buffer[bufferEndIndex - i * stride];
     }
 
-    elementIndex = endElementIndex;
+    elementIndex = (elementIndex + (buffer.size() / stride + 1u) * stride -
+                    buffer.size()) %
+                   stride;
   }
 
   void pushBackZeros(size_t zerosCount) {
