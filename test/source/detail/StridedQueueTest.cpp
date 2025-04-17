@@ -60,5 +60,13 @@ TEST(StridedQueue, pushBack) {
   ASSERT_EQ(7, testee.at(2u));
   ASSERT_EQ(8, testee.at(3u));
   ASSERT_EQ(9, testee.at(4u));
+
+  testee.pushBack(std::vector{0, 0, 10, 0, 0, 20, 0, 0, 30, 0, 0, 40, 0, 0, 50,
+                              0, 0, 60, 0, 0, 70, 0, 0, 80, 0, 0, 90, 0});
+  ASSERT_EQ(50, testee.at(0u));
+  ASSERT_EQ(60, testee.at(1u));
+  ASSERT_EQ(70, testee.at(2u));
+  ASSERT_EQ(80, testee.at(3u));
+  ASSERT_EQ(90, testee.at(4u));
 }
 }  // namespace ws::detail
