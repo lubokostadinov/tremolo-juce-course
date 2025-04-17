@@ -1,5 +1,5 @@
 namespace ws::detail {
-template <size_t Size>
+template <typename T, size_t Size>
 class StridedQueue {
 public:
   void setStride(int newStride) {
@@ -10,11 +10,11 @@ public:
 
   [[nodiscard]] size_t size() const noexcept { return stridedElements.size(); }
 
-  float& front() noexcept { return stridedElements.front(); }
+  T& front() noexcept { return stridedElements.front(); }
 
-  float& at(size_t index) { return stridedElements.at(index); }
+  T& at(size_t index) { return stridedElements.at(index); }
 
-  void pushBack(juce::Span<const float> buffer) {
+  void pushBack(juce::Span<const T> buffer) {
     const auto toBeAdded = newElementsCount(buffer.size());
 
     if (stridedElements.size() <= toBeAdded) {
@@ -66,7 +66,7 @@ private:
     return lowerBound;
   }
 
-  std::array<float, Size> stridedElements{};
+  std::array<T, Size> stridedElements{};
   size_t elementIndex{0u};
   size_t stride{1u};
 };
