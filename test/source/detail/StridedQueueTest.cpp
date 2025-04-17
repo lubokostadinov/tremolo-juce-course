@@ -15,7 +15,6 @@ TEST(StridedQueue, pushBack) {
   ASSERT_EQ(5, testee.at(4u));
 
   testee.pushBack(std::vector{0, 0, 6, 0, 0, 7, 0});
-
   ASSERT_EQ(3, testee.at(0u));
   ASSERT_EQ(4, testee.at(1u));
   ASSERT_EQ(5, testee.at(2u));
@@ -28,5 +27,38 @@ TEST(StridedQueue, pushBack) {
   ASSERT_EQ(3, testee.at(2u));
   ASSERT_EQ(4, testee.at(3u));
   ASSERT_EQ(5, testee.at(4u));
+
+  testee.pushBack(std::vector{6});
+  ASSERT_EQ(2, testee.at(0u));
+  ASSERT_EQ(3, testee.at(1u));
+  ASSERT_EQ(4, testee.at(2u));
+  ASSERT_EQ(5, testee.at(3u));
+  ASSERT_EQ(6, testee.at(4u));
+
+  testee.pushBack(std::vector{0});
+  ASSERT_EQ(2, testee.at(0u));
+  ASSERT_EQ(3, testee.at(1u));
+  ASSERT_EQ(4, testee.at(2u));
+  ASSERT_EQ(5, testee.at(3u));
+  ASSERT_EQ(6, testee.at(4u));
+
+  testee.pushBack(std::vector{0, 7});
+  ASSERT_EQ(3, testee.at(0u));
+  ASSERT_EQ(4, testee.at(1u));
+  ASSERT_EQ(5, testee.at(2u));
+  ASSERT_EQ(6, testee.at(3u));
+  ASSERT_EQ(7, testee.at(4u));
+
+  testee.pushBack(std::vector{0});
+  testee.pushBack(std::vector{0});
+  testee.pushBack(std::vector{8});
+  testee.pushBack(std::vector{0});
+  testee.pushBack(std::vector{0});
+  testee.pushBack(std::vector{9});
+  ASSERT_EQ(5, testee.at(0u));
+  ASSERT_EQ(6, testee.at(1u));
+  ASSERT_EQ(7, testee.at(2u));
+  ASSERT_EQ(8, testee.at(3u));
+  ASSERT_EQ(9, testee.at(4u));
 }
 }  // namespace ws::detail

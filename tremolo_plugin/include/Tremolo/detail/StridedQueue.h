@@ -13,16 +13,24 @@ public:
   void pushBack(std::span<const T> buffer) {
     const auto toBeAdded = newElementsCount(buffer.size());
 
+    const auto endElementIndex =
+        (elementIndex + (buffer.size() / stride + 1u) * stride -
+         buffer.size()) %
+        stride;
+
     if (stridedElements.size() <= toBeAdded) {
       // stridedElements will be completely overwritten
       const auto bufferEndIndex = elementIndex + (toBeAdded - 1u) * stride;
 
-      for (const auto i : std::views::iota(0u, toBeAdded)) {
+      for (const auto i : std::views::iota(0u, stridedElements.size())) {
+        jassert(0 <= (bufferEndIndex - i * stride));
+        jassert((bufferEndIndex - i * stride) < buffer.size());
+        jassert(stridedElements.rbegin() + i < stridedElements.rend());
+
         *(stridedElements.rbegin() + i) = buffer[bufferEndIndex - i * stride];
       }
 
-      // current buffer's last element is "-1st" with respect to the next buffer
-      elementIndex = (bufferEndIndex + stride - 1u) % stride;
+      elementIndex = endElementIndex;
       return;
     }
 
@@ -39,8 +47,7 @@ public:
       elementIndex += stride;
     }
 
-    // current buffer's last element is "-1st" with respect to the next buffer
-    elementIndex = (elementIndex - 1u) % stride;
+    elementIndex = endElementIndex;
   }
 
   void pushBackZeros(size_t zerosCount) {
