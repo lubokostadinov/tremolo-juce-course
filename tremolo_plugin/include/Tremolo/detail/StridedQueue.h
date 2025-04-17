@@ -2,8 +2,6 @@ namespace ws::detail {
 template <size_t Size>
 class StridedQueue {
 public:
-  StridedQueue() { stridedElements.resize(Size, 0.f); }
-
   void setStride(int newStride) {
     jassert(newStride > 0);
 
@@ -69,7 +67,7 @@ private:
     return lowerBound;
   }
 
-  std::deque<float> stridedElements;
+  std::array<float, Size> stridedElements{};
   int elementIndex{0};
   int stride{1};
 };
