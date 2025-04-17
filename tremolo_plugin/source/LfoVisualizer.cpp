@@ -47,12 +47,13 @@ void LfoVisualizer::updateSamplesQueue(double timestampSeconds) {
 
   const auto newAvailableSamples = buffer.getNumSamples();
   if (newAvailableSamples > 0) {
-    lfoSamplesToPlot.pushBack(buffer);
+    lfoSamplesToPlot.pushBack(juce::Span{
+        buffer.getReadPointer(0), static_cast<size_t>(buffer.getNumSamples())});
     buffer.clear();
   } else {
     const auto secondsPassed = timestampSeconds - lastTimestampSeconds.value();
     const auto samplesPassed =
-        static_cast<int>(getCurrentSampleRate() * secondsPassed);
+        static_cast<size_t>(getCurrentSampleRate() * secondsPassed);
     lfoSamplesToPlot.pushBackZeros(samplesPassed);
   }
 

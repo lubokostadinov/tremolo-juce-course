@@ -5,7 +5,7 @@ public:
   void setStride(int newStride) {
     jassert(newStride > 0);
 
-    stride = newStride;
+    stride = static_cast<size_t>(newStride);
   }
 
   [[nodiscard]] size_t size() const noexcept { return stridedElements.size(); }
@@ -14,61 +14,60 @@ public:
 
   float& at(size_t index) { return stridedElements.at(index); }
 
-  void pushBack(const juce::AudioBuffer<float>& buffer) {
-    const auto toBeAdded = newElementsCount(buffer.getNumSamples());
+  void pushBack(juce::Span<const float> buffer) {
+    const auto toBeAdded = newElementsCount(buffer.size());
 
-    if (static_cast<int>(stridedElements.size()) <= toBeAdded) {
+    if (stridedElements.size() <= toBeAdded) {
       // stridedElements will be completely overwritten
-      for (const auto i : std::views::iota(0, toBeAdded)) {
-        *(stridedElements.end() - i - 1) =
-            buffer.getSample(0, buffer.getNumSamples() - i * stride - 1);
+      for (const auto i : std::views::iota(0u, toBeAdded)) {
+        *(stridedElements.end() - i - 1u) =
+            buffer[buffer.size() - i * stride - 1u];
       }
-      elementIndex = stride - 1;
+      elementIndex = stride - 1u;
       return;
     }
 
     std::rotate(stridedElements.begin(), stridedElements.begin() + toBeAdded,
                 stridedElements.end());
 
-    const auto beginIndex =
-        static_cast<int>(stridedElements.size()) - toBeAdded;
+    const auto beginIndex = stridedElements.size() - toBeAdded;
 
-    for (const auto i : std::views::iota(0, toBeAdded)) {
-      jassert((beginIndex + i) < static_cast<int>(stridedElements.size()));
-      jassert(elementIndex < buffer.getNumSamples());
+    for (const auto i : std::views::iota(0u, toBeAdded)) {
+      jassert((beginIndex + i) < stridedElements.size());
+      jassert(elementIndex < buffer.size());
 
-      stridedElements.at(static_cast<size_t>(beginIndex + i)) =
-          buffer.getSample(0, elementIndex);
+      stridedElements.at(beginIndex + i) = buffer[elementIndex];
       elementIndex += stride;
     }
 
     elementIndex %= stride;
   }
 
-  void pushBackZeros(int zerosCount) {
+  void pushBackZeros(size_t zerosCount) {
     const auto toBeAdded = newElementsCount(zerosCount);
-    if (toBeAdded < static_cast<int>(stridedElements.size())) {
+    if (toBeAdded < stridedElements.size()) {
       std::rotate(stridedElements.begin(), stridedElements.begin() + toBeAdded,
                   stridedElements.end());
     }
     const auto beginIndex =
-        std::max(0, static_cast<int>(stridedElements.size()) - toBeAdded);
+        std::max(0, static_cast<int>(stridedElements.size()) -
+                        static_cast<int>(toBeAdded));
     std::fill(stridedElements.begin() + beginIndex, stridedElements.end(), 0.f);
   }
 
 private:
-  [[nodiscard]] int newElementsCount(int sampleCount) const noexcept {
+  [[nodiscard]] size_t newElementsCount(size_t sampleCount) const noexcept {
     const auto lowerBound = sampleCount / stride;
 
     if (lowerBound * stride + elementIndex < sampleCount) {
-      return lowerBound + 1;
+      return lowerBound + 1u;
     }
 
     return lowerBound;
   }
 
   std::array<float, Size> stridedElements{};
-  int elementIndex{0};
-  int stride{1};
+  size_t elementIndex{0u};
+  size_t stride{1u};
 };
 }  // namespace ws::detail
