@@ -11,17 +11,19 @@ public:
   T& at(size_t index) { return stridedElements.at(index); }
 
   void pushBack(std::span<const T> buffer) {
-    const auto toBeAdded = newElementsCount(buffer.size());
+    const auto availableStridedCount = newElementsCount(buffer.size());
 
-    if (toBeAdded < stridedElements.size()) {
+    if (availableStridedCount < stridedElements.size()) {
       // rotate when not overwritten completely
-      std::rotate(stridedElements.begin(), stridedElements.begin() + toBeAdded,
+      std::rotate(stridedElements.begin(),
+                  stridedElements.begin() + availableStridedCount,
                   stridedElements.end());
     }
-    const auto bufferEndIndex = elementIndex + (toBeAdded - 1u) * stride;
+    const auto bufferEndIndex =
+        elementIndex + (availableStridedCount - 1u) * stride;
 
-    for (const auto i :
-         std::views::iota(0u, std::min(toBeAdded, stridedElements.size()))) {
+    for (const auto i : std::views::iota(
+             0u, std::min(availableStridedCount, stridedElements.size()))) {
       jassert(0 <= (bufferEndIndex - i * stride));
       jassert((bufferEndIndex - i * stride) < buffer.size());
       jassert(stridedElements.rbegin() + i < stridedElements.rend());
@@ -38,14 +40,15 @@ public:
     // reset elementIndex; the order changed
     elementIndex = 0u;
 
-    const auto toBeAdded = newElementsCount(zerosCount);
-    if (toBeAdded < stridedElements.size()) {
-      std::rotate(stridedElements.begin(), stridedElements.begin() + toBeAdded,
+    const auto availableStridedCount = newElementsCount(zerosCount);
+    if (availableStridedCount < stridedElements.size()) {
+      std::rotate(stridedElements.begin(),
+                  stridedElements.begin() + availableStridedCount,
                   stridedElements.end());
     }
     const auto beginIndex =
         std::max(0, static_cast<int>(stridedElements.size()) -
-                        static_cast<int>(toBeAdded));
+                        static_cast<int>(availableStridedCount));
     std::fill(stridedElements.begin() + beginIndex, stridedElements.end(), 0.f);
   }
 
