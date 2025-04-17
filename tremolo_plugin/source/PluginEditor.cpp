@@ -6,7 +6,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
       bypassAttachment{p.getParameters().bypassed, bypassButton},
       lfoVisualizer{
           [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
-          [&p] { return p.getSampleRateThreadSafe(); }} {
+          [&p] { return p.getSampleRateThreadSafe(); },
+          [&p] { return p.getParameters().bypassed.get(); }} {
   background.topColour =
       lookAndFeel.getColor(CustomLookAndFeel::Colors::lightGrey).brighter();
   background.bottomColour =

@@ -2,8 +2,11 @@
 namespace ws {
 
 LfoVisualizer::LfoVisualizer(ReadAllLfoSamples readSamples,
-                             GetCurrentSampleRate getRate)
-    : readAllLfoSamples{readSamples}, getCurrentSampleRate{getRate} {
+                             GetCurrentSampleRate getRate,
+                             IsBypassed getIsBypassed)
+    : readAllLfoSamples{readSamples},
+      getCurrentSampleRate{getRate},
+      isBypassed{getIsBypassed} {
   samplesToPath();
 }
 
@@ -45,25 +48,19 @@ void LfoVisualizer::updateSamplesQueue(double timestampSeconds) {
 
   lfoSamplesToPlot.setStride(getStride());
 
-  // When there are no samples, start pushing zeros after 200 ms
-  constexpr auto patienceDurationSeconds = 0.2;
-
   const auto newAvailableSamples = buffer.getNumSamples();
   if (newAvailableSamples > 0) {
     lfoSamplesToPlot.pushBack(std::span{
         buffer.getReadPointer(0), static_cast<size_t>(buffer.getNumSamples())});
     buffer.clear();
-
-    lastTimestampSeconds = timestampSeconds;
-  } else if (patienceDurationSeconds <
-             timestampSeconds - lastTimestampSeconds.value()) {
+  } else if (isBypassed()) {
     const auto secondsPassed = timestampSeconds - lastTimestampSeconds.value();
     const auto samplesPassed =
         static_cast<size_t>(getCurrentSampleRate() * secondsPassed);
     lfoSamplesToPlot.pushBackZeros(samplesPassed);
-
-    lastTimestampSeconds = timestampSeconds;
   }
+
+  lastTimestampSeconds = timestampSeconds;
 }
 
 size_t LfoVisualizer::getStride() const {
