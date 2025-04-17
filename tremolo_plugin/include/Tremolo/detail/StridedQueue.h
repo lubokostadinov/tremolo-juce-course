@@ -33,14 +33,15 @@ public:
                 stridedElements.end());
 
     const auto beginIndex =
-        std::max(0, static_cast<int>(stridedElements.size()) - toBeAdded);
+        static_cast<int>(stridedElements.size()) - toBeAdded;
 
     for (const auto i : std::views::iota(0, toBeAdded)) {
-      jassert(beginIndex + i < static_cast<int>(stridedElements.size()));
+      jassert((beginIndex + i) < static_cast<int>(stridedElements.size()));
+      jassert(elementIndex < buffer.getNumSamples());
+
       stridedElements.at(static_cast<size_t>(beginIndex + i)) =
           buffer.getSample(0, elementIndex);
       elementIndex += stride;
-      jassert(elementIndex < buffer.getNumSamples());
     }
 
     elementIndex %= stride;
