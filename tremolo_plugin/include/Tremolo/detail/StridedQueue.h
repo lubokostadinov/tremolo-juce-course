@@ -2,48 +2,40 @@ namespace ws::detail {
 template <size_t Size>
 class StridedQueue {
 public:
-  StridedQueue() {
-    lfoSamplesToPlot.resize(Size, 0.f);
-  }
+  StridedQueue() { stridedElements.resize(Size, 0.f); }
 
   void setStride(int newStride) {
-    jassert( newStride > 0);
+    jassert(newStride > 0);
 
     stride = newStride;
   }
 
-  [[nodiscard]] size_t size() const noexcept {
-    return lfoSamplesToPlot.size();
-  }
+  [[nodiscard]] size_t size() const noexcept { return stridedElements.size(); }
 
-  float& front() noexcept {
-    return lfoSamplesToPlot.front();
-  }
+  float& front() noexcept { return stridedElements.front(); }
 
-  float& at(size_t index) {
-    return lfoSamplesToPlot.at(index);
-  }
+  float& at(size_t index) { return stridedElements.at(index); }
 
   void pushBack(const juce::AudioBuffer<float>& buffer) {
-    for (; sampleIndex < buffer.getNumSamples(); sampleIndex += stride) {
-      const auto sample = buffer.getSample(0, sampleIndex);
-      lfoSamplesToPlot.pop_front();
-      lfoSamplesToPlot.push_back(sample);
+    for (; elementIndex < buffer.getNumSamples(); elementIndex += stride) {
+      const auto sample = buffer.getSample(0, elementIndex);
+      stridedElements.pop_front();
+      stridedElements.push_back(sample);
     }
-    sampleIndex %= stride;
+    elementIndex %= stride;
   }
 
   void pushBackZeros(int zerosCount) {
-    for (; sampleIndex < zerosCount; sampleIndex += stride) {
-      lfoSamplesToPlot.pop_front();
-      lfoSamplesToPlot.push_back(0.f);
+    for (; elementIndex < zerosCount; elementIndex += stride) {
+      stridedElements.pop_front();
+      stridedElements.push_back(0.f);
     }
-    sampleIndex %= stride;
+    elementIndex %= stride;
   }
-  
+
 private:
-  std::deque<float> lfoSamplesToPlot;
-  int sampleIndex{0};
+  std::deque<float> stridedElements;
+  int elementIndex{0};
   int stride{1};
 };
-}
+}  // namespace ws::detail
