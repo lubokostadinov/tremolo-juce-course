@@ -2,7 +2,11 @@ namespace ws::detail {
 template <typename T, size_t Size>
 class StridedQueue {
 public:
-  void setStride(size_t newStride) { stride = newStride; }
+  void setStride(size_t newStride) {
+    jassert(0u < newStride);
+
+    stride = newStride;
+  }
 
   [[nodiscard]] size_t size() const noexcept { return stridedElements.size(); }
 
@@ -51,7 +55,8 @@ public:
     const auto beginIndex =
         std::max(0, static_cast<int>(stridedElements.size()) -
                         static_cast<int>(availableStridedCount));
-    std::fill(stridedElements.begin() + beginIndex, stridedElements.end(), 0.f);
+    std::fill(stridedElements.begin() + beginIndex, stridedElements.end(),
+              T(0));
   }
 
 private:
