@@ -22,8 +22,10 @@ public:
     const auto bufferEndIndex =
         elementIndex + (availableStridedCount - 1u) * stride;
 
-    for (const auto i : std::views::iota(
-             0u, std::min(availableStridedCount, stridedElements.size()))) {
+    const auto addedCount =
+        std::min(availableStridedCount, stridedElements.size());
+
+    for (const auto i : std::views::iota(0u, addedCount)) {
       jassert(0 <= (bufferEndIndex - i * stride));
       jassert((bufferEndIndex - i * stride) < buffer.size());
       jassert(stridedElements.rbegin() + i < stridedElements.rend());
