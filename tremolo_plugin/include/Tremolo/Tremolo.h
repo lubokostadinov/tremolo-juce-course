@@ -25,6 +25,9 @@ public:
                }](auto& lfo) { lfo.prepare(spec); });
     lfoSampleFifo.prepare(sampleRate);
     lfoTransitionSmoother.reset(sampleRate, 0.025 /* 25 milliseconds */);
+
+    // allocate defensively
+    lfoSamples.resize(static_cast<size_t>(4 * samplesPerBlock));
   }
 
   void setModulationRate(float rateHz) noexcept {
@@ -65,6 +68,39 @@ public:
         // set the output sample
         buffer.setSample(channelIndex, frameIndex, outputSample);
       }
+    }
+  }
+
+  void processChannelwise(juce::AudioBuffer<float>& buffer) noexcept {
+    // actual updating of the LFO waveform happens in process()
+    // to keep setLfoWaveform() idempotent
+    updateLfoWaveform();
+
+    const auto samplesToProcess = std::min(
+        lfoSamples.size(), static_cast<size_t>(buffer.getNumSamples()));
+
+    // detect if the host is misbehaving; if this fails, then many more frames
+    // have been given for processing than declared in prepare()
+    jassert(samplesToProcess <= lfoSamples.size());
+
+    // generate LFO signal
+    for (const auto i : std::views::iota(0u, samplesToProcess)) {
+      lfoSamples[i] = getNextLfoValue();
+      lfoSampleFifo.push(lfoSamples[i]);
+    }
+
+    // calculate the modulation value
+    constexpr auto modulationDepth = 0.1f;
+    juce::FloatVectorOperations::multiply(lfoSamples.data(), modulationDepth,
+                                          samplesToProcess);
+    juce::FloatVectorOperations::add(lfoSamples.data(), 1.f, samplesToProcess);
+
+    // for each channel
+    for (const auto channelIndex :
+         std::views::iota(0, buffer.getNumChannels())) {
+      juce::FloatVectorOperations::multiply(
+          buffer.getWritePointer(channelIndex), lfoSamples.data(),
+          samplesToProcess);
     }
   }
 
@@ -112,6 +148,7 @@ private:
   LfoWaveform lfoToSet{currentLfo};
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
       lfoTransitionSmoother;
+  std::vector<float> lfoSamples;
 
   SampleFifo<float> lfoSampleFifo;
 };
