@@ -54,7 +54,6 @@ public:
       lfoSampleFifo.push(lfoValue);
 
       // calculate the modulation value
-      constexpr auto modulationDepth = 0.1f;
       const auto modulationValue = modulationDepth * lfoValue + 1.f;
 
       for (const auto channelIndex :
@@ -90,7 +89,6 @@ public:
     }
 
     // calculate the modulation value
-    constexpr auto modulationDepth = 0.1f;
     juce::FloatVectorOperations::multiply(lfoSamples.data(), modulationDepth,
                                           samplesToProcess);
     juce::FloatVectorOperations::add(lfoSamples.data(), 1.f, samplesToProcess);
@@ -114,6 +112,8 @@ public:
   }
 
 private:
+  static constexpr auto modulationDepth = 0.1f;
+
   static float triangle(float phase) {
     // Source:
     // https://thewolfsound.com/sine-saw-square-triangle-pulse-basic-waveforms-in-synthesis/#triangle
