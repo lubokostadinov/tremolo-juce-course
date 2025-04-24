@@ -32,7 +32,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(rateLabel);
   rateSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
   rateSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                             true, 60, 20);
+                             true, 80, 20);
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 

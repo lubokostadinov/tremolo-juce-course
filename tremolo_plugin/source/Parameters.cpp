@@ -6,12 +6,12 @@ juce::AudioParameterFloat& createModulationRateParameter(
   constexpr auto versionHint = 1;
   auto parameter = std::make_unique<juce::AudioParameterFloat>(
       juce::ParameterID{"modulation.rate", versionHint}, "Modulation rate",
-      juce::NormalisableRange<float>{0.1f, 20.f, 0.1f, 0.1f}, 5.f,
+      juce::NormalisableRange<float>{0.1f, 20.f, 0.01f, 0.4f}, 5.f,
       juce::AudioParameterFloatAttributes{}
           .withLabel("Hz")
           .withStringFromValueFunction(
               [](float value, int maximumStringLength) {
-                auto result = juce::String{value, 1, false};
+                auto result = juce::String{value, 2, false};
 
                 if (maximumStringLength > 0) {
                   return result.substring(0, maximumStringLength);
