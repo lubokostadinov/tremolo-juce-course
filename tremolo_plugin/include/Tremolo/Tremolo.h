@@ -18,11 +18,12 @@ public:
 
   void prepare(double sampleRate, int samplesPerBlock) {
     std::ranges::for_each(
-        lfos, [spec = juce::dsp::ProcessSpec{
-                   .sampleRate = sampleRate,
-                   .maximumBlockSize = juce::uint32(samplesPerBlock),
-                   .numChannels = 1u,
-               }](auto& lfo) { lfo.prepare(spec); });
+        lfos,
+        [spec = juce::dsp::ProcessSpec{
+             .sampleRate = sampleRate,
+             .maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock),
+             .numChannels = 1u,
+         }](auto& lfo) { lfo.prepare(spec); });
     lfoSampleFifo.prepare(sampleRate);
     lfoTransitionSmoother.reset(sampleRate, 0.025 /* 25 milliseconds */);
 
