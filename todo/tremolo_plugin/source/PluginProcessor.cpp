@@ -1,14 +1,13 @@
 
 namespace ws {
-PluginProcessor::PluginProcessor(Parameters::Container parameterContainer)
+PluginProcessor::PluginProcessor()
     : AudioProcessor(
           BusesProperties()
               .withInput("Input", juce::AudioChannelSet::stereo(), true)
-              .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
-      parameters{parameterContainer} {
-  std::ranges::for_each(parameterContainer, [this](auto& parameter) {
-    addParameter(parameter.release());
-  });
+              .withOutput("Output", juce::AudioChannelSet::stereo(), true)) {
+  // TODO: create parameters
+  // TODO: retrieve references to parameters
+  // TODO: add parameters
 }
 
 const juce::String PluginProcessor::getName() const {
@@ -56,15 +55,16 @@ void PluginProcessor::changeProgramName(int index,
 }
 
 void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
-  currentSampleRate = sampleRate;
+  juce::ignoreUnused(sampleRate, samplesPerBlock);
 
-  tremolo.prepare(sampleRate, samplesPerBlock);
+  // TODO: prepare tremolo
 }
 
 void PluginProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
-  tremolo.reset();
+
+  // TODO: reset tremolo
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
@@ -104,61 +104,38 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     buffer.clear(channelToClear, 0, buffer.getNumSamples());
   }
 
-  // update the parameters
-  tremolo.setModulationRate(parameters.rate);
-  tremolo.setLfoWaveform(
-      static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
-
-  if (parameters.bypassed) {
-    // don't do any processing if the plugin is bypassed
-    return;
-  }
+  // TODO: update parameters
+  // TODO: check for bypass
 
   // apply tremolo
   tremolo.process(buffer);
 }
 
 bool PluginProcessor::hasEditor() const {
-  return true;  // (change this to false if you choose to not supply an editor)
+  return true;
 }
 
+// This function will be called to create an instance of the editor
 juce::AudioProcessorEditor* PluginProcessor::createEditor() {
   return new PluginEditor(*this);
 }
 
 void PluginProcessor::getStateInformation(juce::MemoryBlock& destData) {
-  juce::MemoryOutputStream outputStream{destData, true};
-  JsonSerializer::serialize(parameters, outputStream);
+  // You should use this method to store your parameters in the memory block.
+  // You could do that either as raw data, or use the XML or ValueTree classes
+  // as intermediaries to make it easy to save and load complex data.
+  juce::ignoreUnused(destData);
+
+  // TODO: implement state serialization to JSON
 }
 
 void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
-  juce::MemoryInputStream inputStream{data, static_cast<size_t>(sizeInBytes),
-                                      false};
-  const auto result = JsonSerializer::deserialize(inputStream, parameters);
+  // You should use this method to restore your parameters from this memory
+  // block, whose contents will have been created by the getStateInformation()
+  // call.
+  juce::ignoreUnused(data, sizeInBytes);
 
-  if (result.failed()) {
-    // Notify the user that reading parameters failed.
-    // Currently, we just write the error message to the standard error stream.
-    DBG(result.getErrorMessage());
-  }
-}
-
-Parameters& PluginProcessor::getParameters() noexcept {
-  return parameters;
-}
-
-juce::AudioProcessorParameter* PluginProcessor::getBypassParameter()
-    const noexcept {
-  return &parameters.bypassed;
-}
-
-void PluginProcessor::readAllLfoSamples(
-    juce::AudioBuffer<float>& bufferToFill) {
-  tremolo.readAllLfoSamples(bufferToFill);
-}
-
-double PluginProcessor::getSampleRateThreadSafe() const noexcept {
-  return currentSampleRate;
+  // TODO: implement state deserialization from JSON
 }
 }  // namespace ws
 

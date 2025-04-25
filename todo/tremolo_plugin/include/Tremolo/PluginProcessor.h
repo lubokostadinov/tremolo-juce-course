@@ -1,13 +1,9 @@
 #pragma once
 
-#include "Parameters.h"
-#include "Tremolo.h"
-#include <juce_audio_processors/juce_audio_processors.h>
-
 namespace ws {
 class PluginProcessor : public juce::AudioProcessor {
 public:
-  explicit PluginProcessor(Parameters::Container parameterContainer = {});
+  explicit PluginProcessor();
 
   void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 
@@ -36,19 +32,8 @@ public:
   void getStateInformation(juce::MemoryBlock& destData) override;
   void setStateInformation(const void* data, int sizeInBytes) override;
 
-  [[nodiscard]] Parameters& getParameters() noexcept;
-  juce::AudioProcessorParameter* getBypassParameter() const noexcept override;
-
-  void readAllLfoSamples(juce::AudioBuffer<float>& bufferToFill);
-
-  /** @brief Retrieves the most recent sample rate the processor was given
-   * in a thread-safe manner */
-  double getSampleRateThreadSafe() const noexcept;
-
 private:
-  Parameters parameters;
   Tremolo tremolo;
-  std::atomic<double> currentSampleRate{0.};
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
