@@ -55,16 +55,17 @@ void PluginProcessor::changeProgramName(int index,
 }
 
 void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
-  juce::ignoreUnused(sampleRate, samplesPerBlock);
+  // Use this method as the place to do any pre-playback
+  // initialization that you need, e.g., allocate memory.
 
-  // TODO: prepare tremolo
+  tremolo.prepare(sampleRate, samplesPerBlock);
 }
 
 void PluginProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
 
-  // TODO: reset tremolo
+  tremolo.reset();
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
