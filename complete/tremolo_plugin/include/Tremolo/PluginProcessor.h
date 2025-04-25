@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Parameters.h"
-#include "Tremolo.h"
-#include <juce_audio_processors/juce_audio_processors.h>
-
 namespace ws {
 class PluginProcessor : public juce::AudioProcessor {
 public:
