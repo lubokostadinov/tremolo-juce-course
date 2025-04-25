@@ -75,7 +75,7 @@ juce_add_plugin(
     TRUE
 )
 
-# Configure the JUCE sources included in the plugin target
+# Configure the JUCE sources included in the plugin target.
 target_compile_definitions(TremoloCoursePlugin
   PRIVATE
     JUCE_WEB_BROWSER=0
@@ -85,14 +85,13 @@ target_compile_definitions(TremoloCoursePlugin
 
 juce_add_module(tremolo_plugin ALIAS_NAMESPACE ws)
 
-# Additional definitions required by all users of this module
+# Additional definitions required by all users of this module.
 target_compile_definitions(tremolo_plugin
   INTERFACE
     TREMOLO_PLUGIN_NAME="${TREMOLO_PLUGIN_NAME}"
 )
 
-# Enables strict C++ warnings and treats warnings as errors.
-# We set it only for our source files to avoid compilation errors for JUCE sources.
+# Enables strict C++ warnings.
 target_compile_options(tremolo_plugin INTERFACE "${PROJECT_WARNINGS_CXX}")
 
 target_link_libraries(
