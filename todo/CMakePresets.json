@@ -46,6 +46,10 @@
   ],
   "buildPresets": [
     {
+      "name": "default",
+      "configurePreset": "default"
+    },
+    {
       "name": "ninja-debug",
       "configurePreset": "ninja-debug"
     },
