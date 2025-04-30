@@ -3,8 +3,8 @@
 namespace ws {
 class Tremolo {
 public:
-  void prepare(double sampleRate, int samplesPerBlock) {
-    juce::ignoreUnused(sampleRate, samplesPerBlock);
+  void prepare(double sampleRate, int expectedMaxFramesPerBlock) {
+    juce::ignoreUnused(sampleRate, expectedMaxFramesPerBlock);
   }
 
   void process(juce::AudioBuffer<float>& buffer) noexcept {

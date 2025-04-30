@@ -54,11 +54,12 @@ void PluginProcessor::changeProgramName(int index,
   juce::ignoreUnused(index, newName);
 }
 
-void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
+void PluginProcessor::prepareToPlay(double sampleRate,
+                                    int expectedMaxFramesPerBlock) {
   // Use this method as the place to do any pre-playback
   // initialization that you need, e.g., allocate memory.
 
-  tremolo.prepare(sampleRate, samplesPerBlock);
+  tremolo.prepare(sampleRate, expectedMaxFramesPerBlock);
 }
 
 void PluginProcessor::releaseResources() {
