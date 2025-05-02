@@ -9,7 +9,8 @@ public:
   };
 
   explicit Tremolo() : lfoTransitionSmoother{0.f} {
-    std::ranges::for_each(lfos, [](auto& lfo) { lfo.setFrequency(5, true); });
+    std::ranges::for_each(
+        lfos, [](auto& lfo) { lfo.setFrequency(5.f /* Hz */, true); });
   }
 
   void prepare(double sampleRate, int expectedMaxFramesPerBlock) {
