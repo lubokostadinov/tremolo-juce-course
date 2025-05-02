@@ -8,12 +8,7 @@ public:
     triangle,
   };
 
-  Tremolo()
-      : lfos{juce::dsp::Oscillator<float>{
-                 [](auto phase) { return std::sin(phase); }},
-             juce::dsp::Oscillator<float>{
-                 [](float phase) { return triangle(phase); }}},
-        lfoTransitionSmoother{0.f} {
+  explicit Tremolo() : lfoTransitionSmoother{0.f} {
     std::ranges::for_each(lfos, [](auto& lfo) { lfo.setFrequency(5, true); });
   }
 
@@ -145,7 +140,11 @@ private:
   }
 
   static constexpr auto lfoWaveformCount = 2u;
-  std::array<juce::dsp::Oscillator<float>, lfoWaveformCount> lfos;
+  std::array<juce::dsp::Oscillator<float>, lfoWaveformCount> lfos{
+      juce::dsp::Oscillator<float>{[](auto phase) { return std::sin(phase); }},
+      juce::dsp::Oscillator<float>{
+          [](float phase) { return triangle(phase); }}};
+
   LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet{currentLfo};
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
