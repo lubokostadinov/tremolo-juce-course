@@ -66,6 +66,6 @@ jobs:
       run: cmake --build --preset ${{ matrix.preset }}
 
     - name: Test
-      working-directory: ${{github.workspace}}/complete/build
+      working-directory: ${{github.workspace}}/complete
       run: ctest --preset ${{ matrix.preset }}
 
