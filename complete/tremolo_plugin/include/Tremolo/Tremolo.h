@@ -4,8 +4,8 @@ namespace ws {
 class Tremolo {
 public:
   enum class LfoWaveform {
-    sine,
-    triangle,
+    sine = 0,
+    triangle = 1,
   };
 
   explicit Tremolo() : lfoTransitionSmoother{0.f} {
@@ -148,6 +148,7 @@ private:
 
   LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet{currentLfo};
+
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
       lfoTransitionSmoother;
   std::vector<float> lfoSamples;
