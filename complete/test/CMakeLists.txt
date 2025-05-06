@@ -58,14 +58,5 @@ include(GoogleTest)
 # Add all tests defined with googletest to the CMake metadata
 # so that these tests are run upon a call to ctest in the test
 # projects' binary directory.
-if(CMAKE_GENERATOR STREQUAL Xcode)
-  # On macOS arm64, all binaries have to be signed before running.
-  # In local development, the linker adds an ad-hoc placeholder signature.
-  # In Xcode however, the ad-hoc signature is delayed until after the “Run Script” build phase,
-  # so the POST_BUILD command added by gtest_discover_tests cannot run.
-  # Thus, we need to delay test discovery until run time.
-  # Source: https://discourse.cmake.org/t/googletest-crash-when-using-cmake-xcode-arm64/5766/8
-  gtest_discover_tests(TremoloCoursePluginTest DISCOVERY_MODE PRE_TEST)
-else()
-  gtest_discover_tests(TremoloCoursePluginTest)
-endif()
+gtest_discover_tests(TremoloCoursePluginTest DISCOVERY_TIMEOUT 60 DISCOVERY_MODE PRE_TEST)
+
