@@ -15,6 +15,14 @@
       }
     },
     {
+      "name": "default-with-tests",
+      "inherits": "default",
+      "binaryDir": "cmake-build-with-tests",
+      "cacheVariables": {
+        "BUILD_TESTS": "ON"
+      }
+    },
+    {
       "name": "ninja-debug",
       "generator": "Ninja",
       "binaryDir": "ninja-debug-build",
