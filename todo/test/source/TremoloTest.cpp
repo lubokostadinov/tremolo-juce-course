@@ -5,8 +5,20 @@
 #include <wolfsound/dsp/wolfsound_testSignals.hpp>
 
 namespace ws {
+namespace {
+void extractLfo(Tremolo& tremolo, juce::AudioBuffer<float>& bufferToUse) {
+  juce::dsp::AudioBlock<float> block{bufferToUse};
+  block.fill(1.f);
+  tremolo.process(bufferToUse);
+  block.subtract(1.f);
+}
+}  // namespace
+
 /** This test extracts the LFO used by the Tremolo effect and saves it to a WAV
- * file.
+ * file "lfo.wav".
+ *
+ * You can find the file in the same folder where the test executable resides,
+ * most probably [CMake binary dir]/test/.
  *
  * The LFO rate is not changed; thus, the one set in Tremolo's constructor will
  * be used.
@@ -19,10 +31,7 @@ TEST(Tremolo, ExtractLfo) {
   juce::AudioBuffer<float> buffer;
   buffer.setSize(1, static_cast<int>(sampleRate));
 
-  juce::dsp::AudioBlock<float> block{buffer};
-  block.fill(1.f);
-  testee.process(buffer);
-  block.subtract(1.f);
+  extractLfo(testee, buffer);
 
   wolfsound::WavFileWriter::writeToFile(
       juce::File::getSpecialLocation(
@@ -31,8 +40,53 @@ TEST(Tremolo, ExtractLfo) {
           .getChildFile("lfo.wav")
           .getFullPathName()
           .toStdString(),
-      juce::Span<const float>{block.getChannelPointer(0u),
-                              block.getNumSamples()},
+      juce::Span{buffer.getReadPointer(0),
+                 static_cast<size_t>(buffer.getNumSamples())},
+      wolfsound::Frequency{sampleRate});
+}
+
+/** This test extracts the LFO used by the Tremolo effect switching the LFO
+ * shape mid-processing, and saves it to a WAV file "smoothedLfo.wav".
+ *
+ * You can find the file in the same folder where the test executable resides,
+ * most probably [CMake binary dir]/test/.
+ *
+ * The LFO rate is not changed; thus, the one set in Tremolo's constructor will
+ * be used.
+ */
+TEST(Tremolo, LfoWaveformTransitionIsSmooth) {
+  Tremolo testee;
+  constexpr auto sampleRate = 48000.0;
+  constexpr auto channelCount = 1;
+  constexpr auto blockSizeSeconds = 1;
+  constexpr auto blockSizeSamples =
+      static_cast<int>(blockSizeSeconds * sampleRate);
+  testee.prepare(sampleRate, blockSizeSamples);
+
+  juce::AudioBuffer<float> outputBuffer;
+  constexpr auto recordingLengthSamples = 2 * blockSizeSamples;
+  outputBuffer.setSize(channelCount, recordingLengthSamples);
+
+  juce::AudioBuffer<float> processBuffer;
+  processBuffer.setSize(channelCount, blockSizeSamples);
+
+  testee.setLfoWaveform(Tremolo::LfoWaveform::sine);
+  extractLfo(testee, processBuffer);
+  outputBuffer.copyFrom(0, 0, processBuffer, 0, 0, blockSizeSamples);
+  testee.setLfoWaveform(Tremolo::LfoWaveform::triangle);
+  extractLfo(testee, processBuffer);
+  outputBuffer.copyFrom(0, blockSizeSamples, processBuffer, 0, 0,
+                        blockSizeSamples);
+
+  wolfsound::WavFileWriter::writeToFile(
+      juce::File::getSpecialLocation(
+          juce::File::SpecialLocationType::currentExecutableFile)
+          .getParentDirectory()
+          .getChildFile("smoothedLfo.wav")
+          .getFullPathName()
+          .toStdString(),
+      juce::Span{outputBuffer.getReadPointer(0),
+                 static_cast<size_t>(outputBuffer.getNumSamples())},
       wolfsound::Frequency{sampleRate});
 }
 }  // namespace ws
