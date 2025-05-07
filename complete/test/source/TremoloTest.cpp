@@ -24,25 +24,33 @@ void extractLfo(Tremolo& tremolo, juce::AudioBuffer<float>& bufferToUse) {
  * be used.
  */
 TEST(Tremolo, ExtractLfo) {
-  Tremolo testee;
-  constexpr auto sampleRate = 48000.0;
-  testee.prepare(sampleRate, static_cast<int>(sampleRate));
+  for (const auto lfoWaveform :
+       {Tremolo::LfoWaveform::sine, Tremolo::LfoWaveform::triangle}) {
+    Tremolo testee;
+    constexpr auto sampleRate = 48000.0;
+    testee.setLfoWaveform(lfoWaveform);
+    testee.prepare(sampleRate, static_cast<int>(sampleRate));
 
-  juce::AudioBuffer<float> buffer;
-  buffer.setSize(1, static_cast<int>(sampleRate));
+    juce::AudioBuffer<float> buffer;
+    buffer.setSize(1, static_cast<int>(sampleRate));
 
-  extractLfo(testee, buffer);
+    extractLfo(testee, buffer);
 
-  wolfsound::WavFileWriter::writeToFile(
-      juce::File::getSpecialLocation(
-          juce::File::SpecialLocationType::currentExecutableFile)
-          .getParentDirectory()
-          .getChildFile("lfo.wav")
-          .getFullPathName()
-          .toStdString(),
-      juce::Span{buffer.getReadPointer(0),
-                 static_cast<size_t>(buffer.getNumSamples())},
-      wolfsound::Frequency{sampleRate});
+    const auto* const fileName = lfoWaveform == Tremolo::LfoWaveform::sine
+                                     ? "sineLfo.wav"
+                                     : "triangleLfo.wav";
+
+    wolfsound::WavFileWriter::writeToFile(
+        juce::File::getSpecialLocation(
+            juce::File::SpecialLocationType::currentExecutableFile)
+            .getParentDirectory()
+            .getChildFile(fileName)
+            .getFullPathName()
+            .toStdString(),
+        juce::Span{buffer.getReadPointer(0),
+                   static_cast<size_t>(buffer.getNumSamples())},
+        wolfsound::Frequency{sampleRate});
+  }
 }
 
 /** This test extracts the LFO used by the Tremolo effect switching the LFO
