@@ -9,6 +9,8 @@ vs-build/
 cmake-build/
 ninja-debug-build/
 ninja-release-build/
+done.md
+todo.md
 
 # Prerequisites
 *.d
