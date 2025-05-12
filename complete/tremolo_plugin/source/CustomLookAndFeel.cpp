@@ -112,6 +112,11 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.setGradientFill(knobFill);
   g.fillEllipse(knobBounds);
 
+  g.setColour(juce::Colour{0x400B1E3A});
+  constexpr auto knobStrokeThickness = 1.33f;
+  g.drawEllipse(knobBounds.reduced(knobStrokeThickness / 2.f),
+                knobStrokeThickness);
+
   const auto knobTopBounds = knobBounds.reduced(7.f);
   auto knobTopFill = juce::ColourGradient{juce::Colour{0xFF6697CB},
                                           knobTopBounds.getCentreX(),
@@ -123,5 +128,9 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   knobTopFill.addColour(0.66, juce::Colour{0xFF0C2338});
   g.setGradientFill(knobTopFill);
   g.fillEllipse(knobTopBounds);
+
+  // TODO: Add knob top blur
+
+  // TODO: Add knob top edge
 }
 }  // namespace ws
