@@ -58,6 +58,10 @@ void PluginEditor::resized() {
 
   background.setBounds(bounds);
 
+  auto lfoVisualizerBounds = bounds.reduced(18, 27);
+  lfoVisualizerBounds.removeFromTop(122);
+  lfoVisualizer.setBounds(lfoVisualizerBounds);
+
   bounds.removeFromTop(58);
 
   constexpr auto widgetMargin = 26;
@@ -80,10 +84,5 @@ void PluginEditor::resized() {
   bypassButton.setBounds(bypassButtonBounds);
 
   rateSlider.setBounds(widgetBounds);
-
-  bounds.removeFromTop(12);
-  bounds.removeFromBottom(16);
-
-  lfoVisualizer.setBounds(bounds);
 }
 }  // namespace ws
