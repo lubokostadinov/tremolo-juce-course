@@ -69,6 +69,13 @@ void PluginEditor::resized() {
   rateSlider.setBounds(rateSliderBounds);
   rateLabel.setBounds(rateSliderBounds);
 
+  auto waveformComboBoxBounds = bounds;
+  waveformComboBoxBounds.removeFromTop(66);
+  waveformComboBoxBounds.removeFromRight(392);
+  waveformComboBoxBounds.removeFromBottom(176);
+  waveformComboBoxBounds.removeFromLeft(16);
+  waveformComboBox.setBounds(waveformComboBoxBounds);
+
   bounds.removeFromTop(58);
 
   constexpr auto widgetMargin = 26;
@@ -81,9 +88,6 @@ void PluginEditor::resized() {
   bypassLabel.setBounds(labelsBounds.removeFromRight(oneThirdOfWidth));
 
   auto widgetBounds = bounds.removeFromTop(67);
-
-  waveformComboBox.setBounds(
-      widgetBounds.removeFromLeft(oneThirdOfWidth).reduced(0, 15));
 
   auto bypassButtonBounds =
       widgetBounds.removeFromRight(oneThirdOfWidth).reduced(8, 14);
