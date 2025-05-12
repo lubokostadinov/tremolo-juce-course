@@ -75,10 +75,14 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                          const float rotaryStartAngle,
                                          const float rotaryEndAngle,
                                          juce::Slider& slider) {
-  auto outline = slider.findColour(juce::Slider::rotarySliderOutlineColourId);
-  auto fill = slider.findColour(juce::Slider::rotarySliderFillColourId);
+  const auto knobCanalColor = juce::Colour{0xFF2A3A3B};
 
-  auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(10);
+  auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(3.75f);
+
+  g.setColour(knobCanalColor);
+  g.fillEllipse(bounds);
+
+  bounds.reduce(0.25f, 0.25f);
 
   auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
   auto toAngle =
@@ -86,36 +90,28 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   auto lineW = juce::jmin(8.0f, radius * 0.5f);
   auto arcRadius = radius - lineW * 0.5f;
 
-  juce::Path backgroundArc;
-  backgroundArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(),
-                              arcRadius, arcRadius, 0.0f, rotaryStartAngle,
-                              rotaryEndAngle, true);
-
-  g.setColour(outline);
-  g.strokePath(backgroundArc,
-               juce::PathStrokeType(lineW, juce::PathStrokeType::curved,
-                                    juce::PathStrokeType::rounded));
-
   if (slider.isEnabled()) {
     juce::Path valueArc;
     valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius,
                            arcRadius, 0.0f, rotaryStartAngle, toAngle, true);
 
-    g.setColour(fill);
+    g.setColour(getColor(Colors::orange));
     g.strokePath(valueArc,
                  juce::PathStrokeType(lineW, juce::PathStrokeType::curved,
-                                      juce::PathStrokeType::rounded));
+                                      juce::PathStrokeType::square));
   }
 
-  auto thumbWidth = lineW * 2.0f;
-  juce::Point<float> thumbPoint(
-      bounds.getCentreX() +
-          arcRadius * std::cos(toAngle - juce::MathConstants<float>::halfPi),
-      bounds.getCentreY() +
-          arcRadius * std::sin(toAngle - juce::MathConstants<float>::halfPi));
+  const auto knobBounds = bounds.reduced(4.f);
 
-  g.setColour(slider.findColour(juce::Slider::thumbColourId));
-  g.fillEllipse(
-      juce::Rectangle<float>(thumbWidth, thumbWidth).withCentre(thumbPoint));
+  juce::ColourGradient knobFill = juce::ColourGradient::vertical(juce::Colour{0xFF4A7090},
+    knobBounds.getY(),
+    juce::Colour{0xFF060F1C},
+    knobBounds.getY() + knobBounds.getHeight());
+  // knobFill.addColour(0.0, juce::Colour{0xFF4A7090});
+  knobFill.addColour(0.29, juce::Colour{0xFF396086});
+  knobFill.addColour(0.75, juce::Colour{0xFF2C3648});
+  // knobFill.addColour(1., juce::Colour{0xFF060F1C});
+  g.setGradientFill(knobFill);
+  g.fillEllipse(knobBounds);
 }
 }  // namespace ws
