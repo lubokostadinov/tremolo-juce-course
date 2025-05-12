@@ -23,13 +23,14 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
 
-  rateLabel.setJustificationType(juce::Justification::centred);
-  addAndMakeVisible(rateLabel);
   rateSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-  rateSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                             true, 80, 20);
+  rateSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox,
+                             true, 0, 0);
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
+
+  rateLabel.setJustificationType(juce::Justification::centred);
+  addAndMakeVisible(rateLabel);
 
   bypassLabel.setJustificationType(juce::Justification::centred);
   addAndMakeVisible(bypassLabel);
@@ -63,6 +64,11 @@ void PluginEditor::resized() {
   lfoVisualizerBounds.removeFromTop(122);
   lfoVisualizer.setBounds(lfoVisualizerBounds);
 
+  auto rateSliderBounds = bounds.reduced(230, 40);
+  rateSliderBounds.removeFromBottom(110);
+  rateSlider.setBounds(rateSliderBounds);
+  rateLabel.setBounds(rateSliderBounds);
+
   bounds.removeFromTop(58);
 
   constexpr auto widgetMargin = 26;
@@ -73,7 +79,6 @@ void PluginEditor::resized() {
   const auto oneThirdOfWidth = labelsBounds.getWidth() / 3;
   waveformLabel.setBounds(labelsBounds.removeFromLeft(oneThirdOfWidth));
   bypassLabel.setBounds(labelsBounds.removeFromRight(oneThirdOfWidth));
-  rateLabel.setBounds(labelsBounds);
 
   auto widgetBounds = bounds.removeFromTop(67);
 
@@ -83,7 +88,5 @@ void PluginEditor::resized() {
   auto bypassButtonBounds =
       widgetBounds.removeFromRight(oneThirdOfWidth).reduced(8, 14);
   bypassButton.setBounds(bypassButtonBounds);
-
-  rateSlider.setBounds(widgetBounds);
 }
 }  // namespace ws
