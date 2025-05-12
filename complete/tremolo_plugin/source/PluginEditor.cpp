@@ -31,6 +31,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(rateSlider);
 
   rateLabel.setJustificationType(juce::Justification::centred);
+  rateLabel.setInterceptsMouseClicks(false, false);
   addAndMakeVisible(rateLabel);
 
   bypassLabel.setJustificationType(juce::Justification::left);
