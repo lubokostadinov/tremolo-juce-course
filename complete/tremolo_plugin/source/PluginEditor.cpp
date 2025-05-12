@@ -12,9 +12,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
       assets::RenderedBackground_png, assets::RenderedBackground_pngSize));
   addAndMakeVisible(background);
 
-  headerLabel.setJustificationType(juce::Justification::centred);
-  addAndMakeVisible(headerLabel);
-
   waveformLabel.setJustificationType(juce::Justification::centred);
   addAndMakeVisible(waveformLabel);
 
@@ -62,10 +59,7 @@ void PluginEditor::resized() {
 
   background.setBounds(bounds);
 
-  bounds.removeFromTop(28);
-  headerLabel.setBounds(bounds.removeFromTop(18));
-
-  bounds.removeFromTop(12);
+  bounds.removeFromTop(58);
 
   constexpr auto widgetMargin = 26;
   bounds.removeFromLeft(widgetMargin);
