@@ -5,6 +5,8 @@ class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 public:
   enum class Colors : size_t { orange, lightGrey };
 
+  static juce::Colour getColor(Colors colorName);
+
   CustomLookAndFeel();
 
   void drawComboBox(juce::Graphics&,
@@ -17,6 +19,14 @@ public:
                     int buttonH,
                     juce::ComboBox&) override;
 
-  static juce::Colour getColor(Colors colorName);
+  void drawRotarySlider(juce::Graphics&,
+                        int x,
+                        int y,
+                        int width,
+                        int height,
+                        float sliderPosProportional,
+                        float rotaryStartAngle,
+                        float rotaryEndAngle,
+                        juce::Slider&) override;
 };
 }  // namespace ws
