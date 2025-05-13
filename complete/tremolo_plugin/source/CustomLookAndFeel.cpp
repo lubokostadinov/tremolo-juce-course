@@ -7,21 +7,18 @@ CustomLookAndFeel::CustomLookAndFeel() {
             getColor(Colors::lightGrey).darker());
   setColour(juce::ComboBox::arrowColourId,
             getColor(Colors::lightGrey).darker());
-  setColour(juce::ComboBox::textColourId, juce::Colours::black);
-  setColour(juce::ToggleButton::textColourId, juce::Colours::black);
-  setColour(juce::ToggleButton::tickColourId, juce::Colours::black);
+  setColour(juce::ComboBox::textColourId, juce::Colours::white);
   setColour(juce::Label::textColourId, juce::Colours::white);
+  setColour(juce::ToggleButton::textColourId, juce::Colours::white);
+  setColour(juce::ToggleButton::tickColourId, juce::Colours::white);
   setColour(juce::ToggleButton::tickDisabledColourId,
             juce::Colours::black.brighter());
 
   setColour(juce::PopupMenu::backgroundColourId, getColor(Colors::lightGrey));
-  setColour(juce::PopupMenu::textColourId, juce::Colours::black);
+  setColour(juce::PopupMenu::textColourId, juce::Colours::white);
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::black);
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
             getColor(Colors::orange));
-
-  setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
-  setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
 
   interTypeface = juce::Typeface::createSystemTypefaceFor(
       assets::InterVariableFont_opszwght_ttf,
