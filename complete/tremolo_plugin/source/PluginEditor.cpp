@@ -22,11 +22,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   waveformLabel.setColour(juce::Label::textColourId, sideFontColor);
   addAndMakeVisible(waveformLabel);
 
-  auto waveformChoices = p.getParameters().waveform.choices;
-  for (auto& choice : waveformChoices) {
-    choice = choice.toUpperCase();
-  }
-  waveformComboBox.addItemList(waveformChoices, 1);
+  waveformComboBox.addItemList(p.getParameters().waveform.choices, 1);
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
 
