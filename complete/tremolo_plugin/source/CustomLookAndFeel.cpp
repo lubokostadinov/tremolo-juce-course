@@ -45,19 +45,16 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   g.drawRoundedRectangle(boxBounds.toFloat().reduced(0.5f, 0.5f), cornerSize,
                          1.0f);
 
-  auto arrowZone =
-      juce::Rectangle<int>(width - height, 0, height, height).toFloat();
-  g.drawRoundedRectangle(arrowZone, cornerSize, 1.f);
-
-  arrowZone.reduce((arrowZone.getWidth() - 20.f) / 2.f, 0.f);
+  auto arrowZone = boxBounds.toFloat().reduced(10.f, 11.f);
+  arrowZone.removeFromLeft(104);
   juce::Path path;
-  path.startNewSubPath(arrowZone.getX() + 3.0f, arrowZone.getCentreY() - 2.0f);
-  path.lineTo(arrowZone.getCentreX(), arrowZone.getCentreY() + 3.0f);
-  path.lineTo(arrowZone.getRight() - 3.0f, arrowZone.getCentreY() - 2.0f);
+  path.startNewSubPath(arrowZone.getTopLeft());
+  path.lineTo(arrowZone.getCentreX(), arrowZone.getBottom());
+  path.lineTo(arrowZone.getTopRight());
 
-  g.setColour(box.findColour(juce::ComboBox::arrowColourId)
-                  .withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
-  g.strokePath(path, juce::PathStrokeType(2.0f));
+  g.setColour(
+      juce::Colour{0xFFDDECFF}.withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
+  g.fillPath(path);
 }
 
 juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
