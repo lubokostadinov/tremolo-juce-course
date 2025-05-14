@@ -45,7 +45,14 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   g.setGradientFill(insetGradient);
   g.fillRoundedRectangle(boxBounds.toFloat(), cornerSize);
 
-  // TODO Add button within
+  const auto buttonBounds = boxBounds.toFloat().reduced(2.f);
+  auto buttonGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF4A7090}, buttonBounds.getY(), juce::Colour{0xFF324258},
+      buttonBounds.getBottom());
+  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
+  g.setGradientFill(buttonGradient);
+  g.fillRoundedRectangle(buttonBounds, 4);
+
   // TODO style text
 
   auto arrowZone = boxBounds.toFloat().reduced(10.f, 11.f);
