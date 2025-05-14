@@ -31,6 +31,9 @@ public:
 
   juce::Font getComboBoxFont(juce::ComboBox&) override;
 
+  void positionComboBoxText(juce::ComboBox&,
+                            juce::Label& labelToPosition) override;
+
 private:
   juce::Typeface::Ptr interTypeface;
 };

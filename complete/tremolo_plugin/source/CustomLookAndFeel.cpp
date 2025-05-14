@@ -158,4 +158,11 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
 juce::Font CustomLookAndFeel::getComboBoxFont(juce::ComboBox&) {
   return juce::FontOptions{}.withPointHeight(12.f).withStyle("Medium");
 }
+
+void CustomLookAndFeel::positionComboBoxText(juce::ComboBox& comboBox,
+                                             juce::Label& labelToPosition) {
+  auto bounds = comboBox.getLocalBounds().reduced(10, 6);
+  bounds.removeFromRight(12);
+  labelToPosition.setBounds(bounds);
+}
 }  // namespace ws
