@@ -154,4 +154,8 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.setOpacity(0.1f);
   g.drawEllipse(knobTopBounds, 1.f);
 }
+
+juce::Font CustomLookAndFeel::getComboBoxFont(juce::ComboBox&) {
+  return juce::FontOptions{}.withPointHeight(12.f).withStyle("Medium");
+}
 }  // namespace ws

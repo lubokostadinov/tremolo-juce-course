@@ -29,6 +29,8 @@ public:
                         float rotaryEndAngle,
                         juce::Slider&) override;
 
+  juce::Font getComboBoxFont(juce::ComboBox&) override;
+
 private:
   juce::Typeface::Ptr interTypeface;
 };
