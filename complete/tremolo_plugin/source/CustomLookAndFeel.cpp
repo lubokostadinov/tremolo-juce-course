@@ -139,8 +139,6 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.setGradientFill(knobTopFill);
   g.fillEllipse(knobTopBounds);
 
-  // TODO: Add knob top blur
-
   // Knob top edge
   auto knobTopEdgeFill = juce::ColourGradient{juce::Colour{0xFF8FFFFF},
                                               knobTopBounds.getCentreX(),
