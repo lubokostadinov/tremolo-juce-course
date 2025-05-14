@@ -38,12 +38,15 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   constexpr auto cornerSize = 6.f;
   juce::Rectangle<int> boxBounds(0, 0, width, height);
 
-  g.setColour(box.findColour(juce::ComboBox::backgroundColourId));
+  auto insetGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF22232C}, 0.f, juce::Colour{0xFF263235},
+      boxBounds.toFloat().getHeight());
+  insetGradient.addColour(0.35, juce::Colour{0xFF303538});
+  g.setGradientFill(insetGradient);
   g.fillRoundedRectangle(boxBounds.toFloat(), cornerSize);
 
-  g.setColour(box.findColour(juce::ComboBox::outlineColourId));
-  g.drawRoundedRectangle(boxBounds.toFloat().reduced(0.5f, 0.5f), cornerSize,
-                         1.0f);
+  // TODO Add button within
+  // TODO style text
 
   auto arrowZone = boxBounds.toFloat().reduced(10.f, 11.f);
   arrowZone.removeFromLeft(104);
