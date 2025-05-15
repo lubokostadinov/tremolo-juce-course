@@ -163,4 +163,23 @@ void CustomLookAndFeel::positionComboBoxText(juce::ComboBox& comboBox,
   bounds.removeFromRight(12);
   labelToPosition.setBounds(bounds);
 }
+
+juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
+    juce::ComboBox& box,
+    juce::Label& label) {
+  const auto screenBounds = box.getScreenBounds();
+  auto menuBounds = screenBounds.reduced(2, 0);
+  return juce::LookAndFeel_V4::getOptionsForComboBoxPopupMenu(box, label)
+      .withStandardItemHeight(24)
+      .withTargetScreenArea(menuBounds)
+      .withMinimumWidth(128);
+}
+
+juce::Font CustomLookAndFeel::getPopupMenuFont() {
+  return juce::FontOptions{}.withStyle("Medium").withPointHeight(12.f);
+}
+
+juce::Path CustomLookAndFeel::getTickShape(float) {
+  return {};
+}
 }  // namespace ws
