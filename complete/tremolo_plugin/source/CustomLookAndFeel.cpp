@@ -195,4 +195,17 @@ juce::Font CustomLookAndFeel::getPopupMenuFont() {
 juce::Path CustomLookAndFeel::getTickShape(float) {
   return {};
 }
+
+void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
+                                         juce::ToggleButton& button,
+                                         bool shouldDrawButtonAsHighlighted,
+                                         bool shouldDrawButtonAsDown) {
+  juce::ignoreUnused(shouldDrawButtonAsDown, shouldDrawButtonAsHighlighted);
+
+  drawButtonInset(g, button.getLocalBounds().toFloat());
+
+  if (!button.getToggleState()) {
+    drawPlainButton(g, button.getLocalBounds().toFloat());
+  }
+}
 }  // namespace ws

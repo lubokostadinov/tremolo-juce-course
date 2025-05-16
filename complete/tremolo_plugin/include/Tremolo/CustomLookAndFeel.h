@@ -42,6 +42,11 @@ public:
 
   juce::Path getTickShape(float) override;
 
+  void drawToggleButton(juce::Graphics&,
+                        juce::ToggleButton&,
+                        bool shouldDrawButtonAsHighlighted,
+                        bool shouldDrawButtonAsDown) override;
+
 private:
   void drawButtonInset(juce::Graphics&,
                        const juce::Rectangle<float>& bounds) const;
