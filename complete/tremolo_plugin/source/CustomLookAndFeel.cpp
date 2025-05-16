@@ -215,10 +215,17 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
                                          bool shouldDrawButtonAsDown) {
   juce::ignoreUnused(shouldDrawButtonAsDown, shouldDrawButtonAsHighlighted);
 
+  const auto bounds = button.getLocalBounds().toFloat();
+
   drawButtonInset(g, button.getLocalBounds().toFloat());
 
   if (!button.getToggleState()) {
     drawPlainButton(g, button.getLocalBounds().toFloat());
+    g.setColour(getColor(Colors::white));
+    g.setFont(
+        juce::FontOptions{}.withName("Inter").withPointHeight(12.f).withStyle(
+            "Medium"));
+    g.drawText("Off", bounds, juce::Justification::centred, false);
   } else {
     const auto buttonBounds = button.getLocalBounds().toFloat().reduced(2.f);
     const auto buttonGradient = juce::ColourGradient::vertical(
