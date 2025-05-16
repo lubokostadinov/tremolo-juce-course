@@ -43,6 +43,9 @@ public:
   juce::Path getTickShape(float) override;
 
 private:
+  void drawButtonInset(juce::Graphics&,
+                       const juce::Rectangle<float>& bounds) const;
+
   juce::Typeface::Ptr interTypeface;
 };
 }  // namespace ws
