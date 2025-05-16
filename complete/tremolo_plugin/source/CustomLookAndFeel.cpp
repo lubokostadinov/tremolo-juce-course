@@ -35,13 +35,13 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
                                      int /* buttonW */,
                                      int /* buttonH */,
                                      juce::ComboBox& box) {
-  juce::Rectangle<int> boxBounds(0, 0, width, height);
+  const auto boxBounds = juce::Rectangle{0, 0, width, height}.toFloat();
 
-  drawButtonInset(g, boxBounds.toFloat());
+  drawButtonInset(g, boxBounds);
 
-  drawPlainButton(g, boxBounds.toFloat());
+  drawPlainButton(g, boxBounds);
 
-  auto arrowZone = boxBounds.toFloat().reduced(10.f, 11.f);
+  auto arrowZone = boxBounds.reduced(10.f, 11.f);
   arrowZone.removeFromLeft(104);
   juce::Path path;
   path.startNewSubPath(arrowZone.getTopLeft());
@@ -59,10 +59,10 @@ void CustomLookAndFeel::drawButtonInset(
   constexpr auto cornerSize = 6.f;
   auto insetGradient = juce::ColourGradient::vertical(
       juce::Colour{0xFF22232C}, 0.f, juce::Colour{0xFF263235},
-      bounds.toFloat().getHeight());
+      bounds.getHeight());
   insetGradient.addColour(0.35, juce::Colour{0xFF303538});
   g.setGradientFill(insetGradient);
-  g.fillRoundedRectangle(bounds.toFloat(), cornerSize);
+  g.fillRoundedRectangle(bounds, cornerSize);
 }
 
 void CustomLookAndFeel::drawPlainButton(
