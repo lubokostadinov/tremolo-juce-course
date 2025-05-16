@@ -206,6 +206,13 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
   if (!button.getToggleState()) {
     drawPlainButton(g, button.getLocalBounds().toFloat());
+  } else {
+    const auto buttonBounds = button.getLocalBounds().toFloat().reduced(2.f);
+    auto buttonGradient = juce::ColourGradient::vertical(
+        juce::Colour{0xFFFF901A}, buttonBounds.getY(), juce::Colour{0xFFFFC300},
+        buttonBounds.getBottom());
+    g.setGradientFill(buttonGradient);
+    g.fillRoundedRectangle(buttonBounds, 4);
   }
 }
 }  // namespace ws
