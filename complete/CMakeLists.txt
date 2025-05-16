@@ -90,7 +90,6 @@ juce_add_binary_data(tremolo_plugin_assets
     ws::assets
   SOURCES
     assets/RenderedBackground.png
-    assets/Inter-VariableFont_opsz,wght.ttf
     assets/Inter-Bold.ttf
     assets/Inter-Regular.ttf
     assets/Inter-Medium.ttf

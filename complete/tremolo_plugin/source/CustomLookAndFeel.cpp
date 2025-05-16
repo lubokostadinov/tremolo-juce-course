@@ -8,7 +8,10 @@ CustomLookAndFeel::FontContainer::FontContainer()
                                                   assets::InterBold_ttfSize)},
       interMedium{juce::Typeface::createSystemTypefaceFor(
           assets::InterMedium_ttf,
-          assets::InterMedium_ttfSize)} {}
+          assets::InterMedium_ttfSize)} {
+  juce::LookAndFeel::getDefaultLookAndFeel().setDefaultSansSerifTypeface(
+      interRegular);
+}
 
 CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::TextButton::buttonOnColourId, getColor(Colors::orange));
@@ -30,11 +33,6 @@ CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour{0xFF0C131E});
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
             getColor(Colors::orange));
-
-  interTypeface = juce::Typeface::createSystemTypefaceFor(
-      assets::InterVariableFont_opszwght_ttf,
-      assets::InterVariableFont_opszwght_ttfSize);
-  getDefaultLookAndFeel().setDefaultSansSerifTypeface(interTypeface);
 }
 
 void CustomLookAndFeel::drawComboBox(juce::Graphics& g,

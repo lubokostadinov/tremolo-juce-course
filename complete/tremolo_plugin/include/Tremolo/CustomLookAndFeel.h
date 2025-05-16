@@ -63,7 +63,6 @@ private:
   void drawPlainButton(juce::Graphics&,
                        const juce::Rectangle<float>& bounds) const;
 
-  juce::Typeface::Ptr interTypeface;
   FontContainer fontContainer;
 };
 }  // namespace ws
