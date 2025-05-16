@@ -39,13 +39,7 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
 
   drawButtonInset(g, boxBounds.toFloat());
 
-  const auto buttonBounds = boxBounds.toFloat().reduced(2.f);
-  auto buttonGradient = juce::ColourGradient::vertical(
-      juce::Colour{0xFF4A7090}, buttonBounds.getY(), juce::Colour{0xFF324258},
-      buttonBounds.getBottom());
-  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
-  g.setGradientFill(buttonGradient);
-  g.fillRoundedRectangle(buttonBounds, 4);
+  drawPlainButton(g, boxBounds.toFloat());
 
   auto arrowZone = boxBounds.toFloat().reduced(10.f, 11.f);
   arrowZone.removeFromLeft(104);
@@ -69,6 +63,18 @@ void CustomLookAndFeel::drawButtonInset(
   insetGradient.addColour(0.35, juce::Colour{0xFF303538});
   g.setGradientFill(insetGradient);
   g.fillRoundedRectangle(bounds.toFloat(), cornerSize);
+}
+
+void CustomLookAndFeel::drawPlainButton(
+    juce::Graphics& g,
+    const juce::Rectangle<float>& bounds) const {
+  const auto buttonBounds = bounds.reduced(2.f);
+  auto buttonGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF4A7090}, buttonBounds.getY(), juce::Colour{0xFF324258},
+      buttonBounds.getBottom());
+  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
+  g.setGradientFill(buttonGradient);
+  g.fillRoundedRectangle(buttonBounds, 4);
 }
 
 juce::Colour CustomLookAndFeel::getColor(Colors colorName) {

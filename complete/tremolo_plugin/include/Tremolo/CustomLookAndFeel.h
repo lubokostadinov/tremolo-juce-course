@@ -45,6 +45,8 @@ public:
 private:
   void drawButtonInset(juce::Graphics&,
                        const juce::Rectangle<float>& bounds) const;
+  void drawPlainButton(juce::Graphics&,
+                       const juce::Rectangle<float>& bounds) const;
 
   juce::Typeface::Ptr interTypeface;
 };
