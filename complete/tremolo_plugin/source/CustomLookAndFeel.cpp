@@ -184,6 +184,7 @@ void CustomLookAndFeel::positionComboBoxText(juce::ComboBox& comboBox,
   auto bounds = comboBox.getLocalBounds().reduced(10, 6);
   bounds.removeFromRight(12);
   labelToPosition.setBounds(bounds);
+  labelToPosition.setJustificationType(juce::Justification::centred);
 }
 
 juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
