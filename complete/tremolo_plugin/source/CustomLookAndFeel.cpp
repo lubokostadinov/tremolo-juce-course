@@ -1,4 +1,13 @@
 namespace ws {
+juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
+  static const std::array colors{
+      juce::Colour{0xFFFFAA00},
+      juce::Colour{0xFFD9D9D9},
+      juce::Colour{0xFFDDECFF},
+  };
+  return colors.at(static_cast<std::underlying_type_t<Colors>>(colorName));
+}
+
 CustomLookAndFeel::FontContainer::FontContainer()
     : interRegular{juce::Typeface::createSystemTypefaceFor(
           assets::InterRegular_ttf,
@@ -33,71 +42,6 @@ CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour{0xFF0C131E});
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
             getColor(Colors::orange));
-}
-
-void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
-                                     int width,
-                                     int height,
-                                     bool /* isButtonDown */,
-                                     int /* buttonX */,
-                                     int /* buttonY */,
-                                     int /* buttonW */,
-                                     int /* buttonH */,
-                                     juce::ComboBox& box) {
-  const auto boxBounds = juce::Rectangle{0, 0, width, height}.toFloat();
-
-  drawPlainButton(g, boxBounds);
-
-  auto arrowZone = boxBounds.reduced(10.f, 11.f);
-  arrowZone.removeFromLeft(104);
-  juce::Path path;
-  path.startNewSubPath(arrowZone.getTopLeft());
-  path.lineTo(arrowZone.getCentreX(), arrowZone.getBottom());
-  path.lineTo(arrowZone.getTopRight());
-
-  g.setColour(
-      getColor(Colors::white).withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
-  g.fillPath(path);
-}
-
-void CustomLookAndFeel::drawButtonInset(
-    juce::Graphics& g,
-    const juce::Rectangle<float>& bounds) const {
-  constexpr auto cornerSize = 6.f;
-  auto insetGradient = juce::ColourGradient::vertical(
-      juce::Colour{0xFF22232C}, 0.f, juce::Colour{0xFF263235},
-      bounds.getHeight());
-  insetGradient.addColour(0.35, juce::Colour{0xFF303538});
-  g.setGradientFill(insetGradient);
-  g.fillRoundedRectangle(bounds, cornerSize);
-}
-
-namespace {
-constexpr auto buttonInsetWidth = 2.f;
-constexpr auto buttonCornerSize = 4;
-}  // namespace
-
-void CustomLookAndFeel::drawPlainButton(
-    juce::Graphics& g,
-    const juce::Rectangle<float>& bounds) const {
-  drawButtonInset(g, bounds);
-
-  const auto buttonBounds = bounds.reduced(buttonInsetWidth);
-  auto buttonGradient = juce::ColourGradient::vertical(
-      juce::Colour{0xFF4A7090}, buttonBounds.getY(), juce::Colour{0xFF324258},
-      buttonBounds.getBottom());
-  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
-  g.setGradientFill(buttonGradient);
-  g.fillRoundedRectangle(buttonBounds, buttonCornerSize);
-}
-
-juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
-  static const std::array colors{
-      juce::Colour{0xFFFFAA00},
-      juce::Colour{0xFFD9D9D9},
-      juce::Colour{0xFFDDECFF},
-  };
-  return colors.at(static_cast<std::underlying_type_t<Colors>>(colorName));
 }
 
 void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
@@ -179,6 +123,31 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.drawEllipse(knobTopBounds, 1.f);
 }
 
+void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
+                                     int width,
+                                     int height,
+                                     bool /* isButtonDown */,
+                                     int /* buttonX */,
+                                     int /* buttonY */,
+                                     int /* buttonW */,
+                                     int /* buttonH */,
+                                     juce::ComboBox& box) {
+  const auto boxBounds = juce::Rectangle{0, 0, width, height}.toFloat();
+
+  drawPlainButton(g, boxBounds);
+
+  auto arrowZone = boxBounds.reduced(10.f, 11.f);
+  arrowZone.removeFromLeft(104);
+  juce::Path path;
+  path.startNewSubPath(arrowZone.getTopLeft());
+  path.lineTo(arrowZone.getCentreX(), arrowZone.getBottom());
+  path.lineTo(arrowZone.getTopRight());
+
+  g.setColour(
+      getColor(Colors::white).withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
+  g.fillPath(path);
+}
+
 juce::Font CustomLookAndFeel::getComboBoxFont(juce::ComboBox&) {
   return juce::FontOptions{}.withPointHeight(12.f).withName("Inter").withStyle(
       "Medium");
@@ -243,6 +212,25 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
              false);
 }
 
+namespace {
+constexpr auto buttonInsetWidth = 2.f;
+constexpr auto buttonCornerSize = 4;
+}  // namespace
+
+void CustomLookAndFeel::drawPlainButton(
+    juce::Graphics& g,
+    const juce::Rectangle<float>& bounds) const {
+  drawButtonInset(g, bounds);
+
+  const auto buttonBounds = bounds.reduced(buttonInsetWidth);
+  auto buttonGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF4A7090}, buttonBounds.getY(), juce::Colour{0xFF324258},
+      buttonBounds.getBottom());
+  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
+  g.setGradientFill(buttonGradient);
+  g.fillRoundedRectangle(buttonBounds, buttonCornerSize);
+}
+
 void CustomLookAndFeel::drawGradientButton(juce::Graphics& g,
                                            const juce::Rectangle<float>& bounds,
                                            juce::Colour topColor,
@@ -254,5 +242,16 @@ void CustomLookAndFeel::drawGradientButton(juce::Graphics& g,
       topColor, buttonBounds.getY(), bottomColor, buttonBounds.getBottom());
   g.setGradientFill(buttonGradient);
   g.fillRoundedRectangle(buttonBounds, buttonCornerSize);
+}
+
+void CustomLookAndFeel::drawButtonInset(
+    juce::Graphics& g,
+    const juce::Rectangle<float>& bounds) const {
+  auto insetGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF22232C}, 0.f, juce::Colour{0xFF263235},
+      bounds.getHeight());
+  insetGradient.addColour(0.35, juce::Colour{0xFF303538});
+  g.setGradientFill(insetGradient);
+  g.fillRoundedRectangle(bounds, 6.f);
 }
 }  // namespace ws

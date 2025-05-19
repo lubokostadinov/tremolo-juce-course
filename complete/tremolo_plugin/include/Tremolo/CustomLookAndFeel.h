@@ -9,16 +9,6 @@ public:
 
   CustomLookAndFeel();
 
-  void drawComboBox(juce::Graphics&,
-                    int width,
-                    int height,
-                    bool isButtonDown,
-                    int buttonX,
-                    int buttonY,
-                    int buttonW,
-                    int buttonH,
-                    juce::ComboBox&) override;
-
   void drawRotarySlider(juce::Graphics&,
                         int x,
                         int y,
@@ -28,6 +18,16 @@ public:
                         float rotaryStartAngle,
                         float rotaryEndAngle,
                         juce::Slider&) override;
+
+  void drawComboBox(juce::Graphics&,
+                    int width,
+                    int height,
+                    bool isButtonDown,
+                    int buttonX,
+                    int buttonY,
+                    int buttonW,
+                    int buttonH,
+                    juce::ComboBox&) override;
 
   juce::Font getComboBoxFont(juce::ComboBox&) override;
 
@@ -58,14 +58,14 @@ private:
     juce::Typeface::Ptr interMedium;
   };
 
-  void drawButtonInset(juce::Graphics&,
-                       const juce::Rectangle<float>& bounds) const;
   void drawPlainButton(juce::Graphics&,
                        const juce::Rectangle<float>& bounds) const;
   void drawGradientButton(juce::Graphics&,
                           const juce::Rectangle<float>& bounds,
                           juce::Colour topColor,
                           juce::Colour bottomColor) const;
+  void drawButtonInset(juce::Graphics&,
+                       const juce::Rectangle<float>& bounds) const;
 
   FontContainer fontContainer;
 };
