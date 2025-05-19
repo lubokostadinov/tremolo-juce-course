@@ -74,7 +74,7 @@ PluginEditor::~PluginEditor() {
 }
 
 void PluginEditor::resized() {
-  auto bounds = getLocalBounds();
+  const auto bounds = getLocalBounds();
 
   background.setBounds(bounds);
 
@@ -98,10 +98,14 @@ void PluginEditor::resized() {
   waveformLabelBounds.removeFromTop(48);
 
   // we make more space here than in Figma to avoid ellipsis insertion
-  waveformLabelBounds.removeFromRight(412);
+  waveformLabelBounds.removeFromRight(456);
 
   waveformLabelBounds.removeFromBottom(206);
-  waveformLabelBounds.removeFromLeft(20);
+
+  // because the label was shifted by 5 pixels to the right, Figma's offset
+  // is reduced by 5
+  waveformLabelBounds.removeFromLeft(15);
+
   waveformLabel.setBounds(waveformLabelBounds);
 
   auto bypassButtonBounds = bounds;
@@ -118,7 +122,11 @@ void PluginEditor::resized() {
   bypassLabelBounds.removeFromRight(55);
 
   bypassLabelBounds.removeFromBottom(206);
-  bypassLabelBounds.removeFromLeft(396);
+
+  // because the label was shifted by 5 pixels to the right, Figma's offset
+  // is reduced by 5
+  bypassLabelBounds.removeFromLeft(391);
+
   bypassLabel.setBounds(bypassLabelBounds);
 }
 }  // namespace ws
