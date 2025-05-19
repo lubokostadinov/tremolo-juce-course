@@ -191,7 +191,7 @@ juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
     juce::ComboBox& box,
     juce::Label& label) {
   const auto screenBounds = box.getScreenBounds();
-  auto menuBounds = screenBounds.reduced(2, 0);
+  const auto menuBounds = screenBounds.reduced(2, 0);
   constexpr auto itemHeight = 24;
   return juce::LookAndFeel_V4::getOptionsForComboBoxPopupMenu(box, label)
       .withStandardItemHeight(itemHeight)
@@ -218,10 +218,10 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
   const auto bounds = button.getLocalBounds().toFloat();
 
-  drawButtonInset(g, button.getLocalBounds().toFloat());
+  drawButtonInset(g, bounds);
 
   if (!button.getToggleState()) {
-    drawPlainButton(g, button.getLocalBounds().toFloat());
+    drawPlainButton(g, bounds);
     g.setColour(getColor(Colors::white));
     g.setFont(
         juce::FontOptions{}.withName("Inter").withPointHeight(12.f).withStyle(
@@ -229,7 +229,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
     g.drawText(button.getButtonText(), bounds, juce::Justification::centred,
                false);
   } else {
-    const auto buttonBounds = button.getLocalBounds().toFloat().reduced(2.f);
+    const auto buttonBounds = bounds.reduced(2.f);
     const auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFFFF901A}, buttonBounds.getY(), juce::Colour{0xFFFFC300},
         buttonBounds.getBottom());
