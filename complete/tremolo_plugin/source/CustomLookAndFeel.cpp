@@ -23,20 +23,8 @@ CustomLookAndFeel::FontContainer::FontContainer()
 }
 
 CustomLookAndFeel::CustomLookAndFeel() {
-  setColour(juce::TextButton::buttonOnColourId, getColor(Colors::orange));
-  setColour(juce::TextButton::buttonColourId, getColor(Colors::lightGrey));
-  setColour(juce::ComboBox::backgroundColourId, getColor(Colors::lightGrey));
-  setColour(juce::ComboBox::outlineColourId,
-            getColor(Colors::lightGrey).darker());
-  setColour(juce::ComboBox::arrowColourId,
-            getColor(Colors::lightGrey).darker());
   setColour(juce::ComboBox::textColourId, getColor(Colors::white));
   setColour(juce::Label::textColourId, getColor(Colors::white));
-  setColour(juce::ToggleButton::textColourId, getColor(Colors::white));
-  setColour(juce::ToggleButton::tickColourId, getColor(Colors::white));
-  setColour(juce::ToggleButton::tickDisabledColourId,
-            juce::Colours::black.brighter());
-
   setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xFF153245});
   setColour(juce::PopupMenu::textColourId, getColor(Colors::white));
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour{0xFF0C131E});
