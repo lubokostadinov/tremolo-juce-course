@@ -22,10 +22,10 @@ CustomLookAndFeel::FontContainer::FontContainer()
 }
 
 CustomLookAndFeel::CustomLookAndFeel() {
-  setColour(juce::ComboBox::textColourId, getColor(Colors::white));
-  setColour(juce::Label::textColourId, getColor(Colors::white));
+  setColour(juce::ComboBox::textColourId, getColor(Colors::paleBlue));
+  setColour(juce::Label::textColourId, getColor(Colors::paleBlue));
   setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xFF153245});
-  setColour(juce::PopupMenu::textColourId, getColor(Colors::white));
+  setColour(juce::PopupMenu::textColourId, getColor(Colors::paleBlue));
   setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour{0xFF0C131E});
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
             getColor(Colors::orange));
@@ -131,7 +131,7 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   path.lineTo(arrowZone.getTopRight());
 
   g.setColour(
-      getColor(Colors::white).withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
+      getColor(Colors::paleBlue).withAlpha((box.isEnabled() ? 0.9f : 0.2f)));
   g.fillPath(path);
 }
 
@@ -181,7 +181,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
   if (!button.getToggleState()) {
     drawPlainButton(g, bounds);
-    g.setColour(getColor(Colors::white));
+    g.setColour(getColor(Colors::paleBlue));
     g.setFont(
         juce::FontOptions{}.withName("Inter").withPointHeight(12.f).withStyle(
             "Medium"));
