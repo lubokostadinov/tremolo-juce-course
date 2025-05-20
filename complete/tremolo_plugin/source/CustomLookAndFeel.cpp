@@ -50,8 +50,8 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   bounds.reduce(0.25f, 0.25f);
 
   const auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
-  constexpr auto lineW = 4.f;
-  const auto arcRadius = radius - lineW * 0.5f;
+  constexpr auto lineWidth = 4.f;
+  const auto arcRadius = radius - lineWidth * 0.5f;
   const auto toAngle =
       rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
@@ -62,7 +62,7 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
 
     g.setColour(getColor(Colors::orange));
     g.strokePath(valueArc,
-                 juce::PathStrokeType(lineW, juce::PathStrokeType::curved,
+                 juce::PathStrokeType(lineWidth, juce::PathStrokeType::curved,
                                       juce::PathStrokeType::square));
   }
 
