@@ -53,7 +53,7 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
   auto toAngle =
       rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-  auto lineW = juce::jmin(8.0f, radius * 0.5f);
+  auto lineW = 4.f;
   auto arcRadius = radius - lineW * 0.5f;
 
   if (slider.isEnabled()) {
