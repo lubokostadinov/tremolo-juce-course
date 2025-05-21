@@ -9,6 +9,8 @@ public:
 
   CustomLookAndFeel();
 
+  juce::BorderSize<int> getLabelBorderSize(juce::Label&) override;
+
   void drawRotarySlider(juce::Graphics&,
                         int x,
                         int y,

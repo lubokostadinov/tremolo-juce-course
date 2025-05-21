@@ -97,13 +97,10 @@ void PluginEditor::resized() {
   waveformLabelBounds.removeFromTop(48);
 
   // we make more space here than in Figma to avoid ellipsis insertion
-  waveformLabelBounds.removeFromRight(456);
+  waveformLabelBounds.removeFromRight(461);
 
   waveformLabelBounds.removeFromBottom(206);
-
-  // because the label was shifted by 5 pixels to the right, Figma's offset
-  // is reduced by 5
-  waveformLabelBounds.removeFromLeft(15);
+  waveformLabelBounds.removeFromLeft(20);
 
   waveformLabel.setBounds(waveformLabelBounds);
 
@@ -118,13 +115,10 @@ void PluginEditor::resized() {
   bypassLabelBounds.removeFromTop(48);
 
   // we make more space here than in Figma to avoid ellipsis insertion
-  bypassLabelBounds.removeFromRight(55);
+  bypassLabelBounds.removeFromRight(104);
 
   bypassLabelBounds.removeFromBottom(206);
-
-  // because the label was shifted by 5 pixels to the right, Figma's offset
-  // is reduced by 5
-  bypassLabelBounds.removeFromLeft(391);
+  bypassLabelBounds.removeFromLeft(396);
 
   bypassLabel.setBounds(bypassLabelBounds);
 }

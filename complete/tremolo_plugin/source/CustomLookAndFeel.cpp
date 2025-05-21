@@ -31,6 +31,10 @@ CustomLookAndFeel::CustomLookAndFeel() {
             getColor(Colors::orange));
 }
 
+juce::BorderSize<int> CustomLookAndFeel::getLabelBorderSize(juce::Label&) {
+  return juce::BorderSize{0};
+}
+
 void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                          int x,
                                          int y,
