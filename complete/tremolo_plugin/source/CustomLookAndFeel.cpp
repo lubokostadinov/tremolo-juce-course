@@ -17,8 +17,8 @@ CustomLookAndFeel::FontContainer::FontContainer()
       interMedium{juce::Typeface::createSystemTypefaceFor(
           assets::InterMedium_ttf,
           assets::InterMedium_ttfSize)} {
-  juce::LookAndFeel::getDefaultLookAndFeel().setDefaultSansSerifTypeface(
-      interRegular);
+  // used to set the font of the default standalone plugin window
+  getDefaultLookAndFeel().setDefaultSansSerifTypeface(interRegular);
 }
 
 CustomLookAndFeel::CustomLookAndFeel() {
@@ -145,6 +145,7 @@ void CustomLookAndFeel::positionComboBoxText(juce::ComboBox& comboBox,
   bounds.removeFromRight(12);
   labelToPosition.setBounds(bounds);
   labelToPosition.setJustificationType(juce::Justification::centred);
+  labelToPosition.setFont(getComboBoxFont(comboBox));
 }
 
 juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
