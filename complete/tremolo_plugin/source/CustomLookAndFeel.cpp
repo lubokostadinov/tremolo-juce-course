@@ -4,7 +4,7 @@ juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
       juce::Colour{0xFFFFAA00},
       juce::Colour{0xFFDDECFF},
   };
-  return colors.at(static_cast<std::underlying_type_t<Colors>>(colorName));
+  return colors.at(juce::toUnderlyingType(colorName));
 }
 
 CustomLookAndFeel::FontContainer::FontContainer()
