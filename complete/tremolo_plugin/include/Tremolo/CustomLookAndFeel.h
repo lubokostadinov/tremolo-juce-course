@@ -9,6 +9,8 @@ public:
 
   CustomLookAndFeel();
 
+  juce::Font getSideLabelsFont() const;
+
   juce::BorderSize<int> getLabelBorderSize(juce::Label&) override;
 
   void drawRotarySlider(juce::Graphics&,

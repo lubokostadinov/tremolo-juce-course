@@ -31,6 +31,10 @@ CustomLookAndFeel::CustomLookAndFeel() {
             getColor(Colors::orange));
 }
 
+juce::Font CustomLookAndFeel::getSideLabelsFont() const {
+  return juce::FontOptions{fontContainer.interMedium}.withPointHeight(10.f);
+}
+
 juce::BorderSize<int> CustomLookAndFeel::getLabelBorderSize(juce::Label&) {
   return juce::BorderSize{0};
 }

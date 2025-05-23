@@ -12,14 +12,11 @@ PluginEditor::PluginEditor(PluginProcessor& p)
       assets::RenderedBackground_png, assets::RenderedBackground_pngSize));
   addAndMakeVisible(background);
 
-  const auto sideLabelsFont = juce::Font{
-      juce::FontOptions{}.withPointHeight(10.f).withName("Inter").withStyle(
-          "Medium")};
   const auto sideFontColor = juce::Colour{0xFF6EA0C7};
 
   waveformLabel.setJustificationType(juce::Justification::left);
   waveformLabel.setMinimumHorizontalScale(1.f);
-  waveformLabel.setFont(sideLabelsFont);
+  waveformLabel.setFont(lookAndFeel.getSideLabelsFont());
   waveformLabel.setColour(juce::Label::textColourId, sideFontColor);
   addAndMakeVisible(waveformLabel);
 
@@ -43,7 +40,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   bypassLabel.setJustificationType(juce::Justification::left);
   bypassLabel.setMinimumHorizontalScale(1.f);
-  bypassLabel.setFont(sideLabelsFont);
+  bypassLabel.setFont(lookAndFeel.getSideLabelsFont());
   bypassLabel.setColour(juce::Label::textColourId, sideFontColor);
   addAndMakeVisible(bypassLabel);
 
