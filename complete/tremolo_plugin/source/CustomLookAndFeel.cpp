@@ -39,6 +39,10 @@ juce::BorderSize<int> CustomLookAndFeel::getLabelBorderSize(juce::Label&) {
   return juce::BorderSize{0};
 }
 
+juce::Font CustomLookAndFeel::getRateLabelFont() const {
+  return juce::FontOptions{fontContainer.interBold}.withPointHeight(12.f);
+}
+
 void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                          int x,
                                          int y,

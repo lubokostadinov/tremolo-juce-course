@@ -33,9 +33,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   rateLabel.setJustificationType(juce::Justification::centred);
   rateLabel.setInterceptsMouseClicks(false, false);
-  rateLabel.setFont(
-      juce::FontOptions{}.withName("Inter").withStyle("Bold").withPointHeight(
-          12.f));
+  rateLabel.setFont(lookAndFeel.getRateLabelFont());
   addAndMakeVisible(rateLabel);
 
   bypassLabel.setJustificationType(juce::Justification::left);

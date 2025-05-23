@@ -9,9 +9,11 @@ public:
 
   CustomLookAndFeel();
 
-  juce::Font getSideLabelsFont() const;
+  [[nodiscard]] juce::Font getSideLabelsFont() const;
 
   juce::BorderSize<int> getLabelBorderSize(juce::Label&) override;
+
+  [[nodiscard]] juce::Font getRateLabelFont() const;
 
   void drawRotarySlider(juce::Graphics&,
                         int x,
