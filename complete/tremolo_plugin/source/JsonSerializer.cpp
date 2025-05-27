@@ -1,9 +1,4 @@
 namespace {
-constexpr auto pluginNameId = "pluginName";
-constexpr auto modulationRateHzId = "modulationRateHz";
-constexpr auto bypassedId = "bypassed";
-constexpr auto modulationWaveformId = "modulationWaveform";
-
 struct SerializableParameters {
   float rate;
   bool bypassed;
@@ -33,14 +28,14 @@ struct juce::SerialisationTraits<SerializableParameters> {
 
     std::string pluginName = TREMOLO_PLUGIN_NAME;
 
-    archive(named(pluginNameId, pluginName));
+    archive(named("pluginName", pluginName));
 
     if (pluginName != TREMOLO_PLUGIN_NAME) {
       return;
     }
 
-    archive(named(modulationRateHzId, p.rate), named(bypassedId, p.bypassed),
-            named(modulationWaveformId, p.waveform));
+    archive(named("modulationRateHz", p.rate), named("bypassed", p.bypassed),
+            named("modulationWaveform", p.waveform));
   }
 };
 
