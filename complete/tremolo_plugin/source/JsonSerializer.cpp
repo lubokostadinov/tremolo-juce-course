@@ -53,12 +53,10 @@ void JsonSerializer::serialize(const Parameters& parameters,
     return;
   }
 
-  jassert(json->isObject());
-
-  json->getDynamicObject()->writeAsJSON(
-      output, juce::JSON::FormatOptions{}
-                  .withSpacing(juce::JSON::Spacing::multiLine)
-                  .withMaxDecimalPlaces(2));
+  juce::JSON::writeToStream(output, *json,
+                            juce::JSON::FormatOptions{}
+                                .withSpacing(juce::JSON::Spacing::multiLine)
+                                .withMaxDecimalPlaces(2));
 }
 
 juce::Result JsonSerializer::deserialize(juce::InputStream& input,
