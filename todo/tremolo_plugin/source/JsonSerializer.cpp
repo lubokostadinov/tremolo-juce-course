@@ -10,7 +10,7 @@ juce::Result JsonSerializer::deserialize(juce::InputStream& input,
                                          Parameters& parameters) {
   juce::ignoreUnused(input, parameters);
 
-  // TODO: deserialize parammeters from the JSON input stream
+  // TODO: deserialize parameters from the JSON input stream
 
   return juce::Result::fail("not implemented");
 }
