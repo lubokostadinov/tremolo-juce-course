@@ -8,7 +8,7 @@ public:
     triangle = 1,
   };
 
-  explicit Tremolo() {
+  Tremolo() {
     std::ranges::for_each(
         lfos, [](auto& lfo) { lfo.setFrequency(5.f /* Hz */, true); });
   }
