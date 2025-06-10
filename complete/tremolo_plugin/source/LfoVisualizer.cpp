@@ -4,9 +4,9 @@ namespace tremolo {
 LfoVisualizer::LfoVisualizer(ReadAllLfoSamples readSamples,
                              GetCurrentSampleRate getRate,
                              IsBypassed getIsBypassed)
-    : readAllLfoSamples{readSamples},
-      getCurrentSampleRate{getRate},
-      isBypassed{getIsBypassed} {
+    : readAllLfoSamples{std::move(readSamples)},
+      getCurrentSampleRate{std::move(getRate)},
+      isBypassed{std::move(getIsBypassed)} {
   // preallocate
   buffer.setSize(1, static_cast<int>(getRate()));
 
