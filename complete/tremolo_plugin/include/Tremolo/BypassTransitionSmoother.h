@@ -34,13 +34,36 @@ namespace tremolo {
  */
 class BypassTransitionSmoother {
 public:
-  void prepare(int channelCount, int expectedMaxFramesPerBlock) {
+  void prepare(double sampleRate,
+               int channelCount,
+               int expectedMaxFramesPerBlock) {
     dryBuffer.setSize(channelCount, expectedMaxFramesPerBlock);
+    constexpr auto crossfadeLengthSeconds = 0.1;
+    dryGain.reset(sampleRate, crossfadeLengthSeconds);
+    wetGain.reset(sampleRate, crossfadeLengthSeconds);
     reset();
   }
 
   void setBypass(bool bypass) {
     if (bypass != isBypassed) {
+      const auto startDryGain = bypass ? 0.f : 1.f;
+      const auto endDryGain = 1.f - startDryGain;
+
+      if (!isTransitioning()) {
+        // don't change start gain if previous transition didn't complete
+        dryGain.setCurrentAndTargetValue(startDryGain);
+      }
+      dryGain.setTargetValue(endDryGain);
+
+      const auto startWetGain = bypass ? 1.f : 0.f;
+      const auto endWetGain = 1.f - startWetGain;
+
+      if (!isTransitioning()) {
+        // don't change start gain if previous transition didn't complete
+        wetGain.setCurrentAndTargetValue(startWetGain);
+      }
+      wetGain.setTargetValue(endWetGain);
+
       isTransition = true;
     }
 
@@ -57,14 +80,11 @@ public:
     jassert(buffer.getNumSamples() <= dryBuffer.getNumSamples());
     jassert(buffer.getNumChannels() <= dryBuffer.getNumChannels());
 
-    const auto startDryGain = isBypassed ? 0.f : 1.f;
-    const auto endDryGain = 1.f - startDryGain;
-
     for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
-      dryBuffer.copyFromWithRamp(channel, 0, buffer.getReadPointer(channel),
-                                 buffer.getNumSamples(), startDryGain,
-                                 endDryGain);
+      dryBuffer.copyFrom(channel, 0, buffer, channel, 0,
+                         buffer.getNumSamples());
     }
+    dryGain.applyGain(dryBuffer, dryBuffer.getNumSamples());
   }
 
   void mixToWetBuffer(juce::AudioBuffer<float>& buffer) {
@@ -75,16 +95,14 @@ public:
     jassert(buffer.getNumSamples() <= dryBuffer.getNumSamples());
     jassert(buffer.getNumChannels() <= dryBuffer.getNumChannels());
 
-    const auto startWetGain = isBypassed ? 1.f : 0.f;
-    const auto endWetGain = 1.f - startWetGain;
-
+    wetGain.applyGain(buffer, buffer.getNumSamples());
     for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
-      buffer.applyGainRamp(channel, 0, buffer.getNumSamples(), startWetGain,
-                           endWetGain);
       buffer.addFrom(channel, 0, dryBuffer, channel, 0, buffer.getNumSamples());
     }
 
-    isTransition = false;
+    if (!dryGain.isSmoothing() && !wetGain.isSmoothing()) {
+      isTransition = false;
+    }
   }
 
   void reset() {
@@ -97,5 +115,7 @@ private:
   bool isBypassed = false;
   bool isTransition = false;
   juce::AudioBuffer<float> dryBuffer;
+  juce::SmoothedValue<float> dryGain;
+  juce::SmoothedValue<float> wetGain;
 };
 }  // namespace tremolo
