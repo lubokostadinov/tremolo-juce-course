@@ -2,7 +2,7 @@
 
 namespace tremolo {
 /**
- * Class facilitating transition to and from bypassed state.
+ * Class facilitating transition to and from bypassed state over a single block.
  *
  * It allows 2 things:
  *  - detecting that a bypass state transition takes place
@@ -54,11 +54,11 @@ public:
       return;
     }
 
-    const auto startDryGain = isBypassed ? 0.f : 1.f;
-    const auto endDryGain = 1.f - startDryGain;
-
     jassert(buffer.getNumSamples() <= dryBuffer.getNumSamples());
     jassert(buffer.getNumChannels() <= dryBuffer.getNumChannels());
+
+    const auto startDryGain = isBypassed ? 0.f : 1.f;
+    const auto endDryGain = 1.f - startDryGain;
 
     for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
       dryBuffer.copyFromWithRamp(channel, 0, buffer.getReadPointer(channel),
@@ -77,6 +77,7 @@ public:
 
     const auto startWetGain = isBypassed ? 1.f : 0.f;
     const auto endWetGain = 1.f - startWetGain;
+
     for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
       buffer.applyGainRamp(channel, 0, buffer.getNumSamples(), startWetGain,
                            endWetGain);
