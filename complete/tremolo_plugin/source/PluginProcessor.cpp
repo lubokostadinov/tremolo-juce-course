@@ -61,7 +61,7 @@ void PluginProcessor::prepareToPlay(double sampleRate,
 
   tremolo.prepare(sampleRate, expectedMaxFramesPerBlock);
 
-  dryBuffer.setSize(
+  bypassTransitionSmoother.prepare(
       juce::jmax(getTotalNumInputChannels(), getTotalNumOutputChannels()),
       expectedMaxFramesPerBlock);
 }
@@ -114,40 +114,22 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   tremolo.setLfoWaveform(
       static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
 
-  if (parameters.bypassed && wasBypassed) {
+  bypassTransitionSmoother.setBypass(parameters.bypassed);
+
+  if (bypassTransitionSmoother.isTransitioning()) {
+    bypassTransitionSmoother.setDryBuffer(buffer);
+    tremolo.process(buffer);
+    bypassTransitionSmoother.mixToWetBuffer(buffer);
+    return;
+  }
+
+  if (parameters.bypassed) {
     // don't do any processing if the plugin is bypassed
     return;
   }
 
-  if (!parameters.bypassed && !wasBypassed) {
-    // apply tremolo
-    tremolo.process(buffer);
-    return;
-  }
-
-  const auto startDryGain = wasBypassed ? 1.f : 0.f;
-  const auto endDryGain = 1.f - startDryGain;
-
-  jassert(buffer.getNumSamples() <= dryBuffer.getNumSamples());
-  jassert(buffer.getNumChannels() <= dryBuffer.getNumChannels());
-
-  for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
-    dryBuffer.copyFromWithRamp(channel, 0, buffer.getReadPointer(channel),
-                               buffer.getNumSamples(), startDryGain,
-                               endDryGain);
-  }
-
+  // apply tremolo
   tremolo.process(buffer);
-
-  const auto startWetGain = 1.f - startDryGain;
-  const auto endWetGain = 1.f - endDryGain;
-  for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
-    buffer.applyGainRamp(channel, 0, buffer.getNumSamples(), startWetGain,
-                         endWetGain);
-    buffer.addFrom(channel, 0, dryBuffer, channel, 0, buffer.getNumSamples());
-  }
-
-  wasBypassed = parameters.bypassed;
 }
 
 bool PluginProcessor::hasEditor() const {
@@ -175,7 +157,7 @@ void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
     DBG(result.getErrorMessage());
   }
 
-  wasBypassed = parameters.bypassed;
+  bypassTransitionSmoother.setBypass(parameters.bypassed);
 }
 
 Parameters& PluginProcessor::getParameters() noexcept {
