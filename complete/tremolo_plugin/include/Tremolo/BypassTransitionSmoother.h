@@ -44,7 +44,7 @@ public:
     reset();
   }
 
-  void setBypass(bool bypass) {
+  void setBypass(bool bypass) noexcept {
     if (bypass == isBypassed) {
       return;
     }
@@ -74,7 +74,7 @@ public:
 
   [[nodiscard]] bool isTransitioning() const noexcept { return isTransition; }
 
-  void setDryBuffer(const juce::AudioBuffer<float>& buffer) {
+  void setDryBuffer(const juce::AudioBuffer<float>& buffer) noexcept {
     if (!isTransitioning()) {
       return;
     }
@@ -89,7 +89,7 @@ public:
     dryGain.applyGain(dryBuffer, dryBuffer.getNumSamples());
   }
 
-  void mixToWetBuffer(juce::AudioBuffer<float>& buffer) {
+  void mixToWetBuffer(juce::AudioBuffer<float>& buffer) noexcept {
     if (!isTransitioning()) {
       return;
     }
@@ -107,7 +107,7 @@ public:
     }
   }
 
-  void reset() {
+  void reset() noexcept {
     isBypassed = false;
     isTransition = false;
     dryBuffer.clear();
