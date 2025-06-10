@@ -109,7 +109,7 @@ public:
   }
 
 private:
-  static constexpr auto modulationDepth = 0.1f;
+  static constexpr auto modulationDepth = 0.4f;
 
   static float triangle(float phase) {
     // Source:
