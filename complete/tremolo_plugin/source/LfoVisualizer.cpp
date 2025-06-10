@@ -56,14 +56,15 @@ void LfoVisualizer::updateSamplesQueue(double timestampSeconds) {
   lfoSamplesToPlot.setStride(getStride());
 
   const auto newAvailableSamples = buffer.getNumSamples();
-  if (newAvailableSamples > 0) {
-    lfoSamplesToPlot.pushBack(std::span{
-        buffer.getReadPointer(0), static_cast<size_t>(buffer.getNumSamples())});
-  } else if (isBypassed()) {
+
+  if (isBypassed()) {
     const auto secondsPassed = timestampSeconds - lastTimestampSeconds.value();
     const auto samplesPassed =
         static_cast<size_t>(getCurrentSampleRate() * secondsPassed);
     lfoSamplesToPlot.pushBackZeros(samplesPassed);
+  } else if (newAvailableSamples > 0) {
+    lfoSamplesToPlot.pushBack(std::span{
+        buffer.getReadPointer(0), static_cast<size_t>(buffer.getNumSamples())});
   }
 
   lastTimestampSeconds = timestampSeconds;
