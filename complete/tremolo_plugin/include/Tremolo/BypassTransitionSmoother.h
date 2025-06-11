@@ -34,11 +34,13 @@ namespace tremolo {
  */
 class BypassTransitionSmoother {
 public:
+  explicit BypassTransitionSmoother(double crossfadeLengthSecondsValue = 0.01)
+      : crossfadeLengthSeconds{crossfadeLengthSecondsValue} {}
+
   void prepare(double sampleRate,
                int channelCount,
                int expectedMaxFramesPerBlock) {
     dryBuffer.setSize(channelCount, expectedMaxFramesPerBlock);
-    constexpr auto crossfadeLengthSeconds = 0.01;
     dryGain.reset(sampleRate, crossfadeLengthSeconds);
     wetGain.reset(sampleRate, crossfadeLengthSeconds);
     reset();
@@ -114,10 +116,11 @@ public:
   }
 
 private:
+  double crossfadeLengthSeconds;
   bool isBypassed = false;
   bool isTransition = false;
   juce::AudioBuffer<float> dryBuffer;
-  juce::SmoothedValue<float> dryGain;
-  juce::SmoothedValue<float> wetGain;
+  juce::SmoothedValue<float> dryGain{0.f};
+  juce::SmoothedValue<float> wetGain{0.f};
 };
 }  // namespace tremolo
