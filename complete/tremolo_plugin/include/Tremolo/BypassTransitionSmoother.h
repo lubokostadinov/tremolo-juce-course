@@ -38,7 +38,7 @@ public:
                int channelCount,
                int expectedMaxFramesPerBlock) {
     dryBuffer.setSize(channelCount, expectedMaxFramesPerBlock);
-    constexpr auto crossfadeLengthSeconds = 0.1;
+    constexpr auto crossfadeLengthSeconds = 0.01;
     dryGain.reset(sampleRate, crossfadeLengthSeconds);
     wetGain.reset(sampleRate, crossfadeLengthSeconds);
     reset();
