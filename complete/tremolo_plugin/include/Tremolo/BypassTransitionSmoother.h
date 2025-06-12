@@ -41,8 +41,10 @@ public:
                int channelCount,
                int expectedMaxFramesPerBlock) {
     dryBuffer.setSize(channelCount, expectedMaxFramesPerBlock);
-    dryGain.reset(sampleRate, crossfadeLengthSeconds);
-    wetGain.reset(sampleRate, crossfadeLengthSeconds);
+    numSteps =
+        static_cast<int>(std::floor(crossfadeLengthSeconds * sampleRate));
+    dryGain.reset(numSteps);
+    wetGain.reset(numSteps);
     reset();
   }
 
@@ -117,6 +119,7 @@ public:
 
 private:
   double crossfadeLengthSeconds;
+  int numSteps{0};
   bool isBypassed = false;
   bool isTransition = false;
   juce::AudioBuffer<float> dryBuffer;
