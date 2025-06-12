@@ -22,7 +22,8 @@ public:
 
   void setTargetValue(bool goToMax) {
     this->target = goToMax ? b : a;
-    step = goToMax ? std::abs(step) : -std::abs(step);
+    step =
+        (this->currentValue < this->target) ? std::abs(step) : -std::abs(step);
     this->countdown =
         static_cast<int>(std::abs((this->currentValue - this->target) / step));
   }
