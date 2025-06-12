@@ -105,12 +105,12 @@ public:
     dryGain.setTargetValue(bypass);
     wetGain.setTargetValue(!bypass);
 
-    isTransition = true;
-
     isBypassed = bypass;
   }
 
-  [[nodiscard]] bool isTransitioning() const noexcept { return isTransition; }
+  [[nodiscard]] bool isTransitioning() const noexcept {
+    return dryGain.isSmoothing() || wetGain.isSmoothing();
+  }
 
   void setDryBuffer(const juce::AudioBuffer<float>& buffer) noexcept {
     if (!isTransitioning()) {
@@ -139,22 +139,16 @@ public:
     for (const auto channel : std::views::iota(0, buffer.getNumChannels())) {
       buffer.addFrom(channel, 0, dryBuffer, channel, 0, buffer.getNumSamples());
     }
-
-    if (!dryGain.isSmoothing() && !wetGain.isSmoothing()) {
-      isTransition = false;
-    }
   }
 
   void reset() noexcept {
     isBypassed = false;
-    isTransition = false;
     dryBuffer.clear();
   }
 
 private:
   double crossfadeLengthSeconds;
   bool isBypassed = false;
-  bool isTransition = false;
   juce::AudioBuffer<float> dryBuffer;
   FixedStepSmoothedValue<float> dryGain{0.f, 1.f};
   FixedStepSmoothedValue<float> wetGain{0.f, 1.f};
