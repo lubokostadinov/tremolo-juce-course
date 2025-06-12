@@ -1,6 +1,53 @@
 #pragma once
 
 namespace tremolo {
+template <typename FloatType>
+class FixedStepSmoothedValue
+    : public juce::SmoothedValueBase<FixedStepSmoothedValue<FloatType>> {
+public:
+  FixedStepSmoothedValue(FloatType minValue, FloatType maxValue)
+      : a{minValue}, b{maxValue} {
+    jassert(minValue < maxValue);
+
+    this->currentValue = minValue;
+    this->target = minValue;
+  }
+
+  void reset(double sampleRate, double rampLengthSeconds) {
+    const auto rampLengthSamples =
+        static_cast<int>(std::floor(rampLengthSeconds * sampleRate));
+    step = (b - a) / static_cast<FloatType>(rampLengthSamples);
+  }
+
+  void setTargetValue(bool goToMax) {
+    this->target = goToMax ? b : a;
+    step = goToMax ? std::abs(step) : -std::abs(step);
+    this->countdown =
+        static_cast<int>(std::abs((this->currentValue - this->target) / step));
+  }
+
+  FloatType getNextValue() {
+    if (!this->isSmoothing()) {
+      return this->target;
+    }
+
+    --(this->countdown);
+
+    if (this->isSmoothing()) {
+      this->currentValue += step;
+    } else {
+      this->currentValue = this->target;
+    }
+
+    return this->currentValue;
+  }
+
+private:
+  FloatType a;
+  FloatType b;
+  FloatType step{0.f};
+};
+
 /**
  * Class facilitating transition to and from bypassed state over a single block.
  *
@@ -43,7 +90,7 @@ public:
     dryBuffer.setSize(channelCount, expectedMaxFramesPerBlock);
     numSteps =
         static_cast<int>(std::floor(crossfadeLengthSeconds * sampleRate));
-    dryGain.reset(numSteps);
+    dryGain.reset(sampleRate, crossfadeLengthSeconds);
     wetGain.reset(numSteps);
     reset();
   }
@@ -54,23 +101,12 @@ public:
     }
 
     const auto startDryGain = bypass ? 0.f : 1.f;
-    const auto endDryGain = 1.f - startDryGain;
 
     if (!isTransitioning()) {
       // don't change start gain if previous transition didn't complete
-      dryGain.reset(numSteps);
       dryGain.setCurrentAndTargetValue(startDryGain);
-    } else {
-      const auto currentValue = dryGain.getCurrentValue();
-      auto stepsLeftProportion = currentValue / 1.f;
-      if (juce::approximatelyEqual(endDryGain, 1.f)) {
-        stepsLeftProportion = 1.f - stepsLeftProportion;
-      }
-      const auto newNumSteps = static_cast<int>(stepsLeftProportion * numSteps);
-      dryGain.reset(newNumSteps);
-      dryGain.setCurrentAndTargetValue(currentValue);
     }
-    dryGain.setTargetValue(endDryGain);
+    dryGain.setTargetValue(bypass);
 
     const auto startWetGain = bypass ? 1.f : 0.f;
     const auto endWetGain = 1.f - startWetGain;
@@ -143,7 +179,7 @@ private:
   bool isBypassed = false;
   bool isTransition = false;
   juce::AudioBuffer<float> dryBuffer;
-  juce::SmoothedValue<float> dryGain{0.f};
+  FixedStepSmoothedValue<float> dryGain{0.f, 1.f};
   juce::SmoothedValue<float> wetGain{0.f};
 };
 }  // namespace tremolo
