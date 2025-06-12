@@ -8,6 +8,7 @@ public:
   FixedStepSmoothedValue(FloatType minValue, FloatType maxValue)
       : a{minValue}, b{maxValue} {
     jassert(minValue < maxValue);
+    jassert(!juce::approximatelyEqual(minValue, maxValue));
 
     this->currentValue = minValue;
     this->target = minValue;
