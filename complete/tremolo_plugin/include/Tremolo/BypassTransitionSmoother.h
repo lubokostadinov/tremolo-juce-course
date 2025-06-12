@@ -88,7 +88,7 @@ public:
       dryBuffer.copyFrom(channel, 0, buffer, channel, 0,
                          buffer.getNumSamples());
     }
-    dryGain.applyGain(dryBuffer, dryBuffer.getNumSamples());
+    dryGain.applyGain(dryBuffer, buffer.getNumSamples());
   }
 
   void mixToWetBuffer(juce::AudioBuffer<float>& buffer) noexcept {
