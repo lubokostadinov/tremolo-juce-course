@@ -2,27 +2,61 @@
 #include <gtest/gtest.h>
 
 namespace tremolo {
-TEST(BypassTransitionSmoother, TransitionIsSmooth) {
+class BypassTransitionSmootherTest : public testing::Test {
+protected:
+  void SetUp() override {
+    constexpr auto sampleRate = 10;
+    constexpr auto blockSize = sampleRate;
+    constexpr auto channelCount = 1;
+    testee.prepare(sampleRate, channelCount, blockSize);
+    testee.setBypass(false);
+    buffer.setSize(channelCount, blockSize);
+  }
+
+  juce::dsp::AudioBlock<float> getBlock() { return buffer; }
+
   BypassTransitionSmoother testee{1.0};
-  constexpr auto sampleRate = 10;
-  constexpr auto blockSize = sampleRate;
-  constexpr auto channelCount = 1;
-  testee.prepare(sampleRate, channelCount, blockSize);
-  testee.setBypass(false);
   juce::AudioBuffer<float> buffer;
-  buffer.setSize(channelCount, blockSize);
-  juce::dsp::AudioBlock<float> block{buffer};
+};
+
+TEST_F(BypassTransitionSmootherTest, OffOnTransitionIsSmooth) {
   testee.setBypass(true);
   ASSERT_TRUE(testee.isTransitioning());
+
   constexpr auto dryValue = 0;
   constexpr auto wetValue = 10;
+  auto block = getBlock();
   block.fill(dryValue);
   testee.setDryBuffer(buffer);
   block.fill(wetValue);
   testee.mixToWetBuffer(buffer);
+
   EXPECT_FALSE(testee.isTransitioning());
   for (const auto i : std::views::iota(dryValue, wetValue)) {
     const auto expectedSample = wetValue - i - 1;
+    EXPECT_NEAR(expectedSample, buffer.getSample(0, i), 0.0001f);
+  }
+}
+
+TEST_F(BypassTransitionSmootherTest, OnOffTransitionIsSmooth) {
+  testee.setBypass(true);
+  testee.setDryBuffer(buffer);
+  testee.mixToWetBuffer(buffer);
+  ASSERT_FALSE(testee.isTransitioning());
+
+  testee.setBypass(false);
+  ASSERT_TRUE(testee.isTransitioning());
+  constexpr auto dryValue = 0;
+  constexpr auto wetValue = 10;
+  auto block = getBlock();
+  block.fill(dryValue);
+  testee.setDryBuffer(buffer);
+  block.fill(wetValue);
+  testee.mixToWetBuffer(buffer);
+
+  EXPECT_FALSE(testee.isTransitioning());
+  for (const auto i : std::views::iota(dryValue, wetValue)) {
+    const auto expectedSample = i + 1;
     EXPECT_NEAR(expectedSample, buffer.getSample(0, i), 0.0001f);
   }
 }
