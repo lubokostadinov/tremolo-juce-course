@@ -60,4 +60,37 @@ TEST_F(BypassTransitionSmootherTest, OnOffTransitionIsSmooth) {
     EXPECT_NEAR(expectedSample, buffer.getSample(0, i), 0.0001f);
   }
 }
+
+TEST_F(BypassTransitionSmootherTest, TogglingBypassMidOffOnTransitionIsSmooth) {
+  testee.setBypass(true);
+  ASSERT_TRUE(testee.isTransitioning());
+
+  constexpr auto dryValue = 0;
+  constexpr auto wetValue = 10;
+  buffer.setSize(buffer.getNumChannels(), buffer.getNumSamples() / 2);
+  auto block = getBlock();
+  block.fill(dryValue);
+  testee.setDryBuffer(buffer);
+  block.fill(wetValue);
+  testee.mixToWetBuffer(buffer);
+
+  EXPECT_TRUE(testee.isTransitioning());
+  for (const auto i : std::views::iota(dryValue, wetValue / 2)) {
+    const auto expectedSample = wetValue - i - 1;
+    EXPECT_NEAR(expectedSample, buffer.getSample(0, i), 0.0001f);
+  }
+
+  testee.setBypass(false);
+  EXPECT_TRUE(testee.isTransitioning());
+
+  block.fill(dryValue);
+  testee.setDryBuffer(buffer);
+  block.fill(wetValue);
+  testee.mixToWetBuffer(buffer);
+  EXPECT_FALSE(testee.isTransitioning());
+  for (const auto i : std::views::iota(wetValue / 2, wetValue)) {
+    const auto expectedSample = i + 1;
+    EXPECT_NEAR(expectedSample, buffer.getSample(0, i - wetValue / 2), 0.0001f);
+  }
+}
 }  // namespace tremolo
