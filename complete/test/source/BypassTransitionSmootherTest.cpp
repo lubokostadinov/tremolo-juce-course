@@ -16,6 +16,14 @@ protected:
     buffer.setSize(channelCount, blockSize);
   }
 
+  void processTransitionBlock() {
+    auto block = getBlock();
+    block.fill(dryValue);
+    testee.setDryBuffer(buffer);
+    block.fill(wetValue);
+    testee.mixToWetBuffer(buffer);
+  }
+
   juce::dsp::AudioBlock<float> getBlock() { return buffer; }
 
   BypassTransitionSmoother testee{1.0};
@@ -26,11 +34,7 @@ TEST_F(BypassTransitionSmootherTest, OffOnTransitionIsSmooth) {
   testee.setBypass(true);
   ASSERT_TRUE(testee.isTransitioning());
 
-  auto block = getBlock();
-  block.fill(dryValue);
-  testee.setDryBuffer(buffer);
-  block.fill(wetValue);
-  testee.mixToWetBuffer(buffer);
+  processTransitionBlock();
 
   EXPECT_FALSE(testee.isTransitioning());
   for (const auto i : std::views::iota(dryValue, wetValue)) {
@@ -47,11 +51,8 @@ TEST_F(BypassTransitionSmootherTest, OnOffTransitionIsSmooth) {
 
   testee.setBypass(false);
   ASSERT_TRUE(testee.isTransitioning());
-  auto block = getBlock();
-  block.fill(dryValue);
-  testee.setDryBuffer(buffer);
-  block.fill(wetValue);
-  testee.mixToWetBuffer(buffer);
+
+  processTransitionBlock();
 
   EXPECT_FALSE(testee.isTransitioning());
   for (const auto i : std::views::iota(dryValue, wetValue)) {
@@ -65,11 +66,8 @@ TEST_F(BypassTransitionSmootherTest, TogglingBypassMidOffOnTransitionIsSmooth) {
   ASSERT_TRUE(testee.isTransitioning());
 
   buffer.setSize(buffer.getNumChannels(), buffer.getNumSamples() / 2);
-  auto block = getBlock();
-  block.fill(dryValue);
-  testee.setDryBuffer(buffer);
-  block.fill(wetValue);
-  testee.mixToWetBuffer(buffer);
+
+  processTransitionBlock();
 
   EXPECT_TRUE(testee.isTransitioning());
   for (const auto i : std::views::iota(dryValue, wetValue / 2)) {
@@ -80,10 +78,8 @@ TEST_F(BypassTransitionSmootherTest, TogglingBypassMidOffOnTransitionIsSmooth) {
   testee.setBypass(false);
   EXPECT_TRUE(testee.isTransitioning());
 
-  block.fill(dryValue);
-  testee.setDryBuffer(buffer);
-  block.fill(wetValue);
-  testee.mixToWetBuffer(buffer);
+  processTransitionBlock();
+
   EXPECT_FALSE(testee.isTransitioning());
   for (const auto i : std::views::iota(wetValue / 2, wetValue)) {
     const auto expectedSample = i + 1;
