@@ -78,6 +78,33 @@ TEST_F(BypassTransitionSmootherTest, OnOffTransitionIsSmooth) {
   }
 }
 
+/** This test checks that the smoothing is continued cross-block
+ * (if block size < transition length).
+ */
+TEST_F(BypassTransitionSmootherTest,
+       OffOnTransitionIsContinuedThroughoutBlocks) {
+  testee.setBypass(true);
+  ASSERT_TRUE(testee.isTransitioning());
+
+  buffer.setSize(buffer.getNumChannels(), buffer.getNumSamples() / 2);
+
+  processTransitionBlock();
+  EXPECT_TRUE(testee.isTransitioning());
+  // check downward slope 10 -> 5
+  for (const auto i : std::views::iota(dryValue, wetValue / 2)) {
+    const auto expectedSample = wetValue - i - 1;
+    EXPECT_NEAR(expectedSample, buffer.getSample(0, i), 0.0001f);
+  }
+
+  processTransitionBlock();
+  EXPECT_FALSE(testee.isTransitioning());
+  // check downward slope 5 -> 0
+  for (const auto i : std::views::iota(wetValue / 2, wetValue)) {
+    const auto expectedSample = wetValue - i - 1;
+    EXPECT_NEAR(expectedSample, buffer.getSample(0, i - wetValue / 2), 0.0001f);
+  }
+}
+
 /** This test checks that cross-fade is correctly handled when toggling the
  * bypass OFF -> ON -> OFF (mid-transition)
  *
