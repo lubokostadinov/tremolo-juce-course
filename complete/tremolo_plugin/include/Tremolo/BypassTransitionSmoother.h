@@ -49,6 +49,10 @@ public:
     return this->currentValue;
   }
 
+  [[nodiscard]] juce::Range<FloatType> getRange() const noexcept {
+    return range;
+  }
+
 private:
   juce::Range<FloatType> range;
   FloatType step{0.f};
@@ -104,21 +108,13 @@ public:
   }
 
   void setBypass(bool bypass) noexcept {
-    if (bypass == isBypassed) {
-      return;
-    }
-
     dryGain.setTargetValueToExtreme(bypass);
     wetGain.setTargetValueToExtreme(!bypass);
-
-    isBypassed = bypass;
   }
 
   void setBypassForced(bool bypass) noexcept {
-    isBypassed = bypass;
-
-    dryGain.setCurrentAndTargetValueToExtreme(isBypassed);
-    wetGain.setCurrentAndTargetValueToExtreme(!isBypassed);
+    dryGain.setCurrentAndTargetValueToExtreme(bypass);
+    wetGain.setCurrentAndTargetValueToExtreme(!bypass);
   }
 
   [[nodiscard]] bool isTransitioning() const noexcept {
@@ -137,7 +133,7 @@ public:
   }
 
   void mixToWetBuffer(juce::AudioBuffer<float>& buffer) noexcept {
-    if (!isTransitioning() && !isBypassed) {
+    if (!isTransitioning() && !isBypassed()) {
       // plugin is operational: no need to modify the wet buffer
       return;
     }
@@ -152,15 +148,19 @@ public:
   }
 
   void reset() noexcept {
-    isBypassed = false;
     dryGain.setCurrentAndTargetValueToExtreme(false);
     wetGain.setCurrentAndTargetValueToExtreme(true);
     dryBuffer.clear();
   }
 
 private:
+  [[nodiscard]] bool isBypassed() const noexcept {
+    // no need to check wetGain; both gains move in tandem
+    return juce::approximatelyEqual(dryGain.getTargetValue(),
+                                    dryGain.getRange().getEnd());
+  }
+
   double crossfadeLengthSeconds = 0.0;
-  bool isBypassed = false;
   juce::AudioBuffer<float> dryBuffer;
   FixedStepRangedSmoothedValue<float> dryGain{{0.f, 1.f}};
   FixedStepRangedSmoothedValue<float> wetGain{{0.f, 1.f}};
