@@ -11,7 +11,7 @@ public:
     jassert(range.getStart() < range.getEnd());
     jassert(!juce::approximatelyEqual(range.getStart(), range.getEnd()));
 
-    this->setCurrentAndTargetValue(range.getStart());
+    setCurrentAndTargetValueToExtreme(false);
   }
 
   void reset(double sampleRate, double rampLengthSeconds) noexcept {
@@ -47,10 +47,6 @@ public:
     }
 
     return this->currentValue;
-  }
-
-  [[nodiscard]] juce::Range<FloatType> getRange() const noexcept {
-    return range;
   }
 
 private:
@@ -93,8 +89,9 @@ class BypassTransitionSmoother {
 public:
   explicit BypassTransitionSmoother(double crossfadeLengthSecondsValue = 0.01)
       : crossfadeLengthSeconds{crossfadeLengthSecondsValue} {
-    dryGain.setCurrentAndTargetValue(dryGain.getRange().getStart());
-    wetGain.setCurrentAndTargetValue(wetGain.getRange().getEnd());
+    jassert(0.0 <= crossfadeLengthSeconds);
+
+    reset();
   }
 
   void prepare(double sampleRate,
@@ -156,11 +153,13 @@ public:
 
   void reset() noexcept {
     isBypassed = false;
+    dryGain.setCurrentAndTargetValueToExtreme(false);
+    wetGain.setCurrentAndTargetValueToExtreme(true);
     dryBuffer.clear();
   }
 
 private:
-  double crossfadeLengthSeconds;
+  double crossfadeLengthSeconds = 0.0;
   bool isBypassed = false;
   juce::AudioBuffer<float> dryBuffer;
   FixedStepRangedSmoothedValue<float> dryGain{{0.f, 1.f}};
