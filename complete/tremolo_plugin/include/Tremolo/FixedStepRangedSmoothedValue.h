@@ -16,7 +16,7 @@ namespace tremolo {
  * setCurrentAndTargetValue(), the smoothing will
  * progress along the specified curve.
  *
- * @see BypassTransitionSmoother
+ * @see BypassTransitionSmoother juce::SmoothedValue
  */
 template <typename FloatType>
 class FixedStepRangedSmoothedValue
