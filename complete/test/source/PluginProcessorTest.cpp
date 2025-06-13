@@ -1,3 +1,4 @@
+#include "TestUtils.h"
 #include <tremolo_plugin/tremolo_plugin.h>
 #include <gtest/gtest.h>
 #include <wolfsound/common/wolfsound_Frequency.hpp>
@@ -60,12 +61,7 @@ TEST_F(BypassTransitionIsSmoothTest, ExerciseAllSegments) {
   process();  // bypass OFF
 
   wolfsound::WavFileWriter::writeToFile(
-      juce::File::getSpecialLocation(
-          juce::File::SpecialLocationType::currentExecutableFile)
-          .getParentDirectory()
-          .getChildFile("bypassTransition.wav")
-          .getFullPathName()
-          .toStdString(),
+      getFileOutputPath("bypassTransition.wav"),
       juce::Span{outputBuffer.getReadPointer(0),
                  static_cast<size_t>(outputBuffer.getNumSamples())},
       sampleRate);
