@@ -2,11 +2,11 @@
 #include <juce_core/juce_core.h>
 
 namespace tremolo {
-inline std::string getFileOutputPath(juce::StringRef filename) {
+inline std::string getFileOutputPath(juce::StringRef fileName) {
   return juce::File::getSpecialLocation(
              juce::File::SpecialLocationType::currentExecutableFile)
       .getParentDirectory()
-      .getChildFile(filename)
+      .getChildFile(fileName)
       .getFullPathName()
       .toStdString();
 }
