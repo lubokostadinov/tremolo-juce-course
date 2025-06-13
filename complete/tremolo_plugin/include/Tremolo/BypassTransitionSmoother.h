@@ -20,7 +20,7 @@ public:
     step = range.getLength() / static_cast<FloatType>(rampLengthSamples);
   }
 
-  void setTargetValue(bool goToMax) noexcept {
+  void setTargetValueToExtreme(bool goToMax) noexcept {
     this->target = goToMax ? range.getEnd() : range.getStart();
     step =
         (this->currentValue < this->target) ? std::abs(step) : -std::abs(step);
@@ -106,8 +106,8 @@ public:
       return;
     }
 
-    dryGain.setTargetValue(bypass);
-    wetGain.setTargetValue(!bypass);
+    dryGain.setTargetValueToExtreme(bypass);
+    wetGain.setTargetValueToExtreme(!bypass);
 
     isBypassed = bypass;
   }
