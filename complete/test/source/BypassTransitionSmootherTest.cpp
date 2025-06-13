@@ -61,8 +61,8 @@ TEST_F(BypassTransitionSmootherTest, OffOnTransitionIsSmooth) {
  */
 TEST_F(BypassTransitionSmootherTest, OnOffTransitionIsSmooth) {
   testee.setBypass(true);
-  testee.setDryBuffer(buffer);
-  testee.mixToWetBuffer(buffer);
+  // skip OFF -> ON transition
+  processTransitionBlock();
   ASSERT_FALSE(testee.isTransitioning());
 
   testee.setBypass(false);
