@@ -5,13 +5,12 @@ template <typename FloatType>
 class FixedStepRangedSmoothedValue
     : public juce::SmoothedValueBase<FixedStepRangedSmoothedValue<FloatType>> {
 public:
-  FixedStepRangedSmoothedValue(FloatType minValue, FloatType maxValue)
-      : a{minValue}, b{maxValue}, range{minValue, maxValue} {
-    jassert(minValue < maxValue);
-    jassert(!juce::approximatelyEqual(minValue, maxValue));
+  explicit FixedStepRangedSmoothedValue(juce::Range<FloatType> rangeToUse)
+      : range{rangeToUse} {
+    jassert(range.getStart() < range.getEnd());
+    jassert(!juce::approximatelyEqual(range.getStart(), range.getEnd()));
 
-    this->currentValue = minValue;
-    this->target = minValue;
+    this->setCurrentAndTargetValue(range.getStart());
   }
 
   void reset(double sampleRate, double rampLengthSeconds) {
@@ -45,8 +44,6 @@ public:
   }
 
 private:
-  FloatType a;
-  FloatType b;
   juce::Range<FloatType> range;
   FloatType step{0.f};
 };
@@ -152,7 +149,7 @@ private:
   double crossfadeLengthSeconds;
   bool isBypassed = false;
   juce::AudioBuffer<float> dryBuffer;
-  FixedStepRangedSmoothedValue<float> dryGain{0.f, 1.f};
-  FixedStepRangedSmoothedValue<float> wetGain{0.f, 1.f};
+  FixedStepRangedSmoothedValue<float> dryGain{{0.f, 1.f}};
+  FixedStepRangedSmoothedValue<float> wetGain{{0.f, 1.f}};
 };
 }  // namespace tremolo
