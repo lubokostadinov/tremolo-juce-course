@@ -2,10 +2,10 @@
 
 namespace tremolo {
 template <typename FloatType>
-class FixedStepSmoothedValue
-    : public juce::SmoothedValueBase<FixedStepSmoothedValue<FloatType>> {
+class FixedStepRangedSmoothedValue
+    : public juce::SmoothedValueBase<FixedStepRangedSmoothedValue<FloatType>> {
 public:
-  FixedStepSmoothedValue(FloatType minValue, FloatType maxValue)
+  FixedStepRangedSmoothedValue(FloatType minValue, FloatType maxValue)
       : a{minValue}, b{maxValue} {
     jassert(minValue < maxValue);
     jassert(!juce::approximatelyEqual(minValue, maxValue));
@@ -151,7 +151,7 @@ private:
   double crossfadeLengthSeconds;
   bool isBypassed = false;
   juce::AudioBuffer<float> dryBuffer;
-  FixedStepSmoothedValue<float> dryGain{0.f, 1.f};
-  FixedStepSmoothedValue<float> wetGain{0.f, 1.f};
+  FixedStepRangedSmoothedValue<float> dryGain{0.f, 1.f};
+  FixedStepRangedSmoothedValue<float> wetGain{0.f, 1.f};
 };
 }  // namespace tremolo
