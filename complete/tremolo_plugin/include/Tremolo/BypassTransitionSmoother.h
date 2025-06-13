@@ -96,8 +96,7 @@ public:
   }
 
   void reset() noexcept {
-    dryGain.setCurrentAndTargetValueToExtreme(false);
-    wetGain.setCurrentAndTargetValueToExtreme(true);
+    setBypassForced(false);
     dryBuffer.clear();
   }
 
