@@ -36,7 +36,7 @@ class BypassTransitionSmoother {
 public:
   explicit BypassTransitionSmoother(double crossfadeLengthSecondsValue = 0.01)
       : crossfadeLengthSeconds{crossfadeLengthSecondsValue} {
-    jassert(0.0 <= crossfadeLengthSeconds);
+    jassert(0.0 < crossfadeLengthSeconds);
 
     reset();
   }

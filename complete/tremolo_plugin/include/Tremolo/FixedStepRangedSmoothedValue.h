@@ -33,7 +33,7 @@ public:
 
   void reset(double sampleRate, double rampLengthSeconds) noexcept {
     jassert(0.0 < sampleRate);
-    jassert(0.0 <= rampLengthSeconds);
+    jassert(0.0 < rampLengthSeconds);
 
     const auto rampLengthSamples =
         static_cast<int>(std::floor(rampLengthSeconds * sampleRate));
