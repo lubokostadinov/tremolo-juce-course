@@ -49,6 +49,12 @@ cpmaddpackage(
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Util.cmake)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+  # Sets the Windows VST3 installation location to one
+  # that doesn't require elevated permissions
+  set(JUCE_VST3_COPY_DIR "$ENV{LOCALAPPDATA}/Programs/Common/VST3")
+endif()
+
 # Adds a plugin target.
 set(TREMOLO_PLUGIN_NAME "TODO: set your plugin name")
 juce_add_plugin(
