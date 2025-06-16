@@ -65,7 +65,7 @@ public:
   }
 
   void setDryBuffer(const juce::AudioBuffer<float>& buffer) noexcept {
-    if (!isTransitioning() && !isBypassed()) {
+    if (shouldAvoidProcessing()) {
       // plugin is operational: no need to store the dry buffer
       return;
     }
@@ -81,7 +81,7 @@ public:
   }
 
   void mixToWetBuffer(juce::AudioBuffer<float>& buffer) noexcept {
-    if (!isTransitioning() && !isBypassed()) {
+    if (shouldAvoidProcessing()) {
       // plugin is operational: no need to modify the wet buffer
       return;
     }
@@ -105,6 +105,10 @@ private:
     // no need to check wetGain; both gains move in tandem
     return juce::approximatelyEqual(dryGain.getTargetValue(),
                                     dryGain.getRange().getEnd());
+  }
+
+  [[nodiscard]] bool shouldAvoidProcessing() const noexcept {
+    return !isTransitioning() && !isBypassed();
   }
 
   double crossfadeLengthSeconds = 0.0;
