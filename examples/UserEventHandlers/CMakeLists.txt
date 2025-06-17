@@ -1,2 +1,2 @@
-course_add_example_app("UserEventHandlers")
+course_add_example_app()
 

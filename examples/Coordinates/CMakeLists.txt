@@ -1,2 +1,2 @@
-course_add_example_app("Coordinates")
+course_add_example_app()
 

@@ -27,7 +27,8 @@ cpmaddpackage(
     ${LIB_DIR}/juce
 )
 
-function(course_add_example_app target)
+function(course_add_example_app)
+  get_filename_component(target ${CMAKE_CURRENT_SOURCE_DIR} NAME)
   juce_add_gui_app(${target}
     PRODUCT_NAME "${target}Example"
   )
