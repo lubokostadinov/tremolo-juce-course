@@ -19,4 +19,5 @@ function(course_add_example_app)
 endfunction()
 
 add_subdirectory(Coordinates)
+add_subdirectory(GuiThreadIdPrinting)
 add_subdirectory(UserEventHandlers)
