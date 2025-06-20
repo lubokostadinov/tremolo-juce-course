@@ -20,4 +20,5 @@ endfunction()
 
 add_subdirectory(Coordinates)
 add_subdirectory(GuiThreadIdPrinting)
+add_subdirectory(LongRunningTask)
 add_subdirectory(UserEventHandlers)
