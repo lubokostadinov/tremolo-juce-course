@@ -3,7 +3,7 @@
 namespace tremolo {
 class PluginProcessor : public juce::AudioProcessor {
 public:
-  explicit PluginProcessor();
+  PluginProcessor();
 
   void prepareToPlay(double sampleRate, int expectedMaxFramesPerBlock) override;
 
