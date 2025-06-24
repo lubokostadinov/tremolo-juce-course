@@ -10,34 +10,38 @@ Param& addParamToProcessor(juce::AudioProcessor& processor,
 }
 
 juce::AudioParameterFloat& createModulationRateParameter(
-    juce::AudioProcessor& c) {
+    juce::AudioProcessor& processor) {
   constexpr auto versionHint = 1;
-  return addParamToProcessor(
-      c,
+  return addParameterToProcessor(
+      processor,
       std::make_unique<juce::AudioParameterFloat>(
           juce::ParameterID{"modulation.rate", versionHint}, "Modulation rate",
           juce::NormalisableRange<float>{0.1f, 20.f, 0.01f, 0.4f}, 5.f,
           juce::AudioParameterFloatAttributes{}.withLabel("Hz")));
 }
 
-juce::AudioParameterBool& createBypassedParameter(juce::AudioProcessor& c) {
+juce::AudioParameterBool& createBypassedParameter(
+    juce::AudioProcessor& processor) {
   constexpr auto versionHint = 1;
-  return addParamToProcessor(
-      c, std::make_unique<juce::AudioParameterBool>(
-             juce::ParameterID{"bypassed", versionHint}, "Bypass", false));
+  return addParameterToProcessor(
+      processor,
+      std::make_unique<juce::AudioParameterBool>(
+          juce::ParameterID{"bypassed", versionHint}, "Bypass", false));
 }
 
-juce::AudioParameterChoice& createWaveformParameter(juce::AudioProcessor& c) {
+juce::AudioParameterChoice& createWaveformParameter(
+    juce::AudioProcessor& processor) {
   constexpr auto versionHint = 1;
-  return addParamToProcessor(
-      c, std::make_unique<juce::AudioParameterChoice>(
-             juce::ParameterID{"modulation.waveform", versionHint},
-             "Modulation waveform", juce::StringArray{"Sine", "Triangle"}, 0));
+  return addParameterToProcessor(
+      processor,
+      std::make_unique<juce::AudioParameterChoice>(
+          juce::ParameterID{"modulation.waveform", versionHint},
+          "Modulation waveform", juce::StringArray{"Sine", "Triangle"}, 0));
 }
 }  // namespace
 
-Parameters::Parameters(juce::AudioProcessor& parameterContainer)
-    : rate{createModulationRateParameter(parameterContainer)},
-      bypassed{createBypassedParameter(parameterContainer)},
-      waveform{createWaveformParameter(parameterContainer)} {}
+Parameters::Parameters(juce::AudioProcessor& processor)
+    : rate{createModulationRateParameter(processor)},
+      bypassed{createBypassedParameter(processor)},
+      waveform{createWaveformParameter(processor)} {}
 }  // namespace tremolo
