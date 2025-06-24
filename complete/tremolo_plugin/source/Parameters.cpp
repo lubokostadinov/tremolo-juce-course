@@ -1,11 +1,9 @@
 
 namespace tremolo {
 namespace {
-template <typename Param>
-Param& addParamToProcessor(juce::AudioProcessor& processor,
-                           std::unique_ptr<Param> param) {
-  auto& result = *param;
-  processor.addParameter(param.release());
+auto& addParameterToProcessor(juce::AudioProcessor& processor, auto parameter) {
+  auto& result = *parameter;
+  processor.addParameter(parameter.release());
   return result;
 }
 
