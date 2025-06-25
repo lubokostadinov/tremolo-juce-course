@@ -61,8 +61,8 @@ private:
           static_cast<int>(currentExaminedNumber * progressMultiplier);
       if (progressPercent < newProgressPercent) {
         progressPercent = newProgressPercent;
-        const auto newProgress = std::clamp(
-            static_cast<double>(newProgressPercent) / 100.0, 0.0, 1.0);
+        const auto newProgress = juce::jmap(
+            static_cast<double>(progressPercent), 0.0, 100.0, 0.0, 1.0);
         juce::MessageManager::callAsync(
             [this, newProgress]() { progress = newProgress; });
       }
