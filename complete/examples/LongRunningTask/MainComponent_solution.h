@@ -5,7 +5,10 @@
 class LongRunningTask : public juce::Component, private juce::Thread {
 public:
   LongRunningTask() : juce::Thread{"LongRunningTask"} {
-    startButton.onClick = [this]() { startThread(); };
+    startButton.onClick = [this]() {
+      progress = 0.0;
+      startThread();
+    };
     addAndMakeVisible(startButton);
 
     addAndMakeVisible(progressBar);
@@ -30,6 +33,9 @@ private:
   static constexpr auto limit = 10'000'000;
 
   void findLargestPrimeNumberWithinLimit() {
+    auto progressPercent = 0;
+    constexpr auto progressMultiplier = 100.0 / limit;
+
     auto largestPrimeNumberFound = 2;
 
     for (int currentExaminedNumber = 3; currentExaminedNumber < limit;
@@ -50,13 +56,16 @@ private:
       if (isPrime) {
         largestPrimeNumberFound = currentExaminedNumber;
       }
-      const auto newProgress =
-          std::clamp(static_cast<double>(currentExaminedNumber) /
-                         static_cast<double>(limit),
-                     0.0, 1.0);
 
-      juce::MessageManager::callAsync(
-          [this, newProgress]() { progress = newProgress; });
+      const auto newProgressPercent =
+          static_cast<int>(currentExaminedNumber * progressMultiplier);
+      if (progressPercent < newProgressPercent) {
+        progressPercent = newProgressPercent;
+        const auto newProgress = std::clamp(
+            static_cast<double>(newProgressPercent) / 100.0, 0.0, 1.0);
+        juce::MessageManager::callAsync(
+            [this, newProgress]() { progress = newProgress; });
+      }
     }
 
     juce::MessageManager::callAsync([this, largestPrimeNumberFound]() {
