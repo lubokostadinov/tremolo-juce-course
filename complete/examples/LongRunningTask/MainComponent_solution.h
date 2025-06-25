@@ -6,8 +6,9 @@ class LongRunningTask : public juce::Component, private juce::Thread {
 public:
   LongRunningTask() : juce::Thread{"LongRunningTask"} {
     startButton.onClick = [this]() {
-      progress = 0.0;
-      startThread();
+      if (startThread()) {
+        progress = 0.0;
+      }
     };
     addAndMakeVisible(startButton);
 
