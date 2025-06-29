@@ -81,8 +81,8 @@ TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
 
   // then
   EXPECT_TRUE(result.failed());
-  EXPECT_FLOAT_EQ(parameters.rate, 5.f);
-  EXPECT_FALSE(parameters.bypassed);
+  EXPECT_FLOAT_EQ(parameters.rate.get(), 5.f);
+  EXPECT_FALSE(parameters.bypassed.get());
   EXPECT_EQ(0, parameters.waveform.getIndex());
 }
 }  // namespace tremolo
