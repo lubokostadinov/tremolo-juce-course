@@ -143,7 +143,7 @@ private:
   double crossfadeLengthSeconds = 0.0;
   double sampleRateHz = 0.0;
   juce::AudioBuffer<float> dryBuffer;
-  juce::LinearSmoothedValue<float> dryGain;
-  juce::LinearSmoothedValue<float> wetGain;
+  juce::LinearSmoothedValue<float> dryGain{0.f};
+  juce::LinearSmoothedValue<float> wetGain{1.f};
 };
 }  // namespace tremolo
