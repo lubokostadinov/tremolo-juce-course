@@ -58,8 +58,6 @@ public:
   explicit BypassTransitionSmoother(double crossfadeLengthSecondsValue = 0.01)
       : crossfadeLengthSeconds{crossfadeLengthSecondsValue} {
     jassert(0.0 < crossfadeLengthSeconds);
-
-    reset();
   }
 
   void prepare(const juce::dsp::ProcessSpec& spec) {
@@ -68,7 +66,6 @@ public:
                       static_cast<int>(spec.maximumBlockSize));
     dryGain.reset(spec.sampleRate, crossfadeLengthSeconds);
     wetGain.reset(spec.sampleRate, crossfadeLengthSeconds);
-    reset();
   }
 
   void setBypass(bool bypass) noexcept {
@@ -122,14 +119,10 @@ public:
   }
 
 private:
-  [[nodiscard]] bool isBypassed() const noexcept {
-    return juce::exactlyEqual(dryGain.getTargetValue(), 1.0f);
-  }
-
   double crossfadeLengthSeconds = 0.0;
   double sampleRateHz = 0.0;
   juce::AudioBuffer<float> dryBuffer;
-  juce::LinearSmoothedValue<float> dryGain;
-  juce::LinearSmoothedValue<float> wetGain;
+  juce::LinearSmoothedValue<float> dryGain{0.f};
+  juce::LinearSmoothedValue<float> wetGain{1.f};
 };
 }  // namespace tremolo
