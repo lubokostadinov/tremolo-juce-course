@@ -114,7 +114,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
   bypassTransitionSmoother.setBypass(parameters.bypassed);
 
-  if (parameters.bypassed && !bypassTransitionSmoother.isTransitioning()) {
+  if (parameters.bypassed.get() &&
+      !bypassTransitionSmoother.isTransitioning()) {
     // avoid processing if the plugin is bypassed
     return;
   }
