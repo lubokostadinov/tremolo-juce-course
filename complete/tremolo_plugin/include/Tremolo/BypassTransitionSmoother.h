@@ -72,6 +72,10 @@ public:
   }
 
   void setBypass(bool bypass) noexcept {
+    if (bypass == isBypassed()) {
+      return;
+    }
+
     const auto current = dryGain.getCurrentValue();
     const auto target = bypass ? 1.0f : 0.0f;
     const auto duration = crossfadeLengthSeconds * std::abs(target - current);
