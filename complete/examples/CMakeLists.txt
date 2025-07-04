@@ -13,12 +13,13 @@ function(course_add_example_app)
 
   target_sources(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../Main.cpp)
 
-  target_link_libraries(${target} PRIVATE juce::juce_gui_basics)
+  target_link_libraries(${target} PRIVATE juce::juce_gui_basics juce::juce_audio_utils)
 
   target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endfunction()
 
 add_subdirectory(Coordinates)
 add_subdirectory(GuiThreadIdPrinting)
+add_subdirectory(GuiAndAudioThreadIdPrinting)
 add_subdirectory(LongRunningTask)
 add_subdirectory(UserEventHandlers)
