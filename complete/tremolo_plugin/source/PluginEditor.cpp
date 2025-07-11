@@ -9,8 +9,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
           [&p] { return p.getSampleRateThreadSafe(); },
           [&p] { return p.getParameterRefs().bypassed.get(); }} {
   background.setImage(juce::ImageCache::getFromMemory(
-      assets::RenderedBackground_png, assets::RenderedBackground_pngSize));
+      assets::Background_png, assets::Background_pngSize));
   addAndMakeVisible(background);
+
+  logo.setImage(
+      juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
+  addAndMakeVisible(logo);
 
   const auto sideFontColor = juce::Colour{0xFF6EA0C7};
 
@@ -71,6 +75,8 @@ void PluginEditor::resized() {
   const auto bounds = getLocalBounds();
 
   background.setBounds(bounds);
+
+  logo.setBounds({16, 16, 105, 24});
 
   auto lfoVisualizerBounds = bounds.reduced(18, 27);
   lfoVisualizerBounds.removeFromTop(122);
