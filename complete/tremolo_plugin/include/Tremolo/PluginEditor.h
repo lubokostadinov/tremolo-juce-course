@@ -10,6 +10,7 @@ public:
 
 private:
   juce::ImageComponent background;
+  juce::ImageComponent logo;
 
   juce::Label waveformLabel{"waveform label", "WAVEFORM"};
   juce::ComboBox waveformComboBox;

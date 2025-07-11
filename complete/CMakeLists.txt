@@ -99,7 +99,8 @@ juce_add_binary_data(tremolo_plugin_assets
   NAMESPACE
     tremolo::assets
   SOURCES
-    assets/RenderedBackground.png
+    assets/Background.png
+    assets/Logo.png
     assets/Inter-Bold.ttf
     assets/Inter-Regular.ttf
     assets/Inter-Medium.ttf
