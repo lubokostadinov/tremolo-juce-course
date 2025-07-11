@@ -99,6 +99,8 @@ juce_add_binary_data(tremolo_plugin_assets
   NAMESPACE
     tremolo::assets
   SOURCES
+    assets/Background.png
+    assets/Logo.png
     assets/RenderedBackground.png
     # TODO: Add custom font files
 )
