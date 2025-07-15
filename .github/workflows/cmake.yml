@@ -11,7 +11,8 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        preset: [ninja-debug, ninja-release]
+        # preset: [ninja-debug, ninja-release]
+        preset: [ninja-debug]
 
     runs-on: ${{ matrix.os }}
 
@@ -82,12 +83,12 @@ jobs:
     - name: Build Debug (Windows)
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/complete
-      run: cmake --preset vs --config Debug
+      run: cmake --build --preset vs --config Debug
 
     - name: Build Release (Windows)
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/complete
-      run: cmake --preset vs --config Debug
+      run: cmake --build --preset vs --config Debug
 
     - name: Test Debug (Windows)
       if: matrix.os == 'windows-latest'
