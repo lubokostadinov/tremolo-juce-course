@@ -88,7 +88,7 @@ jobs:
     - name: Build Release (Windows)
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/complete
-      run: cmake --build --preset vs --config Debug
+      run: cmake --build --preset vs --config Release
 
     - name: Test Debug (Windows)
       if: matrix.os == 'windows-latest'
