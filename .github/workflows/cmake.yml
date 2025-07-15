@@ -39,9 +39,11 @@ jobs:
     - uses: ilammy/msvc-dev-cmd@v1 # use MSVC on Windows not minGW
 
     - name: Install ninja-build tool
+      if: matrix.os != 'windows-latest'
       uses: seanmiddleditch/gha-setup-ninja@v5
 
     - name: Cache ninja-build
+      if: matrix.os != 'windows-latest'
       uses: actions/cache@v4
       with:
         key: ${{ runner.os }}-ninja-build
@@ -58,14 +60,43 @@ jobs:
         key: ${{ runner.os }}-libs-${{ hashFiles('complete/CMakeLists.txt') }}-${{ hashFiles('complete/test/CMakeLists.txt') }}
 
     - name: Configure CMake
+      if: matrix.os != 'windows-latest'
       working-directory: ${{ github.workspace }}/complete
       run: cmake --preset ${{ matrix.preset }}
 
     - name: Build
+      if: matrix.os != 'windows-latest'
       working-directory: ${{ github.workspace }}/complete
       run: cmake --build --preset ${{ matrix.preset }}
 
     - name: Test
+      if: matrix.os != 'windows-latest'
       working-directory: ${{github.workspace}}/complete
       run: ctest --preset ${{ matrix.preset }}
+
+    - name: Configure CMake (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/complete
+      run: cmake --preset vs
+
+    - name: Build Debug (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/complete
+      run: cmake --preset vs --config Debug
+
+    - name: Build Release (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/complete
+      run: cmake --preset vs --config Debug
+
+    - name: Test Debug (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/complete
+      run: ctest --preset vs -C Debug
+
+    - name: Test Release (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/complete
+      run: ctest --preset vs -C Release
+
 
