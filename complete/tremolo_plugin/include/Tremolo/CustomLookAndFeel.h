@@ -58,7 +58,6 @@ private:
   struct FontContainer {
     FontContainer();
 
-    juce::Typeface::Ptr interRegular;
     juce::Typeface::Ptr interBold;
     juce::Typeface::Ptr interMedium;
   };

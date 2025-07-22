@@ -8,17 +8,14 @@ juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
 }
 
 CustomLookAndFeel::FontContainer::FontContainer()
-    : interRegular{juce::Typeface::createSystemTypefaceFor(
-          assets::InterRegular_ttf,
-          assets::InterRegular_ttfSize)},
-      interBold{
-          juce::Typeface::createSystemTypefaceFor(assets::InterBold_ttf,
-                                                  assets::InterBold_ttfSize)},
+    : interBold{juce::Typeface::createSystemTypefaceFor(
+          assets::InterBold_ttf,
+          assets::InterBold_ttfSize)},
       interMedium{juce::Typeface::createSystemTypefaceFor(
           assets::InterMedium_ttf,
           assets::InterMedium_ttfSize)} {
   // used to set the font of the default standalone plugin window
-  getDefaultLookAndFeel().setDefaultSansSerifTypeface(interRegular);
+  getDefaultLookAndFeel().setDefaultSansSerifTypeface(interMedium);
 }
 
 CustomLookAndFeel::CustomLookAndFeel() {
