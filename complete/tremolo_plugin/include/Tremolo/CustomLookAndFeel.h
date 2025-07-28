@@ -69,7 +69,7 @@ private:
   void drawButtonInset(juce::Graphics&,
                        const juce::Rectangle<float>& bounds) const;
   void drawGradientButton(juce::Graphics&,
-                          const juce::Rectangle<float>&,
+                          const juce::Rectangle<float>& bounds,
                           const juce::ColourGradient& gradient) const;
 
   FontContainer fontContainer;
