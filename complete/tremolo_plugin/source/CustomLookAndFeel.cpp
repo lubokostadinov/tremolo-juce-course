@@ -1,4 +1,38 @@
 namespace tremolo {
+namespace {
+constexpr auto buttonInsetWidth = 2.f;
+
+void drawGradientButton(juce::Graphics& g,
+                        const juce::Rectangle<float>& bounds,
+                        const juce::ColourGradient& gradient) {
+  g.setGradientFill(gradient);
+  g.fillRoundedRectangle(bounds, 4.f);
+}
+
+void drawBlueGradientButton(juce::Graphics& g,
+                            const juce::Rectangle<float>& bounds) {
+  auto buttonGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF4A7090}, juce::Colour{0xFF324258}, bounds);
+  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
+  drawGradientButton(g, bounds, buttonGradient);
+}
+
+void drawOrangeGradientButton(juce::Graphics& g,
+                              const juce::Rectangle<float>& bounds) {
+  const auto buttonGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFFFF901A}, juce::Colour{0xFFFFC300}, bounds);
+  drawGradientButton(g, bounds, buttonGradient);
+}
+
+void drawButtonInset(juce::Graphics& g, const juce::Rectangle<float>& bounds) {
+  auto insetGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF22232C}, juce::Colour{0xFF263235}, bounds);
+  insetGradient.addColour(0.35, juce::Colour{0xFF303538});
+  g.setGradientFill(insetGradient);
+  g.fillRoundedRectangle(bounds, 6.f);
+}
+}  // namespace
+
 juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
   static const std::array colors{
       juce::Colour{0xFFFFAA00},
@@ -126,7 +160,10 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
                                      juce::ComboBox&) {
   const auto boxBounds = juce::Rectangle{0, 0, width, height}.toFloat();
 
-  drawPlainButton(g, boxBounds);
+  drawButtonInset(g, boxBounds);
+
+  const auto buttonBounds = boxBounds.reduced(buttonInsetWidth);
+  drawBlueGradientButton(g, buttonBounds);
 
   auto arrowZone = boxBounds.reduced(10.f, 11.f);
   arrowZone.removeFromLeft(104);
@@ -178,14 +215,16 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
   const auto bounds = button.getLocalBounds().toFloat();
 
+  drawButtonInset(g, bounds);
+  const auto buttonBounds = bounds.reduced(buttonInsetWidth);
+
   if (!button.getToggleState()) {
-    drawPlainButton(g, bounds);
+    drawBlueGradientButton(g, buttonBounds);
     g.setColour(getColor(Colors::paleBlue));
     g.setFont(
         juce::FontOptions{fontContainer.interMedium}.withPointHeight(12.f));
   } else {
-    drawGradientButton(g, bounds, juce::Colour{0xFFFF901A},
-                       juce::Colour{0xFFFFC300});
+    drawOrangeGradientButton(g, buttonBounds);
 
     const juce::Colour textColour{0xFF501A0B};
     g.setColour(textColour);
@@ -193,46 +232,5 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
   }
   g.drawText(button.getButtonText(), bounds, juce::Justification::centred,
              false);
-}
-
-namespace {
-constexpr auto buttonInsetWidth = 2.f;
-constexpr auto buttonCornerSize = 4;
-}  // namespace
-
-void CustomLookAndFeel::drawPlainButton(
-    juce::Graphics& g,
-    const juce::Rectangle<float>& bounds) const {
-  drawButtonInset(g, bounds);
-
-  const auto buttonBounds = bounds.reduced(buttonInsetWidth);
-  auto buttonGradient = juce::ColourGradient::vertical(
-      juce::Colour{0xFF4A7090}, juce::Colour{0xFF324258}, buttonBounds);
-  buttonGradient.addColour(0.73, juce::Colour{0xFF315160});
-  g.setGradientFill(buttonGradient);
-  g.fillRoundedRectangle(buttonBounds, buttonCornerSize);
-}
-
-void CustomLookAndFeel::drawGradientButton(juce::Graphics& g,
-                                           const juce::Rectangle<float>& bounds,
-                                           juce::Colour topColor,
-                                           juce::Colour bottomColor) const {
-  drawButtonInset(g, bounds);
-
-  const auto buttonBounds = bounds.reduced(buttonInsetWidth);
-  const auto buttonGradient =
-      juce::ColourGradient::vertical(topColor, bottomColor, buttonBounds);
-  g.setGradientFill(buttonGradient);
-  g.fillRoundedRectangle(buttonBounds, buttonCornerSize);
-}
-
-void CustomLookAndFeel::drawButtonInset(
-    juce::Graphics& g,
-    const juce::Rectangle<float>& bounds) const {
-  auto insetGradient = juce::ColourGradient::vertical(
-      juce::Colour{0xFF22232C}, juce::Colour{0xFF263235}, bounds);
-  insetGradient.addColour(0.35, juce::Colour{0xFF303538});
-  g.setGradientFill(insetGradient);
-  g.fillRoundedRectangle(bounds, 6.f);
 }
 }  // namespace tremolo
