@@ -83,20 +83,17 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                          const float rotaryStartAngle,
                                          const float rotaryEndAngle,
                                          juce::Slider&) {
-  const auto knobCanalColor = juce::Colour{0xFF2A3A3B};
-
   const auto bounds = juce::Rectangle{x, y, width, height};
   const auto knobCanalBounds = bounds.toFloat().reduced(3.75f);
 
-  g.setColour(knobCanalColor);
+  g.setColour(juce::Colour{0xFF2A3A3B});
   g.fillEllipse(knobCanalBounds);
 
   const auto valueArcBounds = knobCanalBounds.reduced(0.25f, 0.25f);
 
+  juce::Path arc;
   const auto toAngle =
       rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-
-  juce::Path arc;
   arc.addPieSegment(valueArcBounds, rotaryStartAngle, toAngle, 0.f);
   g.setColour(getColor(Colors::orange));
   g.fillPath(arc);
