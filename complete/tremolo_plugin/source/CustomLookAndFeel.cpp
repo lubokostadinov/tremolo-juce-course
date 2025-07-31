@@ -85,29 +85,23 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                          juce::Slider&) {
   const auto knobCanalColor = juce::Colour{0xFF2A3A3B};
 
-  auto bounds = juce::Rectangle{x, y, width, height}.toFloat().reduced(3.75f);
+  const auto bounds = juce::Rectangle{x, y, width, height};
+  const auto knobCanalBounds = bounds.toFloat().reduced(3.75f);
 
   g.setColour(knobCanalColor);
-  g.fillEllipse(bounds);
+  g.fillEllipse(knobCanalBounds);
 
-  bounds.reduce(0.25f, 0.25f);
+  const auto valueArcBounds = knobCanalBounds.reduced(0.25f, 0.25f);
 
-  const auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
-  constexpr auto lineWidth = 4.f;
-  const auto arcRadius = radius - lineWidth * 0.5f;
   const auto toAngle =
       rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
-  juce::Path valueArc;
-  valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius,
-                         arcRadius, 0.0f, rotaryStartAngle, toAngle, true);
-
+  juce::Path arc;
+  arc.addPieSegment(valueArcBounds, rotaryStartAngle, toAngle, 0.f);
   g.setColour(getColor(Colors::orange));
-  g.strokePath(valueArc,
-               juce::PathStrokeType(lineWidth, juce::PathStrokeType::curved,
-                                    juce::PathStrokeType::square));
+  g.fillPath(arc);
 
-  const auto knobBounds = bounds.reduced(4.f);
+  const auto knobBounds = knobCanalBounds.reduced(4.f);
 
   auto knobFill = juce::ColourGradient::vertical(
       juce::Colour{0xFF4A7090}, juce::Colour{0xFF060F1C}, knobBounds);
