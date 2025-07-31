@@ -2,10 +2,11 @@ namespace tremolo {
 PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
-  addAndMakeVisible(background);
 
   logo.setImage(
       juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
+
+  addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
   // Make sure that before the constructor has finished, you've set the
