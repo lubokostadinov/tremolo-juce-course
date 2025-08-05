@@ -82,7 +82,7 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.setColour(juce::Colour{0xFF2A3A3B});
   g.fillEllipse(knobCanalBounds);
 
-  const auto valueArcBounds = knobCanalBounds.reduced(0.25f, 0.25f);
+  const auto valueArcBounds = knobCanalBounds.reduced(0.25f);
 
   juce::Path arc;
   const auto toAngle =
