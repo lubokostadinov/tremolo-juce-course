@@ -43,7 +43,6 @@ set(GCC_CLANG_WARNINGS
     -Wsign-conversion # warn on sign conversions
     -Wformat=2 # warn on security issues around functions that format output (ie printf)
     -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
-    -Wunused-variable
 
     # These flags cannot be used because they raise warnings in JUCE modules
     # -Wold-style-cast # warn for c-style casts
