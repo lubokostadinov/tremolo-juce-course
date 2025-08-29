@@ -31,6 +31,20 @@
       }
     },
     {
+      "name": "release",
+      "binaryDir": "cmake-release-build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "release-with-debug-info",
+      "binaryDir": "cmake-release-with-debug-info-build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
       "name": "ninja-debug",
       "generator": "Ninja",
       "binaryDir": "ninja-debug-build",
@@ -78,6 +92,16 @@
     {
       "name": "default-with-examples",
       "configurePreset": "default-with-examples"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "configuration": "Release"
+    },
+    {
+      "name": "release-with-debug-info",
+      "configurePreset": "release-with-debug-info",
+      "configuration": "RelWithDebInfo"
     },
     {
       "name": "ninja-debug",
