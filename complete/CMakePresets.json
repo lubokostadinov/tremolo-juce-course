@@ -31,6 +31,13 @@
       }
     },
     {
+      "name": "release",
+      "binaryDir": "cmake-release-build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "name": "ninja-debug",
       "generator": "Ninja",
       "binaryDir": "ninja-debug-build",
@@ -78,6 +85,11 @@
     {
       "name": "default-with-examples",
       "configurePreset": "default-with-examples"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "configuration": "Release"
     },
     {
       "name": "ninja-debug",
