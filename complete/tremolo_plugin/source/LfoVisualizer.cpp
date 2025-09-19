@@ -84,13 +84,15 @@ void LfoVisualizer::samplesToPath() {
   lfoCurve = path;
 }
 
+// clang-format off
 juce::AffineTransform LfoVisualizer::getLfoCurveTransform() const {
   constexpr auto ylim = 1.1f;
   const auto bounds = getLocalBounds().toFloat();
   const auto transform = juce::AffineTransform::fromTargetPoints(
-      0.f, ylim, 0.f, 0.f, 0.f, -ylim, 0.f, bounds.getHeight(),
-      lfoCurve.getCurrentPosition().getX(), -ylim, bounds.getWidth(),
-      bounds.getHeight());
+      0.f, ylim,                                   /* -> */ 0.f, 0.f,
+      0.f, -ylim,                                  /* -> */ 0.f, bounds.getHeight(),
+      lfoCurve.getCurrentPosition().getX(), -ylim, /* -> */ bounds.getWidth(), bounds.getHeight());
   return transform;
 }
+// clang-format on
 }  // namespace tremolo
