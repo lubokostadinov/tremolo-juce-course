@@ -1,6 +1,16 @@
 .DS_Store
 .vs
 .vscode
+libs/
+build/
+xcode-build/
+release-build/
+out/
+vs-build/
+cmake-build/
+cmake-*-build/
+ninja-debug-build/
+ninja-release-build/
 done.md
 todo.md
 diff_todo_complete.sh
@@ -452,3 +462,4 @@ FodyWeavers.xsd
 
 # IntelliJ
 .idea
+**/cmake-build*
