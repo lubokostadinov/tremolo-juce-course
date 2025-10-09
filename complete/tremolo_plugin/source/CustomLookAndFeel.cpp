@@ -55,7 +55,7 @@ CustomLookAndFeel::CustomLookAndFeel() {
       interMedium().getTypeface());
 }
 
-juce::Font CustomLookAndFeel::getSideLabelsFont() const {
+juce::FontOptions CustomLookAndFeel::getSideLabelsFont() {
   return interMedium().withPointHeight(10.f);
 }
 
@@ -63,7 +63,7 @@ juce::BorderSize<int> CustomLookAndFeel::getLabelBorderSize(juce::Label&) {
   return juce::BorderSize{0};
 }
 
-juce::Font CustomLookAndFeel::getRateLabelFont() const {
+juce::FontOptions CustomLookAndFeel::getRateLabelFont() {
   return interBold().withPointHeight(12.f);
 }
 
