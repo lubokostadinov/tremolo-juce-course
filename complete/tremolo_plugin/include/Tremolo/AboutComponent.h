@@ -20,13 +20,11 @@ public:
     g.drawFittedText("i", getLocalBounds(), juce::Justification::centred, 1);
   }
 
-  void mouseEnter(const juce::MouseEvent& event) override {
+  void mouseEnter(const juce::MouseEvent&) override {
     popup.showAt(this, text, 0, false);
   }
 
-  void mouseExit(const juce::MouseEvent& event) override {
-    popup.setVisible(false);
-  }
+  void mouseExit(const juce::MouseEvent&) override { popup.setVisible(false); }
 
 private:
   juce::BubbleMessageComponent popup;
