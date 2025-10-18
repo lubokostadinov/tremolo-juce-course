@@ -6,6 +6,9 @@ public:
   AboutComponent() {
     popup.setAllowedPlacement(juce::BubbleComponent::BubblePlacement::below);
     popup.setAlwaysOnTop(true);
+
+    // since the popup is displayed outside the editor window,
+    // we have to add it to the desktop
     popup.addToDesktop(0);
 
     text.setColour(
