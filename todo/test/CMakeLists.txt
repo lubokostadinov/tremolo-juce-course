@@ -46,6 +46,11 @@ target_compile_definitions(TremoloCoursePluginTest
   PRIVATE
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
+    # We need to re-export these definitions to the test project, because the tremolo_plugin module
+    # does not define them
+    JucePlugin_Manufacturer="$<TARGET_PROPERTY:TremoloCoursePlugin,JUCE_COMPANY_NAME>"
+    JucePlugin_Name="$<TARGET_PROPERTY:TremoloCoursePlugin,JUCE_PLUGIN_NAME>"
+    JucePlugin_VersionString="$<TARGET_PROPERTY:TremoloCoursePlugin,JUCE_VERSION>"
 )
 
 # Thanks to the fact that we link against the gtest_main library, we don't have to write the main function ourselves.
