@@ -59,6 +59,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   lfoVisualizer.setBackgroundColor(juce::Colours::transparentBlack);
   addAndMakeVisible(lfoVisualizer);
 
+  addAndMakeVisible(about);
+
   setLookAndFeel(&lookAndFeel);
 
   // Make sure that before the constructor has finished, you've set the
@@ -121,5 +123,9 @@ void PluginEditor::resized() {
   bypassLabelBounds.removeFromLeft(396);
 
   bypassLabel.setBounds(bypassLabelBounds);
+
+  constexpr auto aboutSize = 20;
+  about.setBounds(
+      getLocalBounds().removeFromRight(aboutSize).removeFromTop(aboutSize));
 }
 }  // namespace tremolo
