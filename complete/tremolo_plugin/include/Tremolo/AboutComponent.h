@@ -3,13 +3,14 @@
 namespace tremolo {
 class About : private juce::MouseListener {
 public:
-  About(juce::Component& clickTarget) : target{clickTarget} {
+  About(juce::Component& clickTarget, juce::String messageOnClick)
+      : target{clickTarget}, message{std::move(messageOnClick)} {
     popup.setAllowedPlacement(juce::BubbleComponent::BubblePlacement::below);
     popup.setAlwaysOnTop(true);
 
-    text.setColour(
+    message.setColour(
         CustomLookAndFeel::getColor(CustomLookAndFeel::Colors::paleBlue));
-    text.setJustification(juce::Justification::centred);
+    message.setJustification(juce::Justification::centred);
 
     target.addMouseListener(this, true);
   }
@@ -23,7 +24,7 @@ private:
     addPopupToTargetParent();
 
     if (!popup.isVisible()) {
-      popup.showAt(&target, text, 0, true);
+      popup.showAt(&target, message, 0, true);
     }
   }
 
@@ -39,10 +40,8 @@ private:
   }
 
   juce::Component& target;
+  juce::AttributedString message;
   juce::BubbleMessageComponent popup;
-  juce::AttributedString text{JucePlugin_Manufacturer
-                              "\n" JucePlugin_Name "\n" __DATE__ " " __TIME__
-                              "\nv" JucePlugin_VersionString};
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(About)
 };

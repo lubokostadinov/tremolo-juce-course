@@ -8,7 +8,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
           [&p](juce::AudioBuffer<float>& b) { p.readAllLfoSamples(b); },
           [&p] { return p.getSampleRateThreadSafe(); },
           [&p] { return p.getParameterRefs().bypassed.get(); }},
-      about{logo} {
+      about{logo, JucePlugin_Manufacturer "\n" JucePlugin_Name "\n" __DATE__
+                                          " " __TIME__
+                                          "\nv" JucePlugin_VersionString} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
   addAndMakeVisible(background);
