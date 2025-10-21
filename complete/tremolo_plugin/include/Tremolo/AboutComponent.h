@@ -21,7 +21,8 @@ public:
       if (auto* parent = target.getParentComponent()) {
         parent->addChildComponent(popup);
       } else {
-        target.addChildComponent(popup);
+        DBG("Cannot display the popup; no parent of the target.");
+        jassertfalse;
       }
     }
 
