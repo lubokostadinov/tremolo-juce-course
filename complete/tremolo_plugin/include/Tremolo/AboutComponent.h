@@ -16,7 +16,18 @@ public:
 
   ~About() override { target.removeMouseListener(this); }
 
-  void mouseDown(const juce::MouseEvent&) override {
+  void mouseDown(const juce::MouseEvent&) override { displayPopup(); }
+
+private:
+  void displayPopup() {
+    addPopupToTargetParent();
+
+    if (!popup.isVisible()) {
+      popup.showAt(&target, text, 0, true);
+    }
+  }
+
+  void addPopupToTargetParent() {
     if (popup.getParentComponent() == nullptr) {
       if (auto* parent = target.getParentComponent()) {
         parent->addChildComponent(popup);
@@ -25,13 +36,8 @@ public:
         jassertfalse;
       }
     }
-
-    if (!popup.isVisible()) {
-      popup.showAt(&target, text, 0, true);
-    }
   }
 
-private:
   juce::Component& target;
   juce::BubbleMessageComponent popup;
   juce::AttributedString text{JucePlugin_Manufacturer
