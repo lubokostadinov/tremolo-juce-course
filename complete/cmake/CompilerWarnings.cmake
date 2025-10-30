@@ -41,12 +41,15 @@ set(GCC_CLANG_WARNINGS
     -Woverloaded-virtual # warn if you overload (not override) a virtual function
     -Wpedantic # warn if non-standard C++ is used
     -Wsign-conversion # warn on sign conversions
-    -Wformat=2 # warn on security issues around functions that format output (ie printf)
+    # warn on security issues around functions that format output (ie printf)
+    -Wformat-security
+    -Wformat-y2k
     -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
 
     # These flags cannot be used because they raise warnings in JUCE modules
     # -Wold-style-cast # warn for c-style casts
     # -Wdouble-promotion # warn if float is implicit promoted to double
+    # -Wformat=2 # warn on security issues around functions that format output (ie printf)
 
     # flags recommended by JUCE
     -Wstrict-aliasing
