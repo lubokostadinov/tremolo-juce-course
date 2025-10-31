@@ -1,4 +1,6 @@
-# Tremolo
+# Tremolo Audio Plugin 
+
+Plugin project for the Official JUCE Audio Plugin Development Course
 
 
 ## Requirements
