@@ -1,6 +1,13 @@
 # Tremolo
 
-![Cmake workflow success badge](https://github.com/JanWilczek/audio-plugin-template/actions/workflows/cmake.yml/badge.svg)
+
+## Requirements
+
+* CMake 3.25 or higher (the one bundled with CLion 2025.1.1 or higher should work)
+* C++ compiler and build system. Tested on
+    * macOS: Apple Clang 17.0.0 & Xcode 16.4
+    * Windows: Visual Studio ???
+    * Linux: gcc ??? & make ???
 
 ## Usage
 
