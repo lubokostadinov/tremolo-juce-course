@@ -2,7 +2,7 @@
 
 # Tremolo Audio Plugin 
 
-![Tremolo user interface](docs/UI.webp)
+![Tremolo user interface](docs/UI.png)
 
 Plugin project for the Official JUCE Audio Plugin Development Course
 
