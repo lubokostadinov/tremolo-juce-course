@@ -22,7 +22,7 @@ The repository consists of two folders: *complete/* and *todo/*
 
 *complete/* contains the completed tremolo plugin project. It compiles and runs out of the box.
 
-*todo/* contains skeleton code of the same plugin. This is the code you will work throughout the course to gradually bring to the same state as the *complete/* folder.
+*todo/* contains skeleton code of the same plugin. This is the code you will work throughout the course to gradually bring to the same state as the *complete/* folder. In its default state, it does not compile.
 
 After cloning the repo you created from this template locally, you can proceed with the usual CMake workflow.
 
