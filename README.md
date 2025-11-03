@@ -3,41 +3,36 @@
 Plugin project for the Official JUCE Audio Plugin Development Course
 
 
+**LOGO**
+
+
 ## Requirements
 
 * CMake 3.25 or higher (the one bundled with CLion 2025.1.1 or higher should work)
 * C++ compiler and build system. Tested on
-    * macOS: Apple Clang 17.0.0 & Xcode 16.4
-    * Windows: Visual Studio ???
-    * Linux: gcc ??? & make ???
+    - macOS Xcode 15.4 (Apple Clang 15.0.0.15000309), 16.4 (Apple Clang 17.0.0.17000013)
+    - Windows: Visual Studio 2022 17.14.13 (MSVC 19.44.35215)
+    - Ubuntu, Debian: gcc 12.2.0, 13.3.0 and make 4.3
 
 ## Usage
 
 This is a template repository which means you can click "Use this template" on GitHub and create your own repo out of it.
 
-After cloning it locally, you can proceed with the usual CMake workflow.
+The repository consists of two folders: *complete/* and *todo/*
+
+*complete/* contains the completed tremolo plugin project. It compiles and runs out of the box.
+
+*todo/* contains skeleton code of the same plugin. This is the code you will work throughout the course to gradually bring to the same state as the *complete/* folder.
+
+After cloning the repo you created from this template locally, you can proceed with the usual CMake workflow.
 
 In the main repo directory execute
 
 ```bash
-# 'default' preset uses Ninja; alternatives: 'release' | 'vs' | 'Xcode'
-# BUILD_TESTS flag will download googletest and allow unit test execution
-# WARNINGS_AS_ERRORS flag will disallow code compilation on possible mistakes
-cmake --preset default -DBUILD_TESTS=ON -DWARNINGS_AS_ERRORS=ON
+cd complete
+cmake --preset default
 cmake --build --preset default
-
-# to run unit tests (BUILD_TESTS=ON)
-ctest --preset default
 ```
 
-The first run will take the most time because the dependencies (CPM, JUCE, and optionally googletest) need to be downloaded.
+The first run will take the most time because the dependencies (CPM and JUCE) need to be downloaded.
 
-Existing presets are `default`, `release`, `vs`, and `Xcode`.
-
-To run clang-format on every commit, in the main directory execute
-
-```bash
-pre-commit install
-```
-
-(for this you may need to install `pre-commit` with `pip`: `pip install pre-commit`).
