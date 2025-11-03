@@ -2,7 +2,7 @@
 
 # Tremolo Audio Plugin 
 
-![Tremolo user interface](docs/UI.png)
+<img alt="Tremolo user interface" src="docs/UI.png" max-width=512>
 
 Plugin project for the Official JUCE Audio Plugin Development Course
 
