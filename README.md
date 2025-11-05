@@ -1,6 +1,6 @@
 <div align="center">
 
-# Tremolo Audio Plugin
+# 🎵 Tremolo Audio Plugin 🎛️
 
 [![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE.md)
 ![Build Status](https://github.com/juce-framework/tremolo-course-plugin/actions/workflows/cmake.yml/badge.svg)
@@ -11,13 +11,13 @@
 
 <img alt="Tremolo user interface" src="docs/UI.png" width="512px">
 
-Tremolo audio plugin project used for the Official JUCE Audio Plugin Development Course.
+Tremolo audio plugin project used for the Official JUCE Audio Plugin Development Course 🎓
 
 ![JUCE audio plugin development course logo](docs/JUCE_Course_logo.svg)
 
 </div>
 
-## Features
+## ✨ Features
 
 * Preconfigured plugin formats:
   * AU
@@ -38,7 +38,7 @@ Tremolo audio plugin project used for the Official JUCE Audio Plugin Development
 * Automatic dependency downloading using [CPM](https://github.com/cpm-cmake/CPM.cmake)
 * Helper *.clang-format*, *.clang-tidy*, and *.pre-commit-config.yaml* configuration files
 
-## Requirements
+## 📋 Requirements
 
 You need to have the following software installed your machine:
 
@@ -49,7 +49,7 @@ You need to have the following software installed your machine:
   * Windows: Visual Studio 2022 17.14.13 (MSVC 19.44.35215)
   * Ubuntu, Debian: gcc 12.2.0, 13.3.0 and make 4.3
 
-## Getting Started
+## 🚀 Getting Started
 
 **Detailed information on the setup process is described in the course.**
 
@@ -69,7 +69,7 @@ The first build will take the most time because the dependencies (CPM and JUCE) 
 
 Build artifacts will be located at *complete/cmake-build/TremoloCoursePlugin_artefacts/Debug*.
 
-## Structure
+## 📂 Structure
 
 This repository is a template. Click “Use this template” on GitHub to create your own copy and begin your project.
 
@@ -78,11 +78,11 @@ The plugin project is present in two folders:
 * *complete/* contains the completed tremolo plugin project. It compiles and runs out of the box.
 * *todo/* contains skeleton code of the same plugin. This is the code you will work on throughout the course to gradually bring it to the same state as the *complete/* folder. In its default state, it does not compile.
 
-## Contributing
+## 🤝 Contributing
 
 * If you find a bug, please, open an issue and/or provide a pull request.
 * Feature requests won't be merged because the goal of the repository is to be educational not feature-full.
 
-## License
+## 📜 License
 
 We use the incredibly liberal ["Unlicense" license](LICENSE.md). You can basically do whatever you want with the code. Remember that the commercial use of products built with JUCE requires a JUCE license. Refer to the JUCE license for details.
