@@ -2,6 +2,13 @@
 
 # Tremolo Audio Plugin
 
+[![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE.md)
+![Build Status](https://github.com/juce-framework/tremolo-course-plugin/actions/workflows/cmake.yml/badge.svg)
+![CMake](https://img.shields.io/badge/CMake-3.25+-064F8C.svg?logo=cmake)
+![C++](https://img.shields.io/badge/C++-20-00599C.svg?logo=cplusplus)
+![JUCE](https://img.shields.io/badge/JUCE-8.0.10-orange.svg)
+![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg)
+
 <img alt="Tremolo user interface" src="docs/UI.png" width="512px">
 
 Tremolo audio plugin project used for the Official JUCE Audio Plugin Development Course.
@@ -47,6 +54,11 @@ The plugin project is present in two folders:
 
 * *complete/* contains the completed tremolo plugin project. It compiles and runs out of the box.
 * *todo/* contains skeleton code of the same plugin. This is the code you will work on throughout the course to gradually bring it to the same state as the *complete/* folder. In its default state, it does not compile.
+
+## Contributing
+
+* If you find a bug, please, open an issue and/or provide a pull request.
+* Feature requests won't be merged because the goal of the repository is to be educational not feature-full.
 
 ## License
 
