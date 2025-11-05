@@ -51,7 +51,7 @@ You need to have the following software installed your machine:
 
 ## 🚀 Getting Started
 
-**Detailed information on the setup process is described in the course.**
+**Detailed instructions on the setup process are described in the course.**
 
 1. Click “Use this template” on GitHub to create your own copy and begin your project.
 2. Clone **your repository** locally.
