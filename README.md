@@ -1,9 +1,9 @@
 <div align="center">
 
-# 🎵 Tremolo Audio Plugin 🎛️
+# Tremolo Audio Plugin
 
 [![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE.md)
-![Build Status](https://github.com/juce-framework/tremolo-course-plugin/actions/workflows/cmake.yml/badge.svg)
+![Build Status](https://github.com/juce-framework/tremolo-juce-course/actions/workflows/cmake.yml/badge.svg)
 ![CMake](https://img.shields.io/badge/CMake-3.25+-064F8C.svg?logo=cmake)
 ![C++](https://img.shields.io/badge/C++-20-00599C.svg?logo=cplusplus)
 ![JUCE](https://img.shields.io/badge/JUCE-8.0.10-orange.svg)
