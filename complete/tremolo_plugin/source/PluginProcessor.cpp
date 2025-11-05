@@ -111,6 +111,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
       parameters.bypassed.get() && !bypassTransitionSmoother.isTransitioning();
 
   // update the parameters
+  // force updates (=skip transitions) if fully bypassed to avoid peculiar
+  // behavior when parameters change under bypass ON
   tremolo.setModulationRate(parameters.rate, bypassedAndNotTransitioning);
   tremolo.setLfoWaveform(
       static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()),
@@ -119,7 +121,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   bypassTransitionSmoother.setBypass(parameters.bypassed);
 
   if (bypassedAndNotTransitioning) {
-    // avoid processing if the plugin is bypassed
+    // avoid processing if the plugin is fully bypassed
     return;
   }
 
@@ -156,6 +158,8 @@ void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
     DBG(result.getErrorMessage());
   }
 
+  // force updates (=skip transitions) to avoid peculiar behavior
+  // when loading a project or a preset
   bypassTransitionSmoother.setBypassForced(parameters.bypassed);
   tremolo.setLfoWaveform(
       static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()), true);

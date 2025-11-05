@@ -31,12 +31,20 @@ public:
     lfoSamples.resize(4u * static_cast<size_t>(expectedMaxFramesPerBlock));
   }
 
+  /**
+   * @param rateHz
+   * @param force if true, transition smoothing is skipped
+   */
   void setModulationRate(float rateHz, bool force = false) noexcept {
     for (auto& lfo : lfos) {
       lfo.setFrequency(rateHz, force);
     }
   }
 
+  /**
+   * @param waveform
+   * @param force if true, transition smoothing is skipped
+   */
   void setLfoWaveform(LfoWaveform waveform, bool force = false) {
     jassert(waveform == LfoWaveform::sine || waveform == LfoWaveform::triangle);
 
