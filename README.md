@@ -17,6 +17,27 @@ Tremolo audio plugin project used for the Official JUCE Audio Plugin Development
 
 </div>
 
+## Features
+
+* Preconfigured plugin formats:
+  * AU
+  * VST3
+  * Standalone
+* Tremolo audio effect: tremolo is amplitude modulation at a rate below the human hearing range. The result is a "pulsing" sound.
+* Parameters
+  * modulation rate
+  * LFO waveform
+  * bypass
+* Real-time LFO visualization
+* Custom UI
+* State serialization
+* Template *README.txt* for distribution
+* Configured GitHub Actions CI pipeline
+* Unit tests using [googletest](https://github.com/google/googletest)
+* CMake presets, including "release"
+* Automatic dependency downloading using [CPM](https://github.com/cpm-cmake/CPM.cmake)
+* Helper *.clang-format*, *.clang-tidy*, and *.pre-commit-config.yaml* configuration files
+
 ## Requirements
 
 You need to have the following software installed your machine:
@@ -45,6 +66,8 @@ You need to have the following software installed your machine:
       ```
 
 The first build will take the most time because the dependencies (CPM and JUCE) need to be downloaded.
+
+Build artifacts will be located at *complete/cmake-build/TremoloCoursePlugin_artefacts/Debug*.
 
 ## Structure
 
