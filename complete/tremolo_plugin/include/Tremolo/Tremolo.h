@@ -133,11 +133,11 @@ private:
     // offset the phase by pi/2 to return 0 if phase equals 0
     // and match the sine waveform
     // (otherwise, the waveform starts at 1)
-    phase -= juce::MathConstants<float>::halfPi;
+    const auto offsetPhase = phase - juce::MathConstants<float>::halfPi;
 
     // Source:
     // https://thewolfsound.com/sine-saw-square-triangle-pulse-basic-waveforms-in-synthesis/#triangle
-    const auto ft = phase / juce::MathConstants<float>::twoPi;
+    const auto ft = offsetPhase / juce::MathConstants<float>::twoPi;
     return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
   }
 
