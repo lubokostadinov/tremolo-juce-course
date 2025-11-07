@@ -8,11 +8,7 @@ public:
     triangle = 1,
   };
 
-  Tremolo() {
-    for (auto& lfo : lfos) {
-      lfo.setFrequency(5.f /* Hz */, true);
-    }
-  }
+  Tremolo() { setModulationRateHz(5.f, true); }
 
   void prepare(double sampleRate, int expectedMaxFramesPerBlock) {
     const juce::dsp::ProcessSpec processSpec{
