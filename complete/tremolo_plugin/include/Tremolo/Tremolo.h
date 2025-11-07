@@ -35,7 +35,7 @@ public:
    * @param rateHz
    * @param force if true, transition smoothing is skipped
    */
-  void setModulationRate(float rateHz, bool force = false) noexcept {
+  void setModulationRateHz(float rateHz, bool force = false) noexcept {
     for (auto& lfo : lfos) {
       lfo.setFrequency(rateHz, force);
     }
