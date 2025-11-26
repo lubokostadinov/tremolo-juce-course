@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE.md)
 ![Build Status](https://github.com/juce-framework/tremolo-juce-course/actions/workflows/cmake.yml/badge.svg)
 ![CMake](https://img.shields.io/badge/CMake-3.25+-064F8C.svg?logo=cmake)
-![C++](https://img.shields.io/badge/C++-20-00599C.svg?logo=cplusplus)
+![C++](https://img.shields.io/badge/C++-23-00599C.svg?logo=cplusplus)
 ![JUCE](https://img.shields.io/badge/JUCE-8.0.10-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg)
 
