@@ -5,6 +5,7 @@
 # $ cmake --version
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
 
+# Enable setting CMAKE_MSVC_DEBUG_INFORMATION_FORMAT
 set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
 
 # Sets the minimum deployment target
@@ -27,7 +28,7 @@ if(PROJECT_IS_TOP_LEVEL)
   # Links to C++ runtime statically
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   # Embeds debug information
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded CACHE STRING "" FORCE)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>" CACHE STRING "" FORCE)
 endif()
 
 # I like to download the dependencies to the same folder as the project.
