@@ -1,5 +1,3 @@
-
-#include "tremolo_plugin/include/Tremolo/Tremolo.h"
 namespace tremolo {
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
