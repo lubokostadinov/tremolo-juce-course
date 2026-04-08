@@ -5,9 +5,8 @@ template <typename T, size_t Size>
 class StridedQueue {
 public:
   void setStride(size_t newStride) {
-    constexpr auto minimumStride = 1uz;
-
-    stride = juce::jmax(minimumStride, newStride);
+    constexpr size_t minimumStride { 1 };
+    stride = juce::jmax<size_t>(minimumStride, newStride);
   }
 
   [[nodiscard]] size_t size() const noexcept { return stridedElements.size(); }
