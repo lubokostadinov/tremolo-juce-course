@@ -1,6 +1,12 @@
 
 namespace tremolo {
 namespace {
+  auto& addParameterToProcessor(juce::AudioProcessor& processor, auto parameter){
+    auto& parameterReference = *parameter;
+    processor.addParameter(parameter.release());
+    return parameterReference;
+  }
+
   juce::AudioParameterFloat& createModulationRateParameter(juce::AudioProcessor& processor){
     constexpr auto versionHint = 1;
     auto parameter = std::make_unique<juce::AudioParameterFloat>(
@@ -10,16 +16,25 @@ namespace {
       5.f,
       juce::AudioParameterFloatAttributes{}.withLabel("Hz")
     );
-    auto& parameterReference = *parameter;
-    processor.addParameter(parameter.release());
-    return parameterReference;
+    return addParameterToProcessor(processor, std::move(parameter));
+  }
+
+  juce::AudioParameterBool& createBypassedParameter(juce::AudioProcessor& processor){
+    constexpr auto versionHint = 1;
+    auto parameter = std::make_unique<juce::AudioParameterBool>(
+      juce::ParameterID{"bypassed", versionHint},
+      "Bypass", 
+      false
+    );
+    return addParameterToProcessor(processor, std::move(parameter));
   }
 }
 Parameters::Parameters(juce::AudioProcessor& processor)
 // TODO: create parameters
 // TODO: retrieve references to parameters
 // TODO: add parameters to the processor
-  : rate{createModulationRateParameter(processor)}
+  : rate{createModulationRateParameter(processor)},
+    bypassed{createBypassedParameter(processor)}
 {
   
 }

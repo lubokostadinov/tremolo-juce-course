@@ -105,7 +105,9 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   // TODO: update parameters
   tremolo.setModulationRate(parameters.rate.get());
   // TODO: check for bypass
-
+  if (parameters.bypassed.get()){
+    return;
+  }
   // apply tremolo
   tremolo.process(buffer);
 }
@@ -136,6 +138,11 @@ void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
 
   // TODO: implement state deserialization from JSON
 }
+
+juce::AudioProcessorParameter* PluginProcessor::getBypassParameter() const {
+  return &parameters.bypassed;
+}
+
 }  // namespace tremolo
 
 // This creates new instances of the plugin.
