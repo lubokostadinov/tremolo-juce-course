@@ -1,6 +1,7 @@
 namespace tremolo {
 PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p),
-  rateAttachment{p.getParameterRefs().rate, rateSlider} {
+  rateAttachment{p.getParameterRefs().rate, rateSlider},
+  bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -16,11 +17,23 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p),
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 
+  bypassButton.onClick = [this] () {
+    bypassButton.setButtonText(bypassButton.getToggleState() ? "Bypassed" : "Off");
+  };
+  bypassButton.onClick();
+  addAndMakeVisible(bypassButton);
+
   addAndMakeVisible(lfoVisualizer);
+
+  setLookAndFeel(&lookAndFeel);
 
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
   setSize(540, 270);
+}
+
+PluginEditor::~PluginEditor() {
+  setLookAndFeel(nullptr);
 }
 
 void PluginEditor::resized() {
@@ -37,6 +50,13 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
+
+  auto buttonBounds = bounds;
+  buttonBounds.removeFromLeft(392);
+  buttonBounds.removeFromRight(16);
+  buttonBounds.removeFromTop(66);
+  buttonBounds.removeFromBottom(176);
+  bypassButton.setBounds(buttonBounds);
 
   lfoVisualizer.setBounds({18, 149, 504, 92});
 }
