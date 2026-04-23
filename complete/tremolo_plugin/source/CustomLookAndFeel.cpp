@@ -183,7 +183,8 @@ juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
   return juce::LookAndFeel_V4::getOptionsForComboBoxPopupMenu(box, label)
       .withStandardItemHeight(24)
       .withTargetScreenArea(menuBounds)
-      .withMinimumWidth(128);
+      .withMinimumWidth(128)
+      .withItemThatMustBeVisible(0);
 }
 
 juce::Font CustomLookAndFeel::getPopupMenuFont() {
