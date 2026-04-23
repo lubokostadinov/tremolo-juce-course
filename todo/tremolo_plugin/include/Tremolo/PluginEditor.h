@@ -12,6 +12,9 @@ private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
+  juce::ComboBox waveformComboBox;
+  juce::ComboBoxParameterAttachment waveformAttachment;
+
   RateSlider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
