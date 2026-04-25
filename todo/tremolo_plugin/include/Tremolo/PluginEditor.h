@@ -12,9 +12,11 @@ private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
+  juce::Label waveformLabel{"waveform label", "Waveform"};
   juce::ComboBox waveformComboBox;
   juce::ComboBoxParameterAttachment waveformAttachment;
 
+  juce::Label rateLabel{"rate label", "Rate"};
   RateSlider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 

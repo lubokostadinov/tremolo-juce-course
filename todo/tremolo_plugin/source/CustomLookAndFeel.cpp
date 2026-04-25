@@ -26,7 +26,19 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
         g.setColour(juce::Colour{0xffddecff});
     }
+
+    g.setFont(interMedium().withPointHeight(12.f));
+
+    DBG(g.getCurrentFont().getTypefacePtr()->getName());
+    
     g.drawText(button.getButtonText(), bounds, juce::Justification::centred, false);
+}
+
+juce::FontOptions CustomLookAndFeel::interMedium() {
+    static const auto result = juce::FontOptions{juce::Typeface::createSystemTypefaceFor(
+                               assets::InterMedium_ttf, assets::InterMedium_ttfSize)};
+
+    return juce::FontOptions{result};
 }
 
 }  // namespace tremolo

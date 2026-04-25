@@ -10,6 +10,9 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p),
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
+  waveformLabel.setFont(lookAndFeel.getSideLabelsFont());
+  addAndMakeVisible(waveformLabel);
+
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
@@ -19,6 +22,9 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p),
   rateSlider.setPopupDisplayEnabled(true, true, this);
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
+
+  rateLabel.setInterceptsMouseClicks(false, false);
+  addAndMakeVisible(rateLabel);
 
   bypassButton.onClick = [this] () {
     bypassButton.setButtonText(bypassButton.getToggleState() ? "Bypassed" : "Off");
@@ -44,7 +50,6 @@ void PluginEditor::resized() {
 
   background.setBounds(bounds);
 
-  //logo.setBounds({16, 16, 105, 24});
   logo.setBounds({0, 0, 0, 0});
 
   auto rateSliderBounds = bounds;
@@ -53,6 +58,9 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
+
+  rateLabel.setJustificationType(juce::Justification::centred);
+  rateLabel.setBounds(rateSliderBounds);
 
   auto buttonBounds = bounds;
   buttonBounds.removeFromLeft(392);
@@ -67,6 +75,9 @@ void PluginEditor::resized() {
   waveformComboBoxBounds.removeFromTop(66);
   waveformComboBoxBounds.removeFromBottom(176);
   waveformComboBox.setBounds(waveformComboBoxBounds);
+
+  const auto waveformLabelBounds = waveformComboBoxBounds.translated(0, -waveformComboBoxBounds.getHeight());
+  waveformLabel.setBounds(waveformLabelBounds);
 
   lfoVisualizer.setBounds({18, 149, 504, 92});
 }
