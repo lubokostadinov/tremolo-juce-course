@@ -17,7 +17,7 @@ private:
   juce::ComboBoxParameterAttachment waveformAttachment;
 
   juce::Label rateLabel{"rate label", "Rate"};
-  RateSlider rateSlider;
+  juce::Slider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
   juce::ToggleButton bypassButton{"Bypassed"};

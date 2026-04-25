@@ -34,6 +34,23 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
     g.drawText(button.getButtonText(), bounds, juce::Justification::centred, false);
 }
 
+void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, 
+                                         float sliderPosProportional, float rotaryStartAngle,
+                                         float rotaryEndAngle, juce::Slider&) {
+
+    auto bounds = juce::Rectangle{x, y, width, height}.toFloat().reduced(3.75f);
+    g.setColour(juce::Colour{0xff2a3a3b});
+    g.fillEllipse(bounds);
+
+    auto toAngle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
+
+    juce::Path valueArc;
+    valueArc.addPieSegment(bounds.reduced(0.25f), rotaryStartAngle, toAngle, 0);
+            
+    g.setColour(juce::Colours::orange);
+    g.fillPath(valueArc);
+}
+
 juce::FontOptions CustomLookAndFeel::interMedium() {
     static const auto result = juce::FontOptions{juce::Typeface::createSystemTypefaceFor(
                                assets::InterMedium_ttf, assets::InterMedium_ttfSize)};
