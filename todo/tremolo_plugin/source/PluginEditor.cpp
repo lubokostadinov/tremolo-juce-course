@@ -23,7 +23,10 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p),
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 
+  rateLabel.setJustificationType(juce::Justification::centred);
   rateLabel.setInterceptsMouseClicks(false, false);
+  rateLabel.setColour(juce::Label::textColourId, 
+    CustomLookAndFeel::getColor(CustomLookAndFeel::Colors::paleBlue));
   addAndMakeVisible(rateLabel);
 
   bypassButton.onClick = [this] () {

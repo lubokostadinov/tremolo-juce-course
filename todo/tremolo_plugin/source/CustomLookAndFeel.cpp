@@ -1,4 +1,18 @@
 namespace tremolo {
+juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
+    static const std::array colors {
+        juce::Colour{0xffddecff}
+    };
+    return colors.at(juce::toUnderlyingType(colorName));
+}
+
+CustomLookAndFeel::CustomLookAndFeel() {
+    setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xff153245});
+    setColour(juce::PopupMenu::textColourId, getColor(Colors::paleBlue));
+    setColour(juce::ComboBox::textColourId, getColor(Colors::paleBlue));
+    setColour(juce::Label::textColourId, juce::Colour{0xff6ea0c7});
+}
+
 void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
                                          juce::ToggleButton& button, 
                                          bool shouldDrawButtonAsHighLighted,
@@ -24,7 +38,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
         g.setGradientFill(buttonGradient);
         g.fillRoundedRectangle(bounds.toFloat(), 4.f);
 
-        g.setColour(juce::Colour{0xffddecff});
+        g.setColour(getColor(Colors::paleBlue));
     }
 
     g.setFont(interMedium().withPointHeight(12.f));

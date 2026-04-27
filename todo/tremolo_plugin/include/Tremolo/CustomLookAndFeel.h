@@ -3,6 +3,12 @@
 namespace tremolo {
 class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 public:
+    CustomLookAndFeel();
+
+    enum class Colors : size_t { paleBlue };
+
+    static juce::Colour getColor(Colors colorName);
+
     void drawToggleButton(juce::Graphics&, juce::ToggleButton&, 
                           bool shouldDrawButtonAsHighLighted,
                           bool shouldDrawButtonAsDown) override;
